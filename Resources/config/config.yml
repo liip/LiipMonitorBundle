@@ -1,0 +1,8 @@
+services:
+    monitor.check.runner:
+        class: Liip\MonitorBundle\Check\Runner
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    monitor.check_chain:
+        class: Liip\MonitorBundle\Check\CheckChain
