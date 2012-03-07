@@ -11,7 +11,7 @@ abstract class Check implements CheckInterface
         return get_called_class();
     }
 
-    protected function getResult($message, $status)
+    protected function buildResult($message, $status)
     {
         return new CheckResult($message, $status);
     }
