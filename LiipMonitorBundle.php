@@ -4,7 +4,7 @@ namespace Liip\MonitorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Liip\MonitorBundle\DependencyInjection\Compiler\TagCompilerPass;
+use Liip\MonitorBundle\DependencyInjection\Compiler\HealthCheckTagCompilerPass;
 
 class LiipMonitorBundle extends Bundle
 {
@@ -12,6 +12,6 @@ class LiipMonitorBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new TagCompilerPass());
+        $container->addCompilerPass(new HealthCheckTagCompilerPass());
     }
 }
