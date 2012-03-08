@@ -2,6 +2,6 @@
 
 namespace Liip\MonitorBundle\Exception;
 
-class CheckFailedException extends \Exception
+class CheckFailedException extends \RuntimeException
 {
 }
