@@ -13,9 +13,9 @@ class CheckChain
         $this->checks = array();
     }
 
-    public function addCheck(CheckInterface  $check)
+    public function addCheck($service_id, CheckInterface $check)
     {
-        $this->checks[] = $check;
+        $this->checks[$service_id] = $check;
     }
 
     public function getChecks()

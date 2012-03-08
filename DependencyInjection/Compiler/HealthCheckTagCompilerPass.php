@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
-class TagCompilerPass implements CompilerPassInterface
+class HealthCheckTagCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
@@ -17,7 +17,7 @@ class TagCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition('monitor.check_chain');
 
         foreach ($container->findTaggedServiceIds('monitor.check') as $id => $attributes) {
-            $definition->addMethodCall('addCheck', array(new Reference($id)));
+            $definition->addMethodCall('addCheck', array($id, new Reference($id)));
         }
     }
 }
