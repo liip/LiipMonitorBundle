@@ -42,7 +42,12 @@ class HealthCheckCommand extends ContainerAwareCommand
         }
 
         foreach ($results as $result) {
-            $output->writeln(sprintf('%s: %s', $result[0], $result[1]->getMessage()));
+            $msg = sprintf('%s: %s', $result[0], $result[1]->getMessage());
+            if ($result[1]->getStatus()) {
+                $output->writeln(sprintf('<info>%s</info>', $msg));
+            } else {
+                $output->writeln(sprintf('<error>%s</error>', $msg));
+            }
         }
     }
 }
