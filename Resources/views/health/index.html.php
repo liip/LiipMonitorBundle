@@ -5,40 +5,36 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Health Check</title>
     <link rel="stylesheet" href="/bundles/liipmonitor/css/style.css" type="text/css">
+    <script type="text/javascript" charset="utf-8">
+        api = {
+            run_all_checks: "<?php echo $view['router']->generate('run_all_checks'); ?>",
+            run_single_check: "<?php echo $view['router']->generate('run_single_check', array('check_id' => 'replaceme')); ?>"
+        };
+    </script>
 </head>
-<body id="monitor-content">
+<body id="container">
+<script type="text/x-handlebars" data-template-name="result-template">
 <table class="test-result">
+    <thead>
     <tr>
         <th>Name</th>
         <th>Message</th>
         <th>Re-Run</th>
     </tr>
-    <script type="text/x-handlebars">
-      {{#view App.MyView}}
-        <h1>Hello world!</h1>
-      {{/view}}
-    </script>
-<?php foreach ($results as $result): ?>
-    <tr class="<?php echo $result[1]->getStatus() ? 'pass' : 'fail' ?>">
-        <td><?php echo $result[0]; ?></td>
-        <td><?php echo $result[1]->getMessage(); ?></td>
-        <td class="run-button"><a href="<?php echo $view['router']->generate('health_check') ?>">run</a></td>
-    </tr>
-<?php endforeach; ?>
-<table>
-    <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/jquery-1.6.1.min.js"></script>
+    </thead>
+    <tbody>
+        {{#each Health.healthController.content}}
+            {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.failed"}}
+                <td>{{content.checkName}}</td>
+                <td>{{content.message}}</td>
+                <td class="run-button"><a href="{{content.runUrl}}">run</a></td>
+            {{/view}}
+        {{/each}}
+    </tbody>
+</table>
+</script>
+    <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/ember-0.9.5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/app.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-            $('a').bind('click',function(event){
-                event.preventDefault();
-                var that = this;
-                $.get(this.href, {}, function(response){
-                    that.html(response);
-                })
-            });
-        });
-    </script>
 </body>
 </html>
