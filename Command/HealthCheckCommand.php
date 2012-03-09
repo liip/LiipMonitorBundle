@@ -38,12 +38,12 @@ class HealthCheckCommand extends ContainerAwareCommand
         if ($checkName == 'all') {
             $results = $runner->runAllChecks();
         } else {
-            $results = array($runner->runCheckByName($checkName));
+            $results = array($runner->runCheckById($checkName));
         }
 
         foreach ($results as $result) {
-            $msg = sprintf('%s: %s', $result[0], $result[1]->getMessage());
-            if ($result[1]->getStatus()) {
+            $msg = sprintf('%s: %s', $result->getCheckName(), $result->getMessage());
+            if ($result->getStatus()) {
                 $output->writeln(sprintf('<info>%s</info>', $msg));
             } else {
                 $output->writeln(sprintf('<error>%s</error>', $msg));

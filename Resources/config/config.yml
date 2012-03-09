@@ -1,8 +1,15 @@
 services:
     monitor.check.runner:
         class: Liip\MonitorBundle\Check\Runner
-        calls:
-            - [ setContainer, [ @service_container ] ]
+        arguments:
+            - @monitor.check_chain
 
     monitor.check_chain:
         class: Liip\MonitorBundle\Check\CheckChain
+
+    monitor.health.controller:
+        class: Liip\MonitorBundle\Controller\HealthCheckController
+        arguments:
+            - @templating
+            - @monitor.check_chain
+            - @monitor.check.runner

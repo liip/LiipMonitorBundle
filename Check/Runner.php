@@ -6,30 +6,29 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class Runner extends ContainerAware
 {
-    public function runCheckByName($checkName)
+    protected $chain;
+
+    public function __construct($chain)
     {
-        $serviceName = $checkName;
+        $this->chain = $chain;
+    }
 
-        if (!$this->container->has($serviceName)) {
-            throw new \InvalidArgumentException('Wrong value for checkName argument');
-        }
-
-        return $this->runCheck($this->container->get($serviceName));
+    public function runCheckById($checkId)
+    {
+        return $this->runCheck($this->chain->getCheckById($checkId));
     }
 
     public function runCheck($checkService)
     {
-        $result = $checkService->check();
-        return array($checkService->getName(), $result);
+        return $checkService->check();
     }
 
     public function runAllChecks()
     {
-        $result = array();
-        $chain = $this->container->get('monitor.check_chain');
-        foreach ($chain->getChecks() as $checkService) {
-            $result[] = $this->runCheck($checkService);
+        $results = array();
+        foreach ($this->chain->getChecks() as $id => $checkService) {
+            $results[$id] = $this->runCheck($checkService);
         }
-        return $result;
+        return $results;
     }
 }
