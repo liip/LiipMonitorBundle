@@ -13,6 +13,6 @@ abstract class Check implements CheckInterface
 
     protected function buildResult($message, $status)
     {
-        return new CheckResult($message, $status);
+        return new CheckResult($this->getName(), $message, $status);
     }
 }
