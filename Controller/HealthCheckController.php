@@ -32,7 +32,7 @@ class HealthCheckController
         $data = array();
         foreach ($results as $id => $result) {
             $tmp = $result->toArray();
-            $tmp['id'] = $id;
+            $tmp['service_id'] = $id;
             $data[] = $tmp;
         }
         return $this->getJsonResponse(array('checks' => $data));
@@ -40,8 +40,9 @@ class HealthCheckController
 
     public function runSingleCheckAction($check_id)
     {
-        $result = $this->runner->runCheckById($check_id);
-        return $this->getJsonResponse($result->toArray());
+        $result = $this->runner->runCheckById($check_id)->toArray();
+        $result['service_id'] = $check_id;
+        return $this->getJsonResponse($result);
     }
 
     protected function getJsonResponse($data)

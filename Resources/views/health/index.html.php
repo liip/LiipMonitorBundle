@@ -13,26 +13,27 @@
     </script>
 </head>
 <body id="container">
-<script type="text/x-handlebars" data-template-name="result-template">
-<table class="test-result">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Message</th>
-        <th>Re-Run</th>
-    </tr>
-    </thead>
-    <tbody>
-        {{#each Health.healthController.content}}
-            {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.failed"}}
-                <td>{{content.checkName}}</td>
-                <td>{{content.message}}</td>
-                <td class="run-button"><a href="{{content.runUrl}}">run</a></td>
-            {{/view}}
-        {{/each}}
-    </tbody>
-</table>
-</script>
+    <h1>System Health Status</h1>
+    <script type="text/x-handlebars" data-template-name="result-template">
+    <table class="test-result">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Message</th>
+            <th>Re-Run</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each Health.healthController.content}}
+                {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.failed"}}
+                    <td>{{content.checkName}}</td>
+                    <td>{{content.message}}</td>
+                    <td><a href="#" {{action "reRunCheck"}}>GO</a></td>
+                {{/view}}
+            {{/each}}
+        </tbody>
+    </table>
+    </script>
     <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/ember-0.9.5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/app.js"></script>
