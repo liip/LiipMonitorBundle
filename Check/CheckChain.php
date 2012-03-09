@@ -22,4 +22,18 @@ class CheckChain
     {
         return $this->checks;
     }
+
+    public function getAvailableChecks()
+    {
+        return array_keys($this->checks);
+    }
+
+    public function getCheckById($id)
+    {
+        if (!isset($this->checks[$id])) {
+            throw new \InvalidArgumentException(sprintf("Check with id: %s doesn't exists", $id));
+        }
+
+        return $this->checks[$id];
+    }
 }
