@@ -17,6 +17,7 @@
 <div id="container">
     <h1>System Health Status</h1>
     <script type="text/x-handlebars" data-template-name="result-template">
+    {{#if Health.healthController.content.length}}
     <table class="table table-bordered table-condensed test-result">
         <thead>
         <tr>
@@ -42,6 +43,14 @@
             {{/each}}
         </tbody>
     </table>
+    {{else}}
+    <div>
+        <h4>No Healtch Checks Registered</h4>
+        <p>
+            To register health checks you need to tag your services in the service container definition by using the following tag: <code>monitor.check</code>.
+        </p>
+    </div>
+    {{/if}}
     </script>
 </div>
 <div id="info">
