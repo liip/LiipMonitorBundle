@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Health Check</title>
-    <link rel="stylesheet" href="/bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="/bundles/liipmonitor/css/style.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo $view['assets']->getUrl('bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css'); ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo $view['assets']->getUrl('bundles/liipmonitor/css/style.css'); ?>" type="text/css">
     <script type="text/javascript" charset="utf-8">
         api = {
             run_all_checks: "<?php echo $view['router']->generate('run_all_checks'); ?>",
@@ -45,7 +45,7 @@
     </table>
     {{else}}
     <div>
-        <h4>No Healtch Checks Registered</h4>
+        <h4>No Health Checks Registered</h4>
         <p>
             To register health checks you need to tag your services in the service container definition by using the following tag: <code>monitor.check</code>.
         </p>
@@ -121,8 +121,8 @@ $ curl -XPOST http://api.nzz.lo/app_dev.php/health/run/monitor.check.redis
         </dd>
     </dl>
 </div>
-<script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/ember-0.9.5.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="/bundles/liipmonitor/javascript/app.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/jquery-1.7.1.min.js'); ?>"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/ember-0.9.5.min.js'); ?>"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/app.js'); ?>"></script>
 </body>
 </html>
