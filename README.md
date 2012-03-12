@@ -11,6 +11,10 @@ Health checks are defined as Symfony services and they have to be tagged as `mon
 
 Checks are run via the command line using a Symfony command or via a REST api that delivers the results in JSON format.
 
+Here's the web interface:
+
+![Web Interface](http://img.skitch.com/20120312-fhyc74ese9jjpyd1wxjcdbs85b.jpg "Web Interface")
+
 ## Installation ##
 
 Add the following code to your deps file:
