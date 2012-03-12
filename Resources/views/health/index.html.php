@@ -22,15 +22,22 @@
         <tr>
             <th>Name</th>
             <th>Message</th>
-            <th>Re-Run</th>
+            <th>Repeat</th>
         </tr>
         </thead>
         <tbody>
             {{#each Health.healthController.content}}
                 {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.failed"}}
-                    <td>{{content.checkName}}</td>
+                    <td>
+                        {{#if content.failed}}
+                        <i class="icon-fire"></i>
+                        {{else}}
+                        <i class="icon-ok"></i>
+                        {{/if}}
+                        &nbsp;&nbsp;{{content.checkName}}
+                    </td>
                     <td>{{content.message}}</td>
-                    <td class="re-run"><button class=".btn" {{action "reRunCheck"}}>GO</button></td>
+                    <td><button class=".btn" {{action "repeatCheck"}}>GO</button></td>
                 {{/view}}
             {{/each}}
         </tbody>
@@ -43,7 +50,7 @@
     <p>It offers a REST API where you can list available health checks and also gives the chance to run them individually or all together.
         This page is just a HTML view of the JSON response provided by one of those API methods.
     </p>
-    <h3>Re running failed tests</h3>
+    <h3>Repeating failed tests</h3>
     <p>
         The third column of the table displays a button labeled <strong>GO</strong>. By pressing this button you can re run a failed the tests to see if it came back to normal.
     </p>
@@ -58,7 +65,12 @@
             Returns a list of available health checks as a JSON array.
             <pre>
 $ curl http://api.nzz.lo/app_dev.php/health/checks
-["monitor.check.jackrabbit","monitor.check.redis","monitor.check.memcache","monitor.check.php_extensions"]</pre>
+[
+    "monitor.check.jackrabbit",
+    "monitor.check.redis",
+    "monitor.check.memcache",
+    "monitor.check.php_extensions"
+]</pre>
         </dd>
         <dt>/health/run</dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.

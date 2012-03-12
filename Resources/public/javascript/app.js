@@ -36,7 +36,7 @@ Health.healthController = Em.ArrayProxy.create({
         });
     },
 
-    reRunCheck: function(check) {
+    repeatCheck: function(check) {
         var self = this;
         $.ajax({
            url: check.get('runUrl'),
@@ -74,9 +74,9 @@ Health.healthController = Em.ArrayProxy.create({
 });
 
 Health.itemRowView = Ember.View.extend({
-    reRunCheck: function(evt, view, context) {
+    repeatCheck: function(evt, view, context) {
         event.preventDefault();
-        Health.healthController.reRunCheck(context.get('content'));
+        Health.healthController.repeatCheck(context.get('content'));
     }
 });
 
