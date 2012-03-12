@@ -37,6 +37,10 @@ If you want to enable the REST API provided by the bundle then add the following
 _monitor:
     resource: "@LiipMonitorBundle/Resources/config/routing.yml"
 
+And finally don't forget to install the bundle assets into your web root:
+
+    $ ./app/console assets:install web --symlink
+
 ## Writing Health Checks ##
 
 Let's see an example on how to implement a Health Check class. In this case we are going to test for the availability of PHP Extensions:
