@@ -73,7 +73,7 @@
         <dd>
             Returns a list of available health checks as a JSON array.
             <pre>
-$ curl http://api.nzz.lo/app_dev.php/health/checks
+$ curl -XPOST http://api.nzz.lo/app_dev.php/health/checks
 [
     "monitor.check.jackrabbit",
     "monitor.check.redis",
@@ -84,7 +84,7 @@ $ curl http://api.nzz.lo/app_dev.php/health/checks
         <dt>/health/run</dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
-$ curl http://api.nzz.lo/app_dev.php/health/run
+$ curl -XPOST http://api.nzz.lo/app_dev.php/health/run
 {
 "checks":
     [
@@ -98,7 +98,7 @@ $ curl http://api.nzz.lo/app_dev.php/health/run
         <dt>/health/run/check_id</dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl http://api.nzz.lo/app_dev.php/health/run/monitor.check.redis
+$ curl -XPOST http://api.nzz.lo/app_dev.php/health/run/monitor.check.redis
 {
    "checkName": "Redis Health Check",
    "message": "OK",

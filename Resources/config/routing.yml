@@ -4,12 +4,12 @@ health_interface:
 
 list_checks:
     pattern: /health/checks
-    defaults:  { _controller:  monitor.health.controller:listAction, _method: GET }
+    defaults:  { _controller:  monitor.health.controller:listAction }
 
 run_all_checks:
     pattern:   /health/run
-    defaults:  { _controller:  monitor.health.controller:runAllChecksAction, _method: GET }
+    defaults:  { _controller:  monitor.health.controller:runAllChecksAction }
 
 run_single_check:
     pattern:   /health/run/{check_id}
-    defaults:  { _controller:  monitor.health.controller:runSingleCheckAction, _method: GET }
+    defaults:  { _controller:  monitor.health.controller:runSingleCheckAction }
