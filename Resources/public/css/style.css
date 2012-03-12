@@ -9,26 +9,32 @@ h1 {
 table.test-result {
     font-family: helvetica;
     font-size: 16px;
-    color: white;
+    color: black;
     margin: 0 auto;
     width: 100%;
 }
 
 tr {
-    background: green;
+    background: #65BF2A;
 }
 
 th {
+    font-size: 16px;
+    color: white;
     background: gray;
 }
 
 .failed {
     color: white;
-    background: red;
+    background: #FF3D3D;
 }
 
-tbody tr:hover {
-    color: black;
+.table tbody tr.failed:hover td {
+    background: #FF9D7D;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #D1F2A5;
 }
 
 #info {
@@ -41,4 +47,8 @@ dd pre {
 
 dd dl dt, dd dl dd {
     padding: 0.3em;
+}
+
+button {
+    width: 100%;
 }
