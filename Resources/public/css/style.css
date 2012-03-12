@@ -1,5 +1,14 @@
+body {
+    padding: 2em;
+}
+
+h1 {
+    margin-bottom: 0.5em;
+}
+
 table.test-result {
     font-family: helvetica;
+    font-size: 16px;
     color: white;
     margin: 0 auto;
     width: 100%;
@@ -10,14 +19,26 @@ tr {
 }
 
 th {
-    background: grey;
-    padding: 5px;
-}
-
-td {
-    padding: 5px;
+    background: gray;
 }
 
 .failed {
+    color: white;
     background: red;
+}
+
+tbody tr:hover {
+    color: black;
+}
+
+#info {
+    margin-top: 2em;
+}
+
+dd pre {
+    margin-top: 0.5em;
+}
+
+dd dl dt, dd dl dd {
+    padding: 0.3em;
 }
