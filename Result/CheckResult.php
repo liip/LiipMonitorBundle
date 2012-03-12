@@ -5,7 +5,7 @@ namespace Liip\MonitorBundle\Result;
 class CheckResult
 {
     const SUCCESS = true;
-    const FAILURE = true;
+    const FAILURE = false;
 
     protected $checkName;
     protected $message;
