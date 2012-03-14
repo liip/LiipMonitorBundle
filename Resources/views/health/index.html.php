@@ -10,7 +10,6 @@
 <body>
 <div id="container">
     <h1>System Health Status</h1>
-    {% raw %}
     <script type="text/x-handlebars" data-template-name="result-template">
     {{#if Health.healthController.content.length}}
     <table class="table table-bordered table-condensed test-result">
@@ -47,7 +46,6 @@
     </div>
     {{/if}}
     </script>
-    {% endraw %}
 </div>
 <div id="info">
     <h2>Documentation</h2>
