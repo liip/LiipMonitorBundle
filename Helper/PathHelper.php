@@ -13,10 +13,10 @@ class PathHelper
         $this->routerHelper = $container->get('templating.helper.router');
     }
 
-    public function generateRoutes($rotues)
+    public function generateRoutes($routes)
     {
         $routes = array();
-        foreach ($rotues as $route => $params) {
+        foreach ($routes as $route => $params) {
             $routes[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->generate($route, $params));
         }
         return $routes;
