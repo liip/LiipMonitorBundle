@@ -23,6 +23,10 @@ Add the following code to your deps file:
         git=git://github.com/liip/LiipMonitorBundle.git
         target=bundles/Liip/MonitorBundle
 
+And then run the vendors install command:
+
+    $ ./bin/vendors install
+
 Then register the bundle in the `AppKernel.php` file:
 
     public function registerBundles()
