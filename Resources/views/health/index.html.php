@@ -4,18 +4,13 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Health Check</title>
-    <link rel="stylesheet" href="<?php echo $view['assets']->getUrl('bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css'); ?>" type="text/css">
-    <link rel="stylesheet" href="<?php echo $view['assets']->getUrl('bundles/liipmonitor/css/style.css'); ?>" type="text/css">
-    <script type="text/javascript" charset="utf-8">
-        api = {
-            run_all_checks: "<?php echo $view['router']->generate('run_all_checks'); ?>",
-            run_single_check: "<?php echo $view['router']->generate('run_single_check', array('check_id' => 'replaceme')); ?>"
-        };
-    </script>
+    <?php echo $css; ?>
+    <?php echo $urls; ?>
 </head>
 <body>
 <div id="container">
     <h1>System Health Status</h1>
+    {% raw %}
     <script type="text/x-handlebars" data-template-name="result-template">
     {{#if Health.healthController.content.length}}
     <table class="table table-bordered table-condensed test-result">
@@ -52,6 +47,7 @@
     </div>
     {{/if}}
     </script>
+    {% endraw %}
 </div>
 <div id="info">
     <h2>Documentation</h2>
@@ -121,8 +117,6 @@ $ curl -XPOST http://api.nzz.lo/app_dev.php/health/run/monitor.check.redis
         </dd>
     </dl>
 </div>
-<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/jquery-1.7.1.min.js'); ?>"></script>
-<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/ember-0.9.5.min.js'); ?>"></script>
-<script type="text/javascript" charset="utf-8" src="<?php echo $view['assets']->getUrl('bundles/liipmonitor/javascript/app.js'); ?>"></script>
+<?php echo $javascript; ?>
 </body>
 </html>

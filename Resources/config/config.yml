@@ -13,3 +13,9 @@ services:
             - @templating
             - @monitor.check_chain
             - @monitor.check.runner
+            - @monitor.helper.path
+
+    monitor.helper.path:
+        class: Liip\MonitorBundle\Helper\PathHelper
+        arguments:
+            - @service_container

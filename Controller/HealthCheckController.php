@@ -7,18 +7,42 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HealthCheckController
 {
+    protected $templating;
+    protected $healthCheckChain;
     protected $runner;
+    protected $pathHelper;
 
-    public function __construct($templating, $healthCheckChain, $runner)
+    public function __construct($templating, $healthCheckChain, $runner, $pathHelper)
     {
         $this->templating = $templating;
         $this->healthCheckChain = $healthCheckChain;
         $this->runner = $runner;
+        $this->pathHelper = $pathHelper;
     }
 
     public function indexAction()
     {
-        return $this->templating->renderResponse('LiipMonitorBundle:health:index.html.php');
+        $urls = $this->pathHelper->getRoutesJs(array(
+            'run_all_checks' => array(),
+            'run_single_check' => array('check_id' => 'replaceme')
+        ));
+
+        $css = $this->pathHelper->getStyleTags(array(
+            'bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css',
+            'bundles/liipmonitor/css/style.css'
+        ));
+
+        $javascript = $this->pathHelper->getScriptTags(array(
+            'bundles/liipmonitor/javascript/jquery-1.7.1.min.js',
+            'bundles/liipmonitor/javascript/ember-0.9.5.min.js',
+            'bundles/liipmonitor/javascript/app.js'
+        ));
+
+        ob_start();
+        include __DIR__ . '/../Resources/views/health/index.html.php';
+        $content = ob_get_clean();
+
+        return new Response($content, 200);
     }
 
     public function listAction(Request $request)
