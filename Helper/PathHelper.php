@@ -15,11 +15,11 @@ class PathHelper
 
     public function generateRoutes($routes)
     {
-        $routes = array();
+        $ret = array();
         foreach ($routes as $route => $params) {
-            $routes[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->generate($route, $params));
+            $ret[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->generate($route, $params));
         }
-        return $routes;
+        return $ret;
     }
 
     public function getRoutesJs($routes)
