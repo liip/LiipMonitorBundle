@@ -10,7 +10,6 @@ services:
     monitor.health.controller:
         class: Liip\MonitorBundle\Controller\HealthCheckController
         arguments:
-            - @templating
             - @monitor.check_chain
             - @monitor.check.runner
             - @monitor.helper.path

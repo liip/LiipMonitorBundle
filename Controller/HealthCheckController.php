@@ -7,14 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HealthCheckController
 {
-    protected $templating;
     protected $healthCheckChain;
     protected $runner;
     protected $pathHelper;
 
-    public function __construct($templating, $healthCheckChain, $runner, $pathHelper)
+    public function __construct($healthCheckChain, $runner, $pathHelper)
     {
-        $this->templating = $templating;
         $this->healthCheckChain = $healthCheckChain;
         $this->runner = $runner;
         $this->pathHelper = $pathHelper;
