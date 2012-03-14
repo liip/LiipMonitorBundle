@@ -25,7 +25,7 @@ class PathHelper
     public function getRoutesJs($routes)
     {
         $script = '<script type="text/javascript" charset="utf-8">';
-        $script .= 'var api = {};';
+        $script .= "var api = {};\n";
         $script .= implode("\n", $this->generateRoutes($routes));
         $script .= '</script>';
         return $script;
