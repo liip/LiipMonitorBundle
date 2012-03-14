@@ -36,6 +36,8 @@ class HealthCheckController
             'bundles/liipmonitor/javascript/app.js'
         ));
 
+        // this is a hack to make the bundle template agnostic.
+        // URL generation for Assets and Routes is still handled by the framework.
         ob_start();
         include __DIR__ . '/../Resources/views/health/index.html.php';
         $content = ob_get_clean();
