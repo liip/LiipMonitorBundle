@@ -7,7 +7,7 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'                => array($vendorDir.'/symfony/src'),
+    'Symfony' => array($vendorDir.'/symfony/src'),
 ));
 
 $loader->register();
