@@ -12,9 +12,9 @@ class CheckResult
     protected $status;
 
     /**
-     * @param $checkName
-     * @param $message
-     * @param $status
+     * @param string $checkName
+     * @param string $message
+     * @param boolean $status
      */
     public function __construct($checkName, $message, $status)
     {
@@ -40,7 +40,7 @@ class CheckResult
     }
 
     /**
-     * @return integer
+     * @return boolean
      */
     public function getStatus()
     {

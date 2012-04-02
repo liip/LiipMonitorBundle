@@ -15,8 +15,8 @@ abstract class Check implements CheckInterface
     }
 
     /**
-     * @param $message
-     * @param $status
+     * @param string $message
+     * @param integer $status
      * @return \Liip\MonitorBundle\Result\CheckResult
      */
     protected function buildResult($message, $status)

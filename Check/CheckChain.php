@@ -19,7 +19,7 @@ final class CheckChain
     }
 
     /**
-     * @param $serviceId
+     * @param string $serviceId
      * @param CheckInterface $check
      * @return void
      */
@@ -46,7 +46,7 @@ final class CheckChain
 
     /**
      * @throws \InvalidArgumentException
-     * @param $id
+     * @param string $id
      * @return \Liip\MonitorBundle\Check\CheckInterface
      */
     public function getCheckById($id)

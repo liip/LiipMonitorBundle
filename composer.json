@@ -2,7 +2,7 @@
     "name": "liip/monitor-bundle",
     "type": "symfony-bundle",
     "description": "Liip Monitor Bundle",
-    "keywords": ["liip", "Monitor"],
+    "keywords": ["monitoring", "monitor", "check", "health"],
     "license": "MIT",
     "authors": [
         {
@@ -17,10 +17,10 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "2.0.*"
+        "symfony/framework-bundle": ">2.0,<2.2-dev"
     },
     "autoload": {
         "psr-0": { "Liip\\MonitorBundle": "" }
     },
-    "target-dir": "Sonata/MonitorBundle"
+    "target-dir": "Liip/MonitorBundle"
 }
