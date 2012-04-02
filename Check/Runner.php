@@ -8,16 +8,27 @@ class Runner extends ContainerAware
 {
     protected $chain;
 
-    public function __construct($chain)
+    /**
+     * @param $chain
+     */
+    public function __construct(CheckChain $chain)
     {
         $this->chain = $chain;
     }
 
+    /**
+     * @param $checkId
+     * @return
+     */
     public function runCheckById($checkId)
     {
         return $this->runCheck($this->chain->getCheckById($checkId));
     }
 
+    /**
+     * @param $checkService
+     * @return
+     */
     public function runCheck($checkService)
     {
         return $checkService->check();

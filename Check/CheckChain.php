@@ -4,30 +4,51 @@ namespace Liip\MonitorBundle\Check;
 
 use Liip\MonitorBundle\Check\CheckInterface;
 
-class CheckChain
+final class CheckChain
 {
-    protected $checks;
+    protected $checks = array();
 
-    public function __construct()
+    /**
+     * @param array $checks
+     */
+    public function __construct(array $checks = array())
     {
-        $this->checks = array();
+        foreach ($checks as $serviceId => $check) {
+            $this->addCheck($serviceId, $check);
+        }
     }
 
-    public function addCheck($service_id, CheckInterface $check)
+    /**
+     * @param $serviceId
+     * @param CheckInterface $check
+     * @return void
+     */
+    public function addCheck($serviceId, CheckInterface $check)
     {
-        $this->checks[$service_id] = $check;
+        $this->checks[$serviceId] = $check;
     }
 
+    /**
+     * @return array
+     */
     public function getChecks()
     {
         return $this->checks;
     }
 
+    /**
+     * @return array
+     */
     public function getAvailableChecks()
     {
         return array_keys($this->checks);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @param $id
+     * @return \Liip\MonitorBundle\Check\CheckInterface
+     */
     public function getCheckById($id)
     {
         if (!isset($this->checks[$id])) {
