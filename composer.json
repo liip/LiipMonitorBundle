@@ -10,9 +10,8 @@
             "email": "alvaro.videla@liip.ch"
         },
         {
-            "name": "Thomas Rabaix",
-            "email": "thomas.rabaix@sonata-project.org",
-            "homepage": "http://sonata-project.org"
+            "name": "Symfony Community",
+            "homepage": "https://github.com/liip/LiipMonitorBundle/contributors"
         }
     ],
     "require": {
