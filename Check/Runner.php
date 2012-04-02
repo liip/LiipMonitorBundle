@@ -9,7 +9,7 @@ class Runner extends ContainerAware
     protected $chain;
 
     /**
-     * @param $chain
+     * @param \Liip\MonitorBundle\Check\CheckChain $chain
      */
     public function __construct(CheckChain $chain)
     {
@@ -17,8 +17,8 @@ class Runner extends ContainerAware
     }
 
     /**
-     * @param $checkId
-     * @return
+     * @param string $checkId
+     * @return \Liip\MonitorBundle\Result\CheckResult
      */
     public function runCheckById($checkId)
     {
@@ -26,20 +26,24 @@ class Runner extends ContainerAware
     }
 
     /**
-     * @param $checkService
-     * @return
+     * @param \Liip\MonitorBundle\Check\CheckInterface $checkService
+     * @return \Liip\MonitorBundle\Result\CheckResult
      */
-    public function runCheck($checkService)
+    public function runCheck(CheckInterface $checkService)
     {
         return $checkService->check();
     }
 
+    /**
+     * @return array
+     */
     public function runAllChecks()
     {
         $results = array();
         foreach ($this->chain->getChecks() as $id => $checkService) {
             $results[$id] = $this->runCheck($checkService);
         }
+
         return $results;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class PathHelper
 {
@@ -10,19 +10,19 @@ class PathHelper
     protected $routerHelper;
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerAwareInterface $container
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct(ContainerAwareInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->assetsHelper = $container->get('templating.helper.assets');
         $this->routerHelper = $container->get('templating.helper.router');
     }
 
     /**
-     * @param $routes
+     * @param array $routes
      * @return array
      */
-    public function generateRoutes($routes)
+    public function generateRoutes(array $routes)
     {
         $ret = array();
         foreach ($routes as $route => $params) {
@@ -32,7 +32,11 @@ class PathHelper
         return $ret;
     }
 
-    public function getRoutesJs($routes)
+    /**
+     * @param array $routes
+     * @return string
+     */
+    public function getRoutesJs(array $routes)
     {
         $script = '<script type="text/javascript" charset="utf-8">';
         $script .= "var api = {};\n";
@@ -43,10 +47,10 @@ class PathHelper
     }
 
     /**
-     * @param $paths
+     * @param array $paths
      * @return string
      */
-    public function getScriptTags($paths)
+    public function getScriptTags(array $paths)
     {
         $ret = '';
         foreach ($paths as $path) {
@@ -57,10 +61,10 @@ class PathHelper
     }
 
     /**
-     * @param $paths
+     * @param array $paths
      * @return string
      */
-    public function getStyleTags($paths)
+    public function getStyleTags(array $paths)
     {
         $ret = '';
         foreach ($paths as $path) {
