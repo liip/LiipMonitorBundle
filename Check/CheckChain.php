@@ -21,7 +21,6 @@ final class CheckChain
     /**
      * @param string $serviceId
      * @param CheckInterface $check
-     * @return void
      */
     public function addCheck($serviceId, CheckInterface $check)
     {
