@@ -27,6 +27,14 @@ And then run the vendors install command:
 
     $ ./bin/vendors install
 
+Ensure the Liip namespace can be loaded by updating your autoload.php:
+
+    $loader->registerNamespaces(array(
+        ...
+        'Liip'             => __DIR__.'/../vendor/bundles',
+        ...
+    ));
+
 Then register the bundle in the `AppKernel.php` file:
 
     public function registerBundles()
