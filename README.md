@@ -145,3 +145,7 @@ To run an individual check you need to provide the check id to the `health` comm
 ## REST API DOCS ##
 
 For documentation on the REST API see: [http://myproject/health](http://myproject/health). Don't forget to add the bundle routes in your `routing.yml` file.
+
+## LiipMonitorExtraBundle ##
+
+We created a bundle where the community can share reusable health checks. We want this bundle to be a useful repository of health checks so go to the [https://github.com/liip/LiipMonitorExtraBundle](https://github.com/liip/LiipMonitorExtraBundle) and fork it to add your own.
