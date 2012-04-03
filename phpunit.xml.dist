@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true" bootstrap="./Tests/bootstrap.php" >
+    <testsuites>
+        <testsuite name="MonitorBundle Test Suite">
+            <directory suffix="Test.php">./Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests/</directory>
+                <directory>./DataFixtures/</directory>
+                <directory>./Resources/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
