@@ -54,6 +54,7 @@ If you want to enable the REST API provided by the bundle then add the following
 
     _monitor:
         resource: "@LiipMonitorBundle/Resources/config/routing.yml"
+        prefix: /monitor/health
 
 And finally don't forget to install the bundle assets into your web root:
 
@@ -144,7 +145,7 @@ To run an individual check you need to provide the check id to the `health` comm
 
 ## REST API DOCS ##
 
-For documentation on the REST API see: [http://myproject/health](http://myproject/health). Don't forget to add the bundle routes in your `routing.yml` file.
+For documentation on the REST API see: [http://myproject/monitor/health](http://myproject/monitor/health). Don't forget to add the bundle routes in your `routing.yml` file.
 
 ## LiipMonitorExtraBundle ##
 

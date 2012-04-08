@@ -14,17 +14,32 @@ table.test-result {
     width: 100%;
 }
 
-tr {
-    background: #65BF2A;
-}
-
 th {
     font-size: 16px;
     color: white;
     background: gray;
 }
 
-.failed {
+.check_result_success {
+    background: #65BF2A;
+}
+
+.check_result_info {
+    color: white;
+    background: #3366ff;
+}
+
+.check_result_warning {
+    color: white;
+    background: #ffcc00;
+}
+
+.check_result_critical {
+    color: white;
+    background: #ff6600;
+}
+
+.check_result_failure {
     color: white;
     background: #FF3D3D;
 }

@@ -4,8 +4,10 @@ namespace Liip\MonitorBundle\Result;
 
 class CheckResult
 {
-    const SUCCESS = true;
-    const FAILURE = false;
+    const SUCCESS = 1;
+    const FAILURE = 0;
+    const WARNING = -1;
+    const CRITICAL = -2;
 
     protected $checkName;
     protected $message;
@@ -14,7 +16,7 @@ class CheckResult
     /**
      * @param string $checkName
      * @param string $message
-     * @param boolean $status
+     * @param integer $status
      */
     public function __construct($checkName, $message, $status)
     {
@@ -40,7 +42,7 @@ class CheckResult
     }
 
     /**
-     * @return boolean
+     * @return integer
      */
     public function getStatus()
     {
@@ -53,9 +55,38 @@ class CheckResult
     public function toArray()
     {
         return array(
-            'checkName' => $this->checkName,
-            'message'   => $this->message,
-            'status'    => $this->status
+            'checkName'   => $this->checkName,
+            'message'     => $this->message,
+            'status'      => $this->status,
+            'status_name' => $this->getStatusName()
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName()
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$this->getStatus()])) {
+            return 'n/a';
+        }
+
+        return $list[$this->getStatus()];
+    }
+
+    /**
+     * @static
+     * @return array
+     */
+    static public function getStatusList()
+    {
+        return array(
+            self::SUCCESS   => 'check_result_success',
+            self::FAILURE   => 'check_result_failure',
+            self::WARNING   => 'check_result_warning',
+            self::CRITICAL  => 'check_result_critical',
         );
     }
 }
