@@ -82,7 +82,6 @@ Health.healthController = Em.ArrayProxy.create({
 
 Health.itemRowView = Ember.View.extend({
     repeatCheck: function(event, view, context) {
-        console.log(context.get('content'));
         Health.healthController.repeatCheck(context.get('content'));
     }
 });
