@@ -83,7 +83,7 @@ class HealthCheckController
     }
 
     /**
-     * @param $checkId
+     * @param string $checkId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runSingleCheckAction($checkId)
