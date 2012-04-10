@@ -46,7 +46,7 @@ class HealthCheckCommand extends ContainerAwareCommand
         foreach ($results as $result) {
             $msg = sprintf('%s: %s', $result->getCheckName(), $result->getMessage());
 
-            switch($result->getStatus()) {
+            switch ($result->getStatus()) {
                 case CheckResult::SUCCESS:
                     $output->writeln(sprintf('<info>SUCCESS</info> %s', $msg));
                     break;
