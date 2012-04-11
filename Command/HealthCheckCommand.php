@@ -47,8 +47,8 @@ class HealthCheckCommand extends ContainerAwareCommand
             $msg = sprintf('%s: %s', $result->getCheckName(), $result->getMessage());
 
             switch ($result->getStatus()) {
-                case CheckResult::SUCCESS:
-                    $output->writeln(sprintf('<info>SUCCESS</info> %s', $msg));
+                case CheckResult::OK:
+                    $output->writeln(sprintf('<info>OK</info> %s', $msg));
                     break;
 
                 case CheckResult::WARNING:
@@ -56,12 +56,12 @@ class HealthCheckCommand extends ContainerAwareCommand
                     break;
 
                 case CheckResult::CRITICAL:
-                    $output->writeln(sprintf('<error>CRITICAL</error> %s', $msg));
+                    $error = true;
+                    $output->writeln(sprintf('<error>CRITICAL %s</error>', $msg));
                     break;
 
-                case CheckResult::FAILURE:
-                    $error = true;
-                    $output->writeln(sprintf('<error>FAILURE %s</error>', $msg));
+                case CheckResult::UNKNOWN:
+                    $output->writeln(sprintf('<error>UNKNOWN<error> %s', $msg));
                     break;
             }
         }

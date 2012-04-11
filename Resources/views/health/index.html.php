@@ -24,12 +24,7 @@
                     {{#each Health.healthController.content}}
                         {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.status_name"}}
                             <td>
-                                {{#if content.failed}}
-                                <i class="icon-fire"></i>
-                                {{else}}
-                                <i class="icon-ok"></i>
-                                {{/if}}
-                                &nbsp;&nbsp;{{content.checkName}}
+                                <i {{bindAttr class="content.icon"}}></i>&nbsp;&nbsp;{{content.checkName}}
                             </td>
                             <td>{{content.message}}</td>
                             <td><button class=".btn" {{action "repeatCheck"}}>GO</button></td>

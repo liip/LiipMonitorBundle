@@ -11,9 +11,19 @@ Health.Check = Em.Object.extend({
     status: false,
     service_id: null,
 
-    failed: function() {
-        return !this.status;
-    }.property('status'),
+    icon: function() {
+        if (this.status_name == "check_result_ok") {
+            return "icon-ok-sign";
+        } else if (this.status_name == "check_result_warning") {
+            return "icon-warning-sign";
+        } else if (this.status_name == "check_result_critical") {
+            return "icon-fire";
+        } else if (this.status_name == "check_result_unknown") {
+            return "icon-question-sign";
+        }
+
+        return "icon-exclamation-sign";
+    }.property('status_name'),
 
     runUrl: function() {
         return api.liip_monitor_run_single_check.replace('replaceme', this.service_id);

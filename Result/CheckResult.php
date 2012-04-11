@@ -4,10 +4,14 @@ namespace Liip\MonitorBundle\Result;
 
 class CheckResult
 {
-    const SUCCESS = 1;
-    const FAILURE = 0;
-    const WARNING = -1;
-    const CRITICAL = -2;
+    const OK       = 0;
+    const WARNING  = 1;
+    const CRITICAL = 2;
+    const UNKNOWN  = 3;
+
+    # BC
+    const SUCCESS  = 0;
+    const FAILURE  = 2;
 
     protected $checkName;
     protected $message;
@@ -83,10 +87,10 @@ class CheckResult
     static public function getStatusList()
     {
         return array(
-            self::SUCCESS   => 'check_result_success',
-            self::FAILURE   => 'check_result_failure',
-            self::WARNING   => 'check_result_warning',
-            self::CRITICAL  => 'check_result_critical',
+            self::OK       => 'check_result_ok',
+            self::WARNING  => 'check_result_warning',
+            self::CRITICAL => 'check_result_critical',
+            self::UNKNOWN  => 'check_result_unknown',
         );
     }
 }
