@@ -87,9 +87,9 @@ Let's see an example on how to implement a Health Check class. In this case we a
                         throw new CheckFailedException(sprintf('Extension %s not loaded', $extension));
                     }
                 }
-                return $this->buildResult('OK', CheckResult::SUCCESS);
+                return $this->buildResult('OK', CheckResult::OK);
             } catch (\Exception $e) {
-                return $this->buildResult(sprintf('KO - %s', $e->getMessage()), CheckResult::FAILURE);
+                return $this->buildResult(sprintf('KO - %s', $e->getMessage()), CheckResult::CRITICAL);
             }
         }
 
