@@ -99,6 +99,17 @@ Let's see an example on how to implement a Health Check class. In this case we a
         }
     }
 
+
+### CheckResult values ###
+
+These values has been taken from the [nagios documentation](http://nagiosplug.sourceforge.net/developer-guidelines.html#RETURNCODES) :
+
+ * ``CheckResult::OK`` - The plugin was able to check the service and it appeared to be functioning properly
+ * ``CheckResult::WARNING`` - The plugin was able to check the service, but it appeared to be above some "warning" threshold or did not appear to be working properly
+ * ``CheckResult::CRITICAL`` - The plugin detected that either the service was not running or it was above some "critical" threshold
+ * ``CheckResult::UNKNOWN`` - Invalid command line arguments were supplied to the plugin or low-level failures internal to the plugin (such as unable to fork, or open a tcp socket) that prevent it from performing the specified operation. Higher-level errors (such as name resolution errors, socket timeouts, etc) are outside of the control of plugins and should generally NOT be reported as UNKNOWN states.
+
+
 As you can see our constructor will take an array with the names of the extensions our application requires. Then on the `check` method it will iterate over that array to test for each of the extensions. If there are no problems then the check will return a `CheckResult` object with a message (`OK` in our case) and the result status (`CheckResult::SUCCESS` in our case). As you can see this is as easy as it gets.
 
 Once you implemented the class then it's time to register the check service with our service container:
