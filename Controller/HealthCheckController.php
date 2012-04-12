@@ -4,6 +4,9 @@ namespace Liip\MonitorBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Liip\MonitorBundle\Check\Runner;
+use Liip\MonitorBundle\Helper\PathHelper;
+use Liip\MonitorBundle\Check\CheckChain;
 
 class HealthCheckController
 {
@@ -11,18 +14,26 @@ class HealthCheckController
     protected $runner;
     protected $pathHelper;
 
-    public function __construct($healthCheckChain, $runner, $pathHelper)
+    /**
+     * @param \Liip\MonitorBundle\Check\CheckChain $healthCheckChain
+     * @param \Liip\MonitorBundle\Check\Runner $runner
+     * @param \Liip\MonitorBundle\Helper\PathHelper $pathHelper
+     */
+    public function __construct(CheckChain $healthCheckChain, Runner $runner, PathHelper $pathHelper)
     {
         $this->healthCheckChain = $healthCheckChain;
         $this->runner = $runner;
         $this->pathHelper = $pathHelper;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $urls = $this->pathHelper->getRoutesJs(array(
-            'run_all_checks' => array(),
-            'run_single_check' => array('check_id' => 'replaceme')
+            'liip_monitor_run_all_checks' => array(),
+            'liip_monitor_run_single_check' => array('checkId' => 'replaceme')
         ));
 
         $css = $this->pathHelper->getStyleTags(array(
@@ -45,11 +56,19 @@ class HealthCheckController
         return new Response($content, 200);
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listAction(Request $request)
     {
         return $this->getJsonResponse($this->healthCheckChain->getAvailableChecks());
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function runAllChecksAction(Request $request)
     {
         $results = $this->runner->runAllChecks();
@@ -59,16 +78,26 @@ class HealthCheckController
             $tmp['service_id'] = $id;
             $data[] = $tmp;
         }
+
         return $this->getJsonResponse(array('checks' => $data));
     }
 
-    public function runSingleCheckAction($check_id)
+    /**
+     * @param string $checkId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function runSingleCheckAction($checkId)
     {
-        $result = $this->runner->runCheckById($check_id)->toArray();
-        $result['service_id'] = $check_id;
+        $result = $this->runner->runCheckById($checkId)->toArray();
+        $result['service_id'] = $checkId;
+
         return $this->getJsonResponse($result);
     }
 
+    /**
+     * @param $data
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     protected function getJsonResponse($data)
     {
         return new Response(json_encode($data), 200, array('Content-Type' => 'application/json'));

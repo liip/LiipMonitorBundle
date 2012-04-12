@@ -11,42 +11,38 @@
 <div id="container">
     <h1>System Health Status</h1>
     <script type="text/x-handlebars" data-template-name="result-template">
-    {{#if Health.healthController.content.length}}
-    <table class="table table-bordered table-condensed test-result">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Message</th>
-            <th>Repeat</th>
-        </tr>
-        </thead>
-        <tbody>
-            {{#each Health.healthController.content}}
-                {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.failed"}}
-                    <td>
-                        {{#if content.failed}}
-                        <i class="icon-fire"></i>
-                        {{else}}
-                        <i class="icon-ok"></i>
-                        {{/if}}
-                        &nbsp;&nbsp;{{content.checkName}}
-                    </td>
-                    <td>{{content.message}}</td>
-                    <td><button class=".btn" {{action "repeatCheck"}}>GO</button></td>
-                {{/view}}
-            {{/each}}
-        </tbody>
-    </table>
-    {{else}}
-    <div>
-        <h4>No Health Checks Registered</h4>
-        <p>
-            To register health checks you need to tag your services in the service container definition by using the following tag: <code>monitor.check</code>.
-        </p>
-    </div>
-    {{/if}}
+        {{#if Health.healthController.content.length}}
+            <table class="table table-bordered table-condensed test-result">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Message</th>
+                        <th>Repeat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each Health.healthController.content}}
+                        {{#view Health.itemRowView contentBinding="this" tagName="tr" classBinding="content.status_name"}}
+                            <td>
+                                <i {{bindAttr class="content.icon"}}></i>&nbsp;&nbsp;{{content.checkName}}
+                            </td>
+                            <td>{{content.message}}</td>
+                            <td><button class=".btn" {{action "repeatCheck"}}>GO</button></td>
+                        {{/view}}
+                    {{/each}}
+                </tbody>
+            </table>
+        {{else}}
+            <div>
+                <h4>No Health Checks Registered</h4>
+                <p>
+                    To register health checks you need to tag your services in the service container definition by using the following tag: <code>monitor.check</code>.
+                </p>
+            </div>
+        {{/if}}
     </script>
 </div>
+
 <div id="info">
     <h2>Documentation</h2>
     <p>This service performs user defined health checks for the various services that compose an application.</p>

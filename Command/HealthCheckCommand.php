@@ -7,6 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Liip\MonitorBundle\Result\CheckResult;
 
 class HealthCheckCommand extends ContainerAwareCommand
 {
@@ -41,13 +42,33 @@ class HealthCheckCommand extends ContainerAwareCommand
             $results = array($runner->runCheckById($checkName));
         }
 
+        $error = false;
         foreach ($results as $result) {
             $msg = sprintf('%s: %s', $result->getCheckName(), $result->getMessage());
-            if ($result->getStatus()) {
-                $output->writeln(sprintf('<info>%s</info>', $msg));
-            } else {
-                $output->writeln(sprintf('<error>%s</error>', $msg));
+
+            switch ($result->getStatus()) {
+                case CheckResult::OK:
+                    $output->writeln(sprintf('<info>OK</info> %s', $msg));
+                    break;
+
+                case CheckResult::WARNING:
+                    $output->writeln(sprintf('<comment>WARNING</comment> %s', $msg));
+                    break;
+
+                case CheckResult::CRITICAL:
+                    $error = true;
+                    $output->writeln(sprintf('<error>CRITICAL %s</error>', $msg));
+                    break;
+
+                case CheckResult::UNKNOWN:
+                    $output->writeln(sprintf('<error>UNKNOWN<error> %s', $msg));
+                    break;
             }
         }
+
+        $output->writeln('done!');
+
+        // return a negative value if an error occurs
+        return $error ? 1 : 0;
     }
 }

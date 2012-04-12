@@ -14,19 +14,29 @@ table.test-result {
     width: 100%;
 }
 
-tr {
-    background: #65BF2A;
-}
-
 th {
     font-size: 16px;
-    color: white;
     background: gray;
 }
 
-.failed {
-    color: white;
+.check_result_ok {
+    color: #000000;
+    background: #65BF2A;
+}
+
+.check_result_warning {
+    color: #000000;
+    background: #ffcc00;
+}
+
+.check_result_critical {
+    color: #000000;
     background: #FF3D3D;
+}
+
+.check_result_unknown {
+    color: #000000;
+    background: #999999;
 }
 
 .table tbody tr.failed:hover td {
