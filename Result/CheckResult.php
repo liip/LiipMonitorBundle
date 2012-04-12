@@ -9,10 +9,6 @@ class CheckResult
     const CRITICAL = 2;
     const UNKNOWN  = 3;
 
-    # BC
-    const SUCCESS  = 0;
-    const FAILURE  = 2;
-
     protected $checkName;
     protected $message;
     protected $status;

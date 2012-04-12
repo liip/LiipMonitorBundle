@@ -12,13 +12,19 @@ Health.Check = Em.Object.extend({
     service_id: null,
 
     icon: function() {
-        if (this.status_name == "check_result_ok") {
+        if (this.status_name === "check_result_ok") {
             return "icon-ok-sign";
-        } else if (this.status_name == "check_result_warning") {
+        }
+
+        if (this.status_name === "check_result_warning") {
             return "icon-warning-sign";
-        } else if (this.status_name == "check_result_critical") {
+        }
+
+        if (this.status_name === "check_result_critical") {
             return "icon-fire";
-        } else if (this.status_name == "check_result_unknown") {
+        }
+
+        if (this.status_name === "check_result_unknown") {
             return "icon-question-sign";
         }
 

@@ -69,6 +69,6 @@ class HealthCheckCommand extends ContainerAwareCommand
         $output->writeln('done!');
 
         // return a negative value if an error occurs
-        return $error ? -1 : 0;
+        return $error ? 1 : 0;
     }
 }
