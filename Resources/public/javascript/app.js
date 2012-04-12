@@ -1,4 +1,9 @@
-var Health = Em.Application.create();
+var Health = Em.Application.create( {
+    ready: function() {
+        Health.ResultView.appendTo('#container');
+        Health.healthController.runChecks();
+    }
+});
 
 Health.Check = Em.Object.extend({
     checkName: null,
@@ -6,12 +11,28 @@ Health.Check = Em.Object.extend({
     status: false,
     service_id: null,
 
-    failed: function() {
-        return !this.status;
-    }.property('status'),
+    icon: function() {
+        if (this.status_name === "check_result_ok") {
+            return "icon-ok-sign";
+        }
+
+        if (this.status_name === "check_result_warning") {
+            return "icon-warning-sign";
+        }
+
+        if (this.status_name === "check_result_critical") {
+            return "icon-fire";
+        }
+
+        if (this.status_name === "check_result_unknown") {
+            return "icon-question-sign";
+        }
+
+        return "icon-exclamation-sign";
+    }.property('status_name'),
 
     runUrl: function() {
-        return api.run_single_check.replace('replaceme', this.service_id);
+        return api.liip_monitor_run_single_check.replace('replaceme', this.service_id);
     }.property('checkName')
 });
 
@@ -21,8 +42,8 @@ Health.healthController = Em.ArrayProxy.create({
 
     runChecks: function() {
         var self = this;
-        $.ajax({
-            url: api.run_all_checks,
+        jQuery.ajax({
+            url: api.liip_monitor_run_all_checks,
             type: 'POST',
             dataType: 'json',
             success: function(data) {
@@ -76,8 +97,7 @@ Health.healthController = Em.ArrayProxy.create({
 });
 
 Health.itemRowView = Ember.View.extend({
-    repeatCheck: function(evt, view, context) {
-        event.preventDefault();
+    repeatCheck: function(event, view, context) {
         Health.healthController.repeatCheck(context.get('content'));
     }
 });
@@ -85,7 +105,3 @@ Health.itemRowView = Ember.View.extend({
 Health.ResultView = Ember.View.create({
     templateName: 'result-template'
 });
-
-Health.ResultView.appendTo('#container');
-
-Health.healthController.runChecks();

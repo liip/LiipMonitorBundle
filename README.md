@@ -54,6 +54,7 @@ If you want to enable the REST API provided by the bundle then add the following
 
     _monitor:
         resource: "@LiipMonitorBundle/Resources/config/routing.yml"
+        prefix: /monitor/health
 
 And finally don't forget to install the bundle assets into your web root:
 
@@ -86,9 +87,9 @@ Let's see an example on how to implement a Health Check class. In this case we a
                         throw new CheckFailedException(sprintf('Extension %s not loaded', $extension));
                     }
                 }
-                return $this->buildResult('OK', CheckResult::SUCCESS);
+                return $this->buildResult('OK', CheckResult::OK);
             } catch (\Exception $e) {
-                return $this->buildResult(sprintf('KO - %s', $e->getMessage()), CheckResult::FAILURE);
+                return $this->buildResult(sprintf('KO - %s', $e->getMessage()), CheckResult::CRITICAL);
             }
         }
 
@@ -97,6 +98,17 @@ Let's see an example on how to implement a Health Check class. In this case we a
             return "PHP Extensions Health Check";
         }
     }
+
+
+### CheckResult values ###
+
+These values has been taken from the [nagios documentation](http://nagiosplug.sourceforge.net/developer-guidelines.html#RETURNCODES) :
+
+ * ``CheckResult::OK`` - The plugin was able to check the service and it appeared to be functioning properly
+ * ``CheckResult::WARNING`` - The plugin was able to check the service, but it appeared to be above some "warning" threshold or did not appear to be working properly
+ * ``CheckResult::CRITICAL`` - The plugin detected that either the service was not running or it was above some "critical" threshold
+ * ``CheckResult::UNKNOWN`` - Invalid command line arguments were supplied to the plugin or low-level failures internal to the plugin (such as unable to fork, or open a tcp socket) that prevent it from performing the specified operation. Higher-level errors (such as name resolution errors, socket timeouts, etc) are outside of the control of plugins and should generally NOT be reported as UNKNOWN states.
+
 
 As you can see our constructor will take an array with the names of the extensions our application requires. Then on the `check` method it will iterate over that array to test for each of the extensions. If there are no problems then the check will return a `CheckResult` object with a message (`OK` in our case) and the result status (`CheckResult::SUCCESS` in our case). As you can see this is as easy as it gets.
 
@@ -144,7 +156,7 @@ To run an individual check you need to provide the check id to the `health` comm
 
 ## REST API DOCS ##
 
-For documentation on the REST API see: [http://myproject/health](http://myproject/health). Don't forget to add the bundle routes in your `routing.yml` file.
+For documentation on the REST API see: [http://myproject/monitor/health](http://myproject/monitor/health). Don't forget to add the bundle routes in your `routing.yml` file.
 
 ## LiipMonitorExtraBundle ##
 

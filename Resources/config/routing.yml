@@ -1,15 +1,15 @@
-health_interface:
-    pattern: /health
+liip_monitor_health_interface:
+    pattern: /
     defaults:  { _controller:  monitor.health.controller:indexAction, _method: GET }
 
-list_checks:
-    pattern: /health/checks
+liip_monitor_list_checks:
+    pattern: /checks
     defaults:  { _controller:  monitor.health.controller:listAction }
 
-run_all_checks:
-    pattern:   /health/run
+liip_monitor_run_all_checks:
+    pattern:   /run
     defaults:  { _controller:  monitor.health.controller:runAllChecksAction }
 
-run_single_check:
-    pattern:   /health/run/{check_id}
+liip_monitor_run_single_check:
+    pattern:   /run/{checkId}
     defaults:  { _controller:  monitor.health.controller:runSingleCheckAction }
