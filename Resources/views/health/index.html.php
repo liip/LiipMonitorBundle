@@ -55,15 +55,16 @@
     </p>
     <h3>REST API</h3>
     <dl>
-        <dt>/health</dt>
+        <dt><a href="<?php echo $request->getUriForPath('/monitor/health') ?>">/health</a></dt>
         <dl>
             Returns this HTML view. If the check was performed without errors then the table row will be <strong>green</strong>, else it will be shown as <strong>red</strong>.
         </dl>
-        <dt>/health/checks</dt>
+        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/checks') ?>">/health/checks</a></dt>
         <dd>
             Returns a list of available health checks as a JSON array.
             <pre>
-$ curl -XPOST http://api.nzz.lo/app_dev.php/health/checks
+$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks') ?>
+
 [
     "monitor.check.jackrabbit",
     "monitor.check.redis",
@@ -71,10 +72,11 @@ $ curl -XPOST http://api.nzz.lo/app_dev.php/health/checks
     "monitor.check.php_extensions"
 ]</pre>
         </dd>
-        <dt>/health/run</dt>
+        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/run') ?>">/health/run</a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST http://api.nzz.lo/app_dev.php/health/run
+$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/run') ?>
+
 {
 "checks":
     [
@@ -88,7 +90,8 @@ $ curl -XPOST http://api.nzz.lo/app_dev.php/health/run
         <dt>/health/run/check_id</dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl -XPOST http://api.nzz.lo/app_dev.php/health/run/monitor.check.redis
+$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks/monitor.check.redis') ?>
+
 {
    "checkName": "Redis Health Check",
    "message": "OK",
