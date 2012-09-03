@@ -29,7 +29,7 @@ class HealthCheckController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $urls = $this->pathHelper->getRoutesJs(array(
             'liip_monitor_run_all_checks' => array(),
@@ -73,13 +73,20 @@ class HealthCheckController
     {
         $results = $this->runner->runAllChecks();
         $data = array();
+        $globalStatus = 'OK';
         foreach ($results as $id => $result) {
             $tmp = $result->toArray();
             $tmp['service_id'] = $id;
+
+            if ($tmp['status'] > 0) {
+                $globalStatus = 'KO';
+            }
+
             $data[] = $tmp;
         }
 
-        return $this->getJsonResponse(array('checks' => $data));
+
+        return $this->getJsonResponse(array('checks' => $data, 'globalStatus' => $globalStatus));
     }
 
     /**

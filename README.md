@@ -19,23 +19,11 @@ Here's the web interface:
 
 ## Installation ##
 
-Add the following code to your deps file:
+Add the following code to your ```composer.json``` file:
 
-    [LiipMonitorBundle]
-        git=git://github.com/liip/LiipMonitorBundle.git
-        target=bundles/Liip/MonitorBundle
+And then run the Composer update command:
 
-And then run the vendors install command:
-
-    $ ./bin/vendors install
-
-Ensure the Liip namespace can be loaded by updating your autoload.php:
-
-    $loader->registerNamespaces(array(
-        ...
-        'Liip'             => __DIR__.'/../vendor/bundles',
-        ...
-    ));
+    $ php composer.phar update
 
 Then register the bundle in the `AppKernel.php` file:
 
@@ -58,7 +46,7 @@ If you want to enable the REST API provided by the bundle then add the following
 
 And finally don't forget to install the bundle assets into your web root:
 
-    $ ./app/console assets:install web --symlink
+    $ ./app/console assets:install web --symlink --relative
 
 ## Writing Health Checks ##
 
@@ -156,7 +144,7 @@ To run an individual check you need to provide the check id to the `health` comm
 
 ## REST API DOCS ##
 
-For documentation on the REST API see: [http://myproject/monitor/health](http://myproject/monitor/health). Don't forget to add the bundle routes in your `routing.yml` file.
+For documentation on the REST API see: [http://myproject/monitor/health/](http://myproject/monitor/health/). Don't forget to add the bundle routes in your `routing.yml` file.
 
 ## LiipMonitorExtraBundle ##
 
