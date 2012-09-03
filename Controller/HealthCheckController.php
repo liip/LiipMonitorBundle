@@ -27,6 +27,7 @@ class HealthCheckController
     }
 
     /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
@@ -57,19 +58,17 @@ class HealthCheckController
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->getJsonResponse($this->healthCheckChain->getAvailableChecks());
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function runAllChecksAction(Request $request)
+    public function runAllChecksAction()
     {
         $results = $this->runner->runAllChecks();
         $data = array();
@@ -84,7 +83,6 @@ class HealthCheckController
 
             $data[] = $tmp;
         }
-
 
         return $this->getJsonResponse(array('checks' => $data, 'globalStatus' => $globalStatus));
     }
