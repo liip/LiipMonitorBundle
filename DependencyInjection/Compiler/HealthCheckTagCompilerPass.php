@@ -10,13 +10,13 @@ class HealthCheckTagCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('monitor.check_chain')) {
+        if (false === $container->hasDefinition('liip_monitor.check_chain')) {
             return;
         }
 
-        $definition = $container->getDefinition('monitor.check_chain');
+        $definition = $container->getDefinition('liip_monitor.check_chain');
 
-        foreach ($container->findTaggedServiceIds('monitor.check') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('liip_monitor.check') as $id => $attributes) {
             $definition->addMethodCall('addCheck', array($id, new Reference($id)));
         }
     }
