@@ -23,10 +23,6 @@ services:
     liip_monitor.check.custom_error_pages:
         class: Liip\MonitorBundle\Check\CustomErrorPagesCheck
         public: false
-        arguments:
-            - [ 404, 500 ]
-            - %kernel.root_dir%
-            - %twig.exception_listener.controller%
 
     liip_monitor.check.symfony_version_check:
         class: Liip\MonitorBundle\Check\SymfonyVersionCheck
@@ -35,8 +31,6 @@ services:
     liip_monitor.check.deps_entries:
         class: Liip\MonitorBundle\Check\DepsEntriesCheck
         public: false
-        arguments:
-            - %kernel.root_dir%
 
     liip_monitor.check.memcache:
         class: Liip\Monitor\Check\MemcacheCheck
@@ -48,22 +42,15 @@ services:
     liip_monitor.check.php_extensions:
         class: Liip\Monitor\Check\PhpExtensionsCheck
         public: false
-        arguments:
-            - [ ]
 
     liip_monitor.check.process_active:
         class: Liip\Monitor\Check\ProcessActiveCheck
         public: false
-        arguments:
-            command: ~
 
     liip_monitor.check.writable_directory:
         class: Liip\Monitor\Check\WritableDirectoryCheck
         public: false
-        arguments:
-            - [ ]
 
     liip_monitor.check.disc_usage:
         class: Liip\Monitor\Check\DiscUsageCheck
         public: false
-        arguments: [ ]
