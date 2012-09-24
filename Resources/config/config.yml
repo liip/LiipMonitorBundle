@@ -1,17 +1,14 @@
 services:
     liip_monitor.check.runner:
         class: Liip\Monitor\Check\Runner
-        public: false
         arguments:
             - @liip_monitor.check_chain
 
     liip_monitor.check_chain:
         class: Liip\Monitor\Check\CheckChain
-        public: false
 
     liip_monitor.health.controller:
         class: Liip\MonitorBundle\Controller\HealthCheckController
-        public: false
         arguments:
             - @liip_monitor.check_chain
             - @liip_monitor.check.runner
