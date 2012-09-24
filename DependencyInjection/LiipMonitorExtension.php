@@ -95,7 +95,7 @@ class LiipMonitorExtension extends Extension
                     $service = $container->getDefinition($check);
             }
 
-            $service->addTag('liip_monitor.check');
+            $service->addTag('liip_monitor.check', array('alias' => $check));
         }
     }
 }

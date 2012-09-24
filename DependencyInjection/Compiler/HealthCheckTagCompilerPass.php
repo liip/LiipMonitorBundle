@@ -17,7 +17,10 @@ class HealthCheckTagCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition('liip_monitor.check_chain');
 
         foreach ($container->findTaggedServiceIds('liip_monitor.check') as $id => $attributes) {
-            $definition->addMethodCall('addCheck', array($id, new Reference($id)));
+            foreach ($attributes as $attribute) {
+                $alias = empty($attribute['alias']) ? $id : $attribute['alias'];
+                $definition->addMethodCall('addCheck', array($alias, new Reference($id)));
+            }
         }
     }
 }

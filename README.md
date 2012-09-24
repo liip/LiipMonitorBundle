@@ -77,12 +77,14 @@ Once you implemented the class then it's time to register the check service with
             arguments:
                 - [ xhprof, apc, memcache ]
             tags:
-                - { name: liip_monitor.check }
+                - { name: liip_monitor.check, alias: php_extensions }
 
 The important bit there is to remember to tag your services with the `liip_monitor.check` tag.
 By doing that the check runner will be able to find your checks. Keep in mind that checks
 can reside either in your bundles or in your app specific code. The location doesn't matter
-as long as the service is properly tagged.
+as long as the service is properly tagged. The ``alias`` is optional and will then simply
+define the ``id`` used when running health checks individually, otherwise the full service
+id must be used in this case.
 
 ## Available Health Checks ##
 
