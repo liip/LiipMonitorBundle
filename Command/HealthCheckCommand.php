@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Liip\MonitorBundle\Result\CheckResult;
+use Liip\Monitor\Result\CheckResult;
 
 class HealthCheckCommand extends ContainerAwareCommand
 {
@@ -34,7 +34,7 @@ class HealthCheckCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
-        $runner = $this->getContainer()->get('monitor.check.runner');
+        $runner = $this->getContainer()->get('liip_monitor.check.runner');
 
         if ($checkName == 'all') {
             $results = $runner->runAllChecks();

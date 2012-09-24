@@ -1,20 +1,56 @@
 services:
-    monitor.check.runner:
-        class: Liip\MonitorBundle\Check\Runner
+    liip_monitor.check.runner:
+        class: Liip\Monitor\Check\Runner
         arguments:
-            - @monitor.check_chain
+            - @liip_monitor.check_chain
 
-    monitor.check_chain:
-        class: Liip\MonitorBundle\Check\CheckChain
+    liip_monitor.check_chain:
+        class: Liip\Monitor\Check\CheckChain
 
-    monitor.health.controller:
+    liip_monitor.health.controller:
         class: Liip\MonitorBundle\Controller\HealthCheckController
         arguments:
-            - @monitor.check_chain
-            - @monitor.check.runner
-            - @monitor.helper.path
+            - @liip_monitor.check_chain
+            - @liip_monitor.check.runner
+            - @liip_monitor.helper.path
 
-    monitor.helper.path:
+    liip_monitor.helper.path:
         class: Liip\MonitorBundle\Helper\PathHelper
+        public: false
         arguments:
             - @service_container
+
+    liip_monitor.check.custom_error_pages:
+        class: Liip\MonitorBundle\Check\CustomErrorPagesCheck
+        public: false
+
+    liip_monitor.check.symfony_version_check:
+        class: Liip\MonitorBundle\Check\SymfonyVersionCheck
+        public: false
+
+    liip_monitor.check.deps_entries:
+        class: Liip\MonitorBundle\Check\DepsEntriesCheck
+        public: false
+
+    liip_monitor.check.memcache:
+        class: Liip\Monitor\Check\MemcacheCheck
+        public: false
+        arguments:
+            host: localhost
+            port: 11211
+
+    liip_monitor.check.php_extensions:
+        class: Liip\Monitor\Check\PhpExtensionsCheck
+        public: false
+
+    liip_monitor.check.process_active:
+        class: Liip\Monitor\Check\ProcessActiveCheck
+        public: false
+
+    liip_monitor.check.writable_directory:
+        class: Liip\Monitor\Check\WritableDirectoryCheck
+        public: false
+
+    liip_monitor.check.disc_usage:
+        class: Liip\Monitor\Check\DiscUsageCheck
+        public: false
