@@ -15,11 +15,11 @@ too.
 
 So each health check will be a class that will implement the `CheckInterface::check`
 method which must return a `CheckResult` object. What happens inside that method
-is up to the Check developer.
+is up to the check developer.
 
 Health checks are defined as Symfony services and they have to be tagged as
-`monitor.check` in order to be picked up by the _Health Check Runner_. This gives a
-lot of flexibility to application and bundle developers when they want to add their
+`liip_monitor.check` in order to be picked up by the _health check runner_. This gives
+a lot of flexibility to application and bundle developers when they want to add their
 own checks.
 
 Checks are run via the command line using a Symfony command or via a REST api that
