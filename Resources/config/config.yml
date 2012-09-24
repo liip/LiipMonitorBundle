@@ -21,7 +21,7 @@ services:
             - @service_container
 
     liip_monitor.check.custom_error_pages:
-        class: Liip\Monitor\Check\CustomErrorPagesCheck
+        class: Liip\MonitorBundle\Check\CustomErrorPagesCheck
         public: false
         arguments:
             - [ 404, 500 ]
@@ -29,11 +29,11 @@ services:
             - %twig.exception_listener.controller%
 
     liip_monitor.check.symfony_version_check:
-        class: Liip\Monitor\Check\SymfonyVersionCheck
+        class: Liip\MonitorBundle\Check\SymfonyVersionCheck
         public: false
 
     liip_monitor.check.deps_entries:
-        class: Liip\Monitor\Check\DepsEntriesCheck
+        class: Liip\MonitorBundle\Check\DepsEntriesCheck
         public: false
         arguments:
             - %kernel.root_dir%

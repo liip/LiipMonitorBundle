@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\Monitor\Check;
+namespace Liip\MonitorBundle\Check;
 
 use Liip\Monitor\Check\Check;
 use Liip\Monitor\Exception\CheckFailedException;

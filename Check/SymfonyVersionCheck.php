@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\Monitor\Check;
+namespace Liip\MonitorBundle\Check;
 
 use Symfony\Component\HttpKernel\Kernel;
 use Exception;
