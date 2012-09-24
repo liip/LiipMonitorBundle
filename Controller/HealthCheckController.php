@@ -4,9 +4,9 @@ namespace Liip\MonitorBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Liip\MonitorBundle\Check\Runner;
+use Liip\Monitor\Check\Runner;
 use Liip\MonitorBundle\Helper\PathHelper;
-use Liip\MonitorBundle\Check\CheckChain;
+use Liip\Monitor\Check\CheckChain;
 
 class HealthCheckController
 {
@@ -15,8 +15,8 @@ class HealthCheckController
     protected $pathHelper;
 
     /**
-     * @param \Liip\MonitorBundle\Check\CheckChain $healthCheckChain
-     * @param \Liip\MonitorBundle\Check\Runner $runner
+     * @param \Liip\Monitor\Check\CheckChain $healthCheckChain
+     * @param \Liip\Monitor\Check\Runner $runner
      * @param \Liip\MonitorBundle\Helper\PathHelper $pathHelper
      */
     public function __construct(CheckChain $healthCheckChain, Runner $runner, PathHelper $pathHelper)

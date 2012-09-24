@@ -24,7 +24,7 @@ class ListChecksCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $chain = $this->getContainer()->get('monitor.check_chain');
+        $chain = $this->getContainer()->get('liip_monitor.check_chain');
         foreach ($chain->getAvailableChecks() as $service_id) {
             $output->writeln($service_id);
         }
