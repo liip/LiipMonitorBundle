@@ -47,8 +47,8 @@ class LiipMonitorExtension extends Extension
                     break;
 
                 case 'deps_entries':
-                    if (isset($values['kernel_root_dir'])) {
-                        $service->replaceArgument(0, $values['kernel_root_dir']);
+                    if (isset($values)) {
+                        $service->replaceArgument(0, $values);
                     }
                     break;
 
@@ -62,20 +62,20 @@ class LiipMonitorExtension extends Extension
                     break;
 
                 case 'php_extensions':
-                    if (isset($values['extensions'])) {
-                        $service->replaceArgument(0, $values['extensions']);
+                    if (isset($values)) {
+                        $service->replaceArgument(0, $values);
                     }
                     break;
 
                 case 'process_active':
-                    if (isset($values['processes'])) {
-                        $service->replaceArgument(0, $values['processes']);
+                    if (isset($values)) {
+                        $service->replaceArgument(0, $values);
                     }
                     break;
 
                 case 'writable_directory':
-                    if (isset($values['dirs'])) {
-                        $service->replaceArgument(0, $values['dirs']);
+                    if (isset($values)) {
+                        $service->replaceArgument(0, $values);
                     }
                     break;
 
