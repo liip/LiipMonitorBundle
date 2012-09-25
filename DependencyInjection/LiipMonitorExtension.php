@@ -23,6 +23,11 @@ class LiipMonitorExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        if (empty($config['checks'])) {
+            return;
+        }
+
         foreach ($config['checks'] as $check => $values) {
             if (empty($values)) {
                 continue;
