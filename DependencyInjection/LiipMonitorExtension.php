@@ -53,8 +53,8 @@ class LiipMonitorExtension extends Extension
                     break;
 
                 case 'memcache':
-                    $service->addArgument($values['host']);
-                    $service->addArgument($values['port']);
+                    $service->replaceArgument(0, $values['host']);
+                    $service->replaceArgument(1, $values['port']);
                     break;
 
                 case 'php_extensions':
