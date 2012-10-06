@@ -36,8 +36,8 @@ services:
         class: Liip\Monitor\Check\MemcacheCheck
         public: false
         arguments:
-            host: localhost
-            port: 11211
+            - localhost
+            - 11211
 
     liip_monitor.check.php_extensions:
         class: Liip\Monitor\Check\PhpExtensionsCheck
