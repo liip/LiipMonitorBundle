@@ -31,7 +31,7 @@ To remedy the situation, do:
 
 Author: Tarjei Huse, tarjei.huse@gmail.com
 
-""""
+"""
 
 class Symfony2Check(nagiosplugin.Check):
     name = "Symfony2 health check"
