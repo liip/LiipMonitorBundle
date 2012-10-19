@@ -36,7 +36,7 @@
             <div>
                 <h4>No Health Checks Registered</h4>
                 <p>
-                    To register health checks you need to tag your services in the service container definition by using the following tag: <code>monitor.check</code>.
+                    To register health checks you need to tag your services in the service container definition by using the following tag: <code>liip_monitor.check</code>.
                 </p>
             </div>
         {{/if}}
