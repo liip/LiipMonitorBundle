@@ -67,6 +67,16 @@ And finally don't forget to install the bundle assets into your web root:
 
     $ ./app/console assets:install web --symlink --relative
 
+## Enabling built-in health checks
+
+To enable built-in health checks, add them to your `config.yml`
+
+
+```yml
+liip_monitor:
+    checks:
+        php_extensions: [apc, xdebug]
+```
 ## Adding Health Checks ##
 
 Once you implemented the class then it's time to register the check service with our service container:
