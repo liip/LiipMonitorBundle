@@ -144,7 +144,37 @@ To run an individual check you need to provide the check id to the `health` comm
 
     PHP Extensions Health Check: OK
 
+
+### Run health checks as composer post-install/update scripts
+
+To run health checks as a composer post-install or post-update script, simply add the
+`Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth` ScriptHandler to the 
+`post-install-cmd / post-update-cmd` command sections of your `composer.json`:
+
+``` json
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
+        ]
+    },
+
+
+```
+
 ## REST API DOCS ##
 
 For documentation on the REST API see: [http://myproject/monitor/health/](http://myproject/monitor/health/).
 Don't forget to add the bundle routes in your `routing.yml` file.
+
+
