@@ -20,6 +20,9 @@
         "liip/monitor": "0.5.*",
         "symfony/framework-bundle": ">2.0,<2.3-dev"
     },
+    "suggest": {
+        "sensio/distribution-bundle": "To be able to use the composer ScriptHandler"
+    },
     "autoload": {
         "psr-0": { "Liip\\MonitorBundle": "" }
     },
