@@ -178,3 +178,39 @@ For documentation on the REST API see: [http://myproject/monitor/health/](http:/
 Don't forget to add the bundle routes in your `routing.yml` file.
 
 
+## Nagios integration ##
+
+You can find a simple Nagios check written in Python in the Resources/scripts directory.
+It depends on the nagiosplugin library.
+
+Copy the script into your scripts directory in Nagios and create a command like this:
+
+    define command{
+            command_name    check_symfony_health
+            command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$
+    }
+
+To use the plugin with HTTP basic authentication, change the command to:
+
+    command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$ -a username:password
+
+Add a service:
+
+    define service{
+     hostgroup_name         Symfony2
+     service_description    Symfony2 health check
+     check_command          check_symfony_health
+     use                    generic-service
+    }
+
+And create a host attached to the Symfony2 hostgroup:
+
+    define host{
+        use              web-host
+        host_name        www.myhost.com
+        address          8.8.8.4
+        hostgroups       Symfony2
+    }
+
+And place your host within the Symfony2 hostgroup.
+
