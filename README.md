@@ -212,5 +212,5 @@ And create a host attached to the Symfony2 hostgroup:
         hostgroups       Symfony2
     }
 
-
+And place your host within the Symfony2 hostgroup.
 
