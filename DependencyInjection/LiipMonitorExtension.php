@@ -38,7 +38,7 @@ class LiipMonitorExtension extends Extension
             switch ($check) {
                 case 'custom_error_pages':
                     $service->addArgument($values['error_codes']);
-                    $service->addArgument($values['kernel_root_dir']);
+                    $service->addArgument($values['path']);
                     $service->addArgument($values['controller']);
                     break;
 
