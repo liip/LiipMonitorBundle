@@ -72,6 +72,19 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks') ?>
     "monitor.check.php_extensions"
 ]</pre>
         </dd>
+
+        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/groups') ?>">/health/groups</a></dt>
+        <dd>
+            Returns a list of available health check groups as a JSON array. Health check groups are a way to group several checks into one check, for example to provide a status page for end-users (e.g. like <a target="_blank" href="http://status.github.com">status.github.com</a>).
+            <pre>
+$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/groups') ?>
+
+[
+    "storage",
+    "api"
+]</pre>
+        </dd>
+
         <dt><a href="<?php echo $request->getUriForPath('/monitor/health/run') ?>">/health/run</a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
@@ -87,6 +100,21 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/run') ?>
     ]
 }</pre>
         </dd>
+
+        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/rungroups') ?>">/health/rungroups</a></dt>
+        <dd>Performs all health check groups and returns the results as an array of JSON objects.
+<pre>
+$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/rungroups') ?>
+
+{
+"checks":
+    [
+        {"storage": "check_result_ok"},
+        {"api": "check_result_ok"},
+    ]
+}</pre>
+        </dd>
+
         <dt>/health/run/check_id</dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>

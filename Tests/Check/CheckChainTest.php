@@ -27,4 +27,28 @@ class CheckChainTest extends \PHPUnit_Framework_TestCase
         $checkChain->getCheckById('fake');
     }
 
+    public function testCheckGroups()
+    {
+        $checkOne = $check = $this->getMock('Liip\Monitor\Check\CheckInterface');
+
+        $checkOne
+            ->expects($this->exactly(2))
+            ->method('getGroup')
+            ->will($this->returnValue('foo'))
+        ;
+
+        $checkTwo = $check = $this->getMock('Liip\Monitor\Check\CheckInterface');
+
+        $checkTwo
+            ->expects($this->exactly(2))
+            ->method('getGroup')
+            ->will($this->returnValue('bar'))
+        ;
+
+        $checkChain = new CheckChain();
+        $checkChain->addCheck('foo_id', $checkOne);
+        $checkChain->addCheck('bar_id', $checkTwo);
+
+        $this->assertEquals(array('foo', 'bar'), $checkChain->getGroups());
+    }
 }
