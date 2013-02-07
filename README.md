@@ -96,6 +96,12 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
+## Check groups ##
+
+All built-in checks are assigned to the group `default`.
+See [check groups](https://github.com/liip/LiipMonitor/tree/master#check-groups) in the `LiipMonitor` library for details.
+
+
 ## Available Health Checks ##
 
 On top of all the checks provided by the LiipMonitor library this Bundle adds the following

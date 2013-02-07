@@ -68,6 +68,14 @@ class HealthCheckController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
+    public function listGroups()
+    {
+        return $this->getJsonResponse($this->healthCheckChain->getGroups());
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function runAllChecksAction()
     {
         $results = $this->runner->runAllChecks();
@@ -87,6 +95,7 @@ class HealthCheckController
         return $this->getJsonResponse(array('checks' => $data, 'globalStatus' => $globalStatus));
     }
 
+
     /**
      * @param string $checkId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -97,6 +106,21 @@ class HealthCheckController
         $result['service_id'] = $checkId;
 
         return $this->getJsonResponse($result);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function runAllGroupChecksAction()
+    {
+        $results = $this->runner->runAllChecksByGroup();
+        $data = array();
+
+        foreach ($results as $id => $result) {
+            $data[$id] = $result->getStatusName();
+        }
+
+        return $this->getJsonResponse($data);
     }
 
     /**

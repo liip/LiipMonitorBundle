@@ -14,6 +14,7 @@ class ListChecksCommand extends ContainerAwareCommand
     {
         $this
             ->setName('monitor:list')
+            ->addOption('group', 'g', InputOption::VALUE_OPTIONAL, 'List the checks by group')
             ->setDescription('Lists Health Checks');
     }
 
@@ -25,8 +26,18 @@ class ListChecksCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $chain = $this->getContainer()->get('liip_monitor.check_chain');
-        foreach ($chain->getAvailableChecks() as $service_id) {
-            $output->writeln($service_id);
+        if (!$input->getOption('group')) {
+            foreach ($chain->getGroups() as $group) {
+
+                $output->writeln(sprintf('Group <info>%s</info>', $group));
+                foreach ($chain->getChecksByGroup($group) as $service_id) {
+                    $output->writeln('  - ' . $service_id);
+                }
+            }
+        } else {
+            foreach ($chain->getAvailableChecks() as $service_id) {
+                $output->writeln($service_id);
+            }
         }
     }
 }
