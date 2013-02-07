@@ -5,7 +5,8 @@
 #
 # This uses https on the common /utils/health/run or /health/run directories 
 #  when providing just the host hame (-H) option
-# or can use the exact address provided with the address (-A) option
+# OR
+# Uses the exact address provided with the address (-A) option
 #
 #
 # Usage - Nagios config:
@@ -65,8 +66,8 @@ if (defined($opts{A})) {
 	   	exit 3;
 	}
 } else {
-	my $url1 = "https://" . $opts{H} . "/health/run";
-	my $url2 = "https://" . $opts{H} . "/utils/health/run";
+	my $url1 = "https://" . $opts{H} . "/utils/health/run";
+	my $url2 = "https://" . $opts{H} . "/health/run";
 
 	eval {
 		$browser->get( $url1 );
@@ -96,7 +97,7 @@ foreach (@{$content->{checks}})
         $passnumber += 1;
         $color = '#33FF00';
     }
-    $donechecks .= "<tr style=\'font-size:8pt\'><td nowrap><table style=\'background-color:#33FF00\'><tr style=\'vertical-align:middle\'><td style=\'font-size:6pt\'> ${totalnumber} </td></tr></table></td><td></td><td></td><td> $_->{checkName} </td><td> $_->{message} </td></tr>";
+    $donechecks .= "<tr style=\'font-size:8pt\'><td nowrap><table style=\'background-color:${color}\'><tr style=\'vertical-align:middle\'><td style=\'font-size:6pt\'> ${totalnumber} </td></tr></table></td><td></td><td></td><td> $_->{checkName} </td><td> $_->{message} </td></tr>";
 }
 
 if ($failnumber > 0) {
