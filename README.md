@@ -180,8 +180,37 @@ Don't forget to add the bundle routes in your `routing.yml` file.
 
 ## Nagios integration ##
 
-You can find a simple Nagios check written in Python in the Resources/scripts directory.
-It depends on the nagiosplugin library.
+You can find a simple Nagios check written in Perl and Python in the Resources/scripts directory.
+
+### Perl Version ###
+
+This is dependent on perl modules avalible on CPAN Getopt::Std, WWW::Mechanize, and JSON
+
+
+Copy the script into your scripts directory in Nagios and create a command like this:
+
+    define command{
+            command_name    check_symfony_health
+            command_line    $USER1$/check_symfony2.pl -H $HOSTNAME$
+    }
+
+Running the command with the Hostname flag (-H) will check both "http://$HOSTNAME$/health/run" and "http://$HOSTNAME$/utils/health/run". You can also use the Address flag (-A) to check a specified URL: 
+
+    command_line    $USER1$/check_symfony2.pl -A https://mysite.org/somedir/health/run
+
+The plugin can be used with Authentication, Using the Username (-u) and Password (-p) flags:
+
+    command_line    $USER1$/check_symfony2.p1 -H $HOSTNAME$ -u username -p password
+
+You can also specify the Warning (-w) and Critical (-c) levels for the check using the standard flags
+
+    command_line    $USER1$/check_symfony2.pl -H $HOSTNAME$ -w 1 -c 2
+
+Any flags can be combined except -A and -H. THe -u and -p flags should always be used together.
+
+### Python Version ###
+
+The Python version depends on the nagiosplugin library < 1.0.0.
 
 Copy the script into your scripts directory in Nagios and create a command like this:
 
@@ -193,6 +222,8 @@ Copy the script into your scripts directory in Nagios and create a command like 
 To use the plugin with HTTP basic authentication, change the command to:
 
     command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$ -a username:password
+
+### Conneting Check to Host in Nagios ###
 
 Add a service:
 

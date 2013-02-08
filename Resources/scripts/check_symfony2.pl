@@ -13,7 +13,7 @@
 #
 # define command{  
 #         command_name    check_symfony_health
-#         command_line    $USER1$/check_symfony2 -w 0  -c 0 -H $HOSTNAME$ -n USERNAME -p USERPASSWORD
+#         command_line    $USER1$/check_symfony2 -w 1  -c 1 -H $HOSTNAME$ -n USERNAME -p USERPASSWORD
 # }
 #
 # Created by: Troy Germain, troy.germain@gmail.com
@@ -114,7 +114,7 @@ $message .= $htmlend;
 
 print "$message\n";
 
-if ($failnumber < $opts{w}) {
+if ($failnumber < $opts{w} or $failnumber == 0 ) {
     exit 0;
 }
 
