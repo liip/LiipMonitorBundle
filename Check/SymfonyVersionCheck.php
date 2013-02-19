@@ -13,9 +13,9 @@ use Liip\Monitor\Result\CheckResult;
  * Add this to your config.yml
  *
  *     monitor.check.symfony_version:
- *         class: Liip\Monitor\Check\SymfonyVersionCheck
+ *         class: Liip\MonitorBundle\Check\SymfonyVersionCheck
  *         tags:
- *             - { name: monitor.check }
+ *             - { name: liip_monitor.check }
  *
  * @author Roderik van der Veer <roderik@vanderveer.be>
  */
