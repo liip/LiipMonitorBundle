@@ -54,3 +54,13 @@ services:
     liip_monitor.check.disc_usage:
         class: Liip\Monitor\Check\DiscUsageCheck
         public: false
+
+    liip_monitor.check.security_advisory:
+        class: Liip\Monitor\Check\SecurityAdvisoryCheck
+        public: false
+        arguments:
+            - @liip_monitor.security_checker
+
+    liip_monitor.security_checker:
+        class: SensioLabs\Security\SecurityChecker
+        public: false
