@@ -73,6 +73,10 @@ class LiipMonitorExtension extends Extension
                     $service->addArgument($values['percentage']);
                     $service->addArgument($values['path']);
                     break;
+
+                case 'security_advisory':
+                    $service->addArgument($values['path']);
+                    break;
             }
 
             $service->addTag('liip_monitor.check', array('alias' => $check));
