@@ -63,7 +63,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('security_advisory')
                             ->children()
-                                ->scalarNode('path')->defaultValue('%kernel.root_dir%' . '/../composer.lock')->end()
+                                ->scalarNode('lock_file')->defaultValue('%kernel.root_dir%' . '/../composer.lock')->end()
                             ->end()
                         ->end()
                     ->end()

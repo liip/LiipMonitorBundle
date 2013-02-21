@@ -75,7 +75,7 @@ class LiipMonitorExtension extends Extension
                     break;
 
                 case 'security_advisory':
-                    $service->addArgument($values['path']);
+                    $service->addArgument($values['lock_file']);
                     break;
             }
 
