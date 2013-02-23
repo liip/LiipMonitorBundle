@@ -190,7 +190,7 @@ You can find a simple Nagios check written in Perl and Python in the Resources/s
 
 ### Perl Version ###
 
-This is dependent on perl modules avalible on CPAN Getopt::Std, WWW::Mechanize, and JSON
+This is dependent on perl modules available on CPAN Getopt::Std, WWW::Mechanize, and JSON
 
 
 Copy the script into your scripts directory in Nagios and create a command like this:
@@ -229,7 +229,7 @@ To use the plugin with HTTP basic authentication, change the command to:
 
     command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$ -a username:password
 
-### Conneting Check to Host in Nagios ###
+### Connecting Check to Host in Nagios ###
 
 Add a service:
 

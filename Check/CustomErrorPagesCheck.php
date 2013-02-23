@@ -60,7 +60,7 @@ class CustomErrorPagesCheck extends Check
 
             $values = $reflectionChildren->getValue($tree);
 
-            // we suppose pages has been customized if the execption controller is not the default one,
+            // we suppose pages has been customized if the exception controller is not the default one,
             // so we don't look for template file in this case.
             if ($values['exception_controller']->getDefaultValue() == $this->exceptionController) {
                 $missingTemplate = array();
