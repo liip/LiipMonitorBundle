@@ -39,8 +39,16 @@ th {
     background: #999999;
 }
 
-.table tbody tr.failed:hover td {
+.table tbody tr.check_result_warning:hover td {
+    background: #FDFF87;
+}
+
+.table tbody tr.check_result_critical:hover td {
     background: #FF9D7D;
+}
+
+.table tbody tr.check_result_unknown:hover td {
+    background: #999999;
 }
 
 .table tbody tr:hover td, .table tbody tr:hover th {
