@@ -55,6 +55,8 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('custom_error_pages')
                             ->children()
                                 ->arrayNode('error_codes')
+                                    ->isRequired()
+                                    ->requiresAtLeastOneElement()
                                     ->prototype('scalar')->end()
                                 ->end()
                                 ->scalarNode('path')->defaultValue('%kernel.root_dir%')->end()
