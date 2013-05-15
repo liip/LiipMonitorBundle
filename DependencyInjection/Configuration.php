@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('path')->defaultValue('%kernel.cache_dir%')->end()
                             ->end()
                         ->end()
+                        ->scalarNode('doctrine_dbal')->defaultNull()->end()
                         ->arrayNode('memcache')
                             ->children()
                                 ->scalarNode('host')->defaultValue('localhost')->end()

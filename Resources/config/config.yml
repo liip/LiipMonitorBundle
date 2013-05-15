@@ -39,6 +39,10 @@ services:
             - localhost
             - 11211
 
+    liip_monitor.check.doctrine_dbal:
+        class: Liip\Monitor\Check\DoctrineDbalCheck
+        public: false
+
     liip_monitor.check.http_service:
         class: Liip\Monitor\Check\HttpServiceCheck
         public: false

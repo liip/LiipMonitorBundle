@@ -6,7 +6,8 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
+    Symfony\Component\DependencyInjection\Reference;
 
 class LiipMonitorExtension extends Extension
 {
@@ -55,6 +56,11 @@ class LiipMonitorExtension extends Extension
                 case 'memcache':
                     $service->replaceArgument(0, $values['host']);
                     $service->replaceArgument(1, $values['port']);
+                    break;
+
+                case 'doctrine_dbal':
+                    $service->addArgument(new Reference('doctrine'));
+                    $service->addArgument($values);
                     break;
 
                 case 'http_service':
