@@ -39,6 +39,16 @@ services:
             - localhost
             - 11211
 
+    liip_monitor.check.http_service:
+        class: Liip\Monitor\Check\HttpServiceCheck
+        public: false
+        arguments:
+            - localhost
+            - 80
+            - /
+            - 200
+            - ~
+
     liip_monitor.check.php_extensions:
         class: Liip\Monitor\Check\PhpExtensionsCheck
         public: false

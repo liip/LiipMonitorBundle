@@ -57,6 +57,14 @@ class LiipMonitorExtension extends Extension
                     $service->replaceArgument(1, $values['port']);
                     break;
 
+                case 'http_service':
+                    $service->replaceArgument(0, $values['host']);
+                    $service->replaceArgument(1, $values['port']);
+                    $service->replaceArgument(2, $values['path']);
+                    $service->replaceArgument(3, $values['status_code']);
+                    $service->replaceArgument(4, $values['content']);
+                    break;
+
                 case 'php_extensions':
                     $service->addArgument($values);
                     break;
