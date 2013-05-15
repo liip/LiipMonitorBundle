@@ -54,7 +54,7 @@ class HealthCheckController
         include __DIR__ . '/../Resources/views/health/index.html.php';
         $content = ob_get_clean();
 
-        return new Response($content, 200);
+        return new Response($content, 200, array('Content-Type' => 'text/html'));
     }
 
     /**
