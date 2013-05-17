@@ -55,15 +55,15 @@
     </p>
     <h3>REST API</h3>
     <dl>
-        <dt><a href="<?php echo $request->getUriForPath('/monitor/health') ?>">/health</a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo()) ?>"><?php echo $request->getPathInfo() ?></a></dt>
         <dl>
             Returns this HTML view. If the check was performed without errors then the table row will be <strong>green</strong>, else it will be shown as <strong>red</strong>.
         </dl>
-        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/checks') ?>">/health/checks</a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>"><?php echo $request->getPathInfo().'checks' ?></a></dt>
         <dd>
             Returns a list of available health checks as a JSON array.
             <pre>
-$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks') ?>
+$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>
 
 [
     "monitor.check.jackrabbit",
@@ -73,11 +73,11 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks') ?>
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/groups') ?>">/health/groups</a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>"><?php echo $request->getPathInfo().'groups' ?></a></dt>
         <dd>
             Returns a list of available health check groups as a JSON array. Health check groups are a way to group several checks into one check, for example to provide a status page for end-users (e.g. like <a target="_blank" href="http://status.github.com">status.github.com</a>).
             <pre>
-$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/groups') ?>
+$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
 
 [
     "storage",
@@ -85,10 +85,10 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/groups') ?>
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/run') ?>">/health/run</a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run') ?>"><?php echo $request->getPathInfo().'run' ?></a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/run') ?>
+$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'run') ?>
 
 {
 "checks":
@@ -101,10 +101,10 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/run') ?>
 }</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath('/monitor/health/rungroups') ?>">/health/rungroups</a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>"><?php echo $request->getPathInfo().'rungroups' ?></a></dt>
         <dd>Performs all health check groups and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/rungroups') ?>
+$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>
 
 {
 "checks":
@@ -115,10 +115,10 @@ $ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/rungroups') ?>
 }</pre>
         </dd>
 
-        <dt>/health/run/check_id</dt>
+        <dt><?php echo $request->getPathInfo().'run/check_id' ?></dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath('/monitor/health/checks/monitor.check.redis') ?>
+$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'checks/monitor.check.redis') ?>
 
 {
    "checkName": "Redis Health Check",
