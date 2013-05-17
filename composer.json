@@ -10,6 +10,10 @@
             "email": "alvaro.videla@liip.ch"
         },
         {
+            "name": "Liip AG",
+            "homepage": "http://www.liip.ch/"
+        },
+        {
             "name": "Symfony Community",
             "homepage": "https://github.com/liip/LiipMonitorBundle/contributors"
         }
@@ -18,7 +22,7 @@
     "require": {
         "php": ">=5.3.2",
         "liip/monitor": "0.5.*",
-        "symfony/framework-bundle": ">2.0,<2.3-dev"
+        "symfony/framework-bundle": "~2.0"
     },
     "suggest": {
         "sensio/distribution-bundle": "To be able to use the composer ScriptHandler"
