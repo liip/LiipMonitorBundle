@@ -180,7 +180,7 @@ To run health checks as a composer post-install or post-update script, simply ad
 
 ## REST API DOCS ##
 
-For documentation on the REST API see: [http://myproject/monitor/health/](http://myproject/monitor/health/).
+For documentation on the REST API see: [http://myproject.org/monitor/health/](http://myproject.org/monitor/health/).
 Don't forget to add the bundle routes in your `routing.yml` file.
 
 
@@ -200,9 +200,10 @@ Copy the script into your scripts directory in Nagios and create a command like 
             command_line    $USER1$/check_symfony2.pl -H $HOSTNAME$
     }
 
-Running the command with the Hostname flag (-H) will check both "http://$HOSTNAME$/health/run" and "http://$HOSTNAME$/utils/health/run". You can also use the Address flag (-A) to check a specified URL: 
+Running the command with the Hostname flag (-H) will check "http://$HOSTNAME$/monitor/health/run".
+You can also use the Address flag (-A) to check a specified URL: 
 
-    command_line    $USER1$/check_symfony2.pl -A https://mysite.org/somedir/health/run
+    command_line    $USER1$/check_symfony2.pl -A https://mysite.org/monitor/health/run
 
 The plugin can be used with Authentication, Using the Username (-u) and Password (-p) flags:
 

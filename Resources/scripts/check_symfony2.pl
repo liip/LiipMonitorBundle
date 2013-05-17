@@ -56,35 +56,27 @@ if (defined($opts{u}) && defined($opts{p}) ) {
     $browser->credentials($opts{u}, $opts{p});
 }
 if (defined($opts{A})) {
-	eval {
-	    $browser->get( $opts{A} );
-    	$jsn = $browser->content();
-	   	$content = decode_json( $jsn );
-	};
-	if ($@) {
-    	print "Symfony Health Unknown - Failed connecting to health page: $opts{A}\n";
-	   	exit 3;
-	}
+    eval {
+        $browser->get( $opts{A} );
+        $jsn = $browser->content();
+           $content = decode_json( $jsn );
+    };
+    if ($@) {
+        print "Symfony Health Unknown - Failed connecting to health page: $opts{A}\n";
+       exit 3;
+    }
 } else {
-	my $url1 = "https://" . $opts{H} . "/utils/health/run";
-	my $url2 = "https://" . $opts{H} . "/health/run";
+    my $url = "https://" . $opts{H} . "/monitor/health/run";
 
-	eval {
-		$browser->get( $url1 );
-		$jsn = $browser->content();
-		$content = decode_json( $jsn );
-	};
-	if ($@) {
-		eval {
-		    $browser->get( $url2 );
-    		$jsn = $browser->content();
-	    	$content = decode_json( $jsn );
-		};
-		if ($@) {
-    		print "Symfony Health Unknown - Failed connecting to health page for $opts{H}\n";
-	    	exit 3;
-		}
-	}
+    eval {
+        $browser->get( $url );
+        $jsn = $browser->content();
+        $content = decode_json( $jsn );
+    };
+    if ($@) {
+        print "Symfony Health Unknown - Failed connecting to health page for $opts{H}\n";
+        exit 3;
+    }
 }
 
 foreach (@{$content->{checks}})
