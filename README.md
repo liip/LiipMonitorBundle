@@ -29,8 +29,6 @@ Here's the web interface:
 
 ![Web Interface](http://img.skitch.com/20120312-fhyc74ese9jjpyd1wxjcdbs85b.jpg "Web Interface")
 
-[![Build Status](https://secure.travis-ci.org/liip/LiipMonitorBundle.png)](http://travis-ci.org/liip/LiipMonitorBundle)
-
 ## Installation ##
 
 Add the following code to your ```composer.json``` file:
