@@ -18,10 +18,9 @@
             "homepage": "https://github.com/liip/LiipMonitorBundle/contributors"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "php": ">=5.3.2",
-        "liip/monitor": "0.5.*",
+        "php": ">=5.3.3",
+        "liip/monitor": "1.0.*",
         "symfony/framework-bundle": "~2.0"
     },
     "suggest": {
@@ -33,7 +32,7 @@
     "target-dir": "Liip/MonitorBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5.x-dev"
+            "dev-master": "1.0-dev"
         }
     }
 }
