@@ -26,11 +26,6 @@ class HealthCheckCommand extends ContainerAwareCommand
             ));
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \RuntimeException in case there is no or an invalid feed url is given.
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');

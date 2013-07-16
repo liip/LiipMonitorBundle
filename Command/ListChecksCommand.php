@@ -18,11 +18,6 @@ class ListChecksCommand extends ContainerAwareCommand
             ->setDescription('Lists Health Checks');
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \RuntimeException in case there is no or an invalid feed url is given.
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $chain = $this->getContainer()->get('liip_monitor.check_chain');
