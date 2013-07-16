@@ -1,16 +1,15 @@
 services:
     liip_monitor.check.runner:
-        class: Liip\Monitor\Check\Runner
-        arguments:
-            - @liip_monitor.check_chain
+        class: ZendDiagnostics\Runner\Runner
+        calls:
+            - ['addReporter', [ @liip_monitor.check.reporter ]]
 
-    liip_monitor.check_chain:
-        class: Liip\Monitor\Check\CheckChain
+    liip_monitor.check.reporter:
+        class: Liip\MonitorBundle\Helper\Reporter
 
     liip_monitor.health.controller:
         class: Liip\MonitorBundle\Controller\HealthCheckController
         arguments:
-            - @liip_monitor.check_chain
             - @liip_monitor.check.runner
             - @liip_monitor.helper.path
 
@@ -21,30 +20,30 @@ services:
             - @service_container
 
     liip_monitor.check.custom_error_pages:
-        class: Liip\MonitorBundle\Check\CustomErrorPagesCheck
+        class: Liip\MonitorBundle\Check\CustomErrorPages
         public: false
 
     liip_monitor.check.symfony_version_check:
-        class: Liip\MonitorBundle\Check\SymfonyVersionCheck
+        class: Liip\MonitorBundle\Check\SymfonyVersion
         public: false
 
     liip_monitor.check.deps_entries:
-        class: Liip\MonitorBundle\Check\DepsEntriesCheck
+        class: Liip\MonitorBundle\Check\DepsEntries
         public: false
 
     liip_monitor.check.memcache:
-        class: Liip\Monitor\Check\MemcacheCheck
+        class: ZendDiagnostics\Check\Memcache
         public: false
         arguments:
             - localhost
             - 11211
 
     liip_monitor.check.doctrine_dbal:
-        class: Liip\Monitor\Check\DoctrineDbalCheck
+        class: Liip\MonitorBundle\Check\DoctrineDbal
         public: false
 
     liip_monitor.check.http_service:
-        class: Liip\Monitor\Check\HttpServiceCheck
+        class: ZendDiagnostics\Check\HttpService
         public: false
         arguments:
             - localhost
@@ -53,24 +52,24 @@ services:
             - 200
             - ~
 
-    liip_monitor.check.php_extensions:
-        class: Liip\Monitor\Check\PhpExtensionsCheck
+    liip_monitor.check.extension_loaded:
+        class: ZendDiagnostics\Check\ExtensionLoaded
         public: false
 
-    liip_monitor.check.process_active:
-        class: Liip\Monitor\Check\ProcessActiveCheck
+    liip_monitor.check.process_running:
+        class: ZendDiagnostics\Check\ProcessRunning
         public: false
 
     liip_monitor.check.writable_directory:
-        class: Liip\Monitor\Check\WritableDirectoryCheck
+        class: ZendDiagnostics\Check\WritableDirectory
         public: false
 
     liip_monitor.check.disc_usage:
-        class: Liip\Monitor\Check\DiscUsageCheck
+        class: ZendDiagnostics\Check\DiscUsage
         public: false
 
     liip_monitor.check.security_advisory:
-        class: Liip\Monitor\Check\SecurityAdvisoryCheck
+        class: ZendDiagnostics\Check\SecurityAdvisory
         public: false
         arguments:
             - @liip_monitor.security_checker

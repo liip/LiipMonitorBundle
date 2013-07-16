@@ -3,9 +3,9 @@
 namespace Liip\MonitorBundle\Check;
 
 use Symfony\Component\HttpKernel\Kernel;
-use Exception;
-use Liip\Monitor\Check\Check;
-use Liip\Monitor\Result\CheckResult;
+use ZendDiagnostics\Check\AbstractCheck;
+use ZendDiagnostics\Result\Success;
+use ZendDiagnostics\Result\Warning;
 
 /**
  * Checks the version of this website against the latest stable release.
@@ -19,9 +19,8 @@ use Liip\Monitor\Result\CheckResult;
  *
  * @author Roderik van der Veer <roderik@vanderveer.be>
  */
-class SymfonyVersionCheck extends Check
+class SymfonyVersion extends AbstractCheck
 {
-
     /**
      * {@inheritdoc}
      */
@@ -30,16 +29,14 @@ class SymfonyVersionCheck extends Check
         try {
             $latestRelease = $this->getLatestSymfonyVersion(); // eg. 2.0.12
             $currentVersion = Kernel::VERSION;
-            if (version_compare($currentVersion, $latestRelease) >= 0) {
-                $result = $this->buildResult('OK', CheckResult::OK);
-            } else {
-                $result = $this->buildResult('Update to ' . $latestRelease . ' from ' . $currentVersion, CheckResult::WARNING);
+            if (version_compare($currentVersion, $latestRelease) < 0) {
+                return new Warning('Update to ' . $latestRelease . ' from ' . $currentVersion);
             }
         } catch (\Exception $e) {
-            $result = $this->buildResult($e->getMessage(), CheckResult::UNKNOWN);
+            return new Warning($e->getMessage());
         }
 
-        return $result;
+        return new Success();
     }
 
     private function getLatestSymfonyVersion()
