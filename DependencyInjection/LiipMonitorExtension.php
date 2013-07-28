@@ -71,11 +71,11 @@ class LiipMonitorExtension extends Extension
                     $service->replaceArgument(4, $values['content']);
                     break;
 
-                case 'php_extensions':
+                case 'extension_loaded':
                     $service->addArgument($values);
                     break;
 
-                case 'process_active':
+                case 'process_running':
                     $service->addArgument($values);
                     break;
 

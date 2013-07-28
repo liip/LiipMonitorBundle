@@ -2,18 +2,18 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use Liip\Monitor\Check\Check;
-use Liip\Monitor\Result\CheckResult;
-use Liip\Monitor\Exception\CheckFailedException;
-
 use Symfony\Bundle\TwigBundle\DependencyInjection\Configuration;
+
+use ZendDiagnostics\Check\AbstractCheck;
+use ZendDiagnostics\Result\Failure;
+use ZendDiagnostics\Result\Success;
 
 /**
  * Checks if error pages have been customized.
  *
  * @author Cédric Girard <c.girard@lexik.fr>
  */
-class CustomErrorPagesCheck extends Check
+class CustomErrorPages extends AbstractCheck
 {
     /**
      * @var string
@@ -74,17 +74,14 @@ class CustomErrorPagesCheck extends Check
                 }
 
                 if (count($missingTemplate) > 0) {
-                    throw new CheckFailedException(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplate)));
+                    return new Failure(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplate)));
                 }
             }
-
-            $result = $this->buildResult('OK', CheckResult::OK);
-
         } catch (\Exception $e) {
-            $result = $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
+            return new Failure($e->getMessage());
         }
 
-        return $result;
+        return new Success();
     }
 
     /**
