@@ -61,7 +61,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                     break;
 
                 case CheckResult::UNKNOWN:
-                    $output->writeln(sprintf('<error>UNKNOWN<error> %s', $msg));
+                    $output->writeln(sprintf('<error>UNKNOWN</error> %s', $msg));
                     break;
             }
         }
