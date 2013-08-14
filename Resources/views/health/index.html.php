@@ -63,7 +63,7 @@
         <dd>
             Returns a list of available health checks as a JSON array.
             <pre>
-$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>
 
 [
     "monitor.check.jackrabbit",
@@ -77,7 +77,7 @@ $ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'checks
         <dd>
             Returns a list of available health check groups as a JSON array. Health check groups are a way to group several checks into one check, for example to provide a status page for end-users (e.g. like <a target="_blank" href="http://status.github.com">status.github.com</a>).
             <pre>
-$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
 
 [
     "storage",
@@ -88,7 +88,7 @@ $ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'groups
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run') ?>"><?php echo $request->getPathInfo().'run' ?></a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'run') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run') ?>
 
 {
 "checks":
@@ -104,7 +104,7 @@ $ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'run') 
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>"><?php echo $request->getPathInfo().'rungroups' ?></a></dt>
         <dd>Performs all health check groups and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>
 
 {
 "checks":
@@ -118,7 +118,7 @@ $ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'rungro
         <dt><?php echo $request->getPathInfo().'run/check_id' ?></dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl -XPOST <?php echo $request->getUriForPath($request->getPathInfo().'checks/monitor.check.redis') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'checks/monitor.check.redis') ?>
 
 {
    "checkName": "Redis Health Check",
