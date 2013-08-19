@@ -140,7 +140,7 @@ provided by the bundle. Let's see what commands we have available for the CLI:
     Memcache Health Check: KO - No configuration set for session.save_path
     PHP Extensions Health Check: OK
 
-### Run Individual the Checks ###
+### Run Individual Checks ###
 
 To run an individual check you need to provide the check id to the `health` command:
 
