@@ -7,7 +7,8 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
-    Symfony\Component\DependencyInjection\Reference;
+    Symfony\Component\DependencyInjection\Reference,
+    Symfony\Component\DependencyInjection\Definition;
 
 class LiipMonitorExtension extends Extension
 {
@@ -29,13 +30,19 @@ class LiipMonitorExtension extends Extension
             return;
         }
 
+        //This list of checks can have multiple configurations defined
+        $dynamic_checks = array('http_services');
+
         foreach ($config['checks'] as $check => $values) {
             if (empty($values)) {
                 continue;
             }
 
             $serviceId = $this->getAlias().'.check.'.$check;
-            $service = $container->getDefinition($serviceId);
+            $service = null;
+            if (!in_array($check, $dynamic_checks)) {
+                $service = $container->getDefinition($serviceId);
+            }
             switch ($check) {
                 case 'custom_error_pages':
                     $service->addArgument($values['error_codes']);
@@ -71,6 +78,23 @@ class LiipMonitorExtension extends Extension
                     $service->replaceArgument(4, $values['content']);
                     break;
 
+                case 'http_services':
+                    foreach ($values as $alias => $service_values) {
+                        $new_id = $serviceId . '_' . $alias;
+                        if ($container->hasDefinition($new_id)) {
+                            $service = $container->getDefinition($new_id);
+                        } else {
+                            $http_service = $container->getDefinition($this->getAlias().'.check.http_service');
+                            $service = $container->setDefinition($new_id, new Definition($http_service->getClass(), $http_service->getArguments()));
+                        }
+                        $service->replaceArgument(0, $service_values['host']);
+                        $service->replaceArgument(1, $service_values['port']);
+                        $service->replaceArgument(2, $service_values['path']);
+                        $service->replaceArgument(3, $service_values['status_code']);
+                        $service->replaceArgument(4, $service_values['content']);
+                        $service->addTag('liip_monitor.check', array('alias' => $check . '_' . $alias));
+                    }
+                    break;
                 case 'php_extensions':
                     $service->addArgument($values);
                     break;
@@ -93,7 +117,9 @@ class LiipMonitorExtension extends Extension
                     break;
             }
 
-            $service->addTag('liip_monitor.check', array('alias' => $check));
+            if (!in_array($check, $dynamic_checks)) {
+                $service->addTag('liip_monitor.check', array('alias' => $check));
+            }
         }
     }
 }
