@@ -39,6 +39,13 @@ services:
             - localhost
             - 11211
 
+    liip_monitor.check.redis:
+        class: Liip\Monitor\Check\RedisCheck
+        public: false
+        arguments:
+            - localhost
+            - 6379
+
     liip_monitor.check.doctrine_dbal:
         class: Liip\Monitor\Check\DoctrineDbalCheck
         public: false
@@ -78,3 +85,14 @@ services:
     liip_monitor.security_checker:
         class: SensioLabs\Security\SecurityChecker
         public: false
+
+    liip_monitor.check.rabbit_mq:
+        class: Liip\Monitor\Check\RabbitMQCheck
+        public: false
+        arguments:
+            - localhost
+            - 5672
+            - guest
+            - guest
+            - /
+
