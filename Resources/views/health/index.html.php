@@ -73,18 +73,6 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>"><?php echo $request->getPathInfo().'groups' ?></a></dt>
-        <dd>
-            Returns a list of available health check groups as a JSON array. Health check groups are a way to group several checks into one check, for example to provide a status page for end-users (e.g. like <a target="_blank" href="http://status.github.com">status.github.com</a>).
-            <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
-
-[
-    "storage",
-    "api"
-]</pre>
-        </dd>
-
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run') ?>"><?php echo $request->getPathInfo().'run' ?></a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
@@ -97,20 +85,6 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
         {"checkName": "Redis Health Check", "message": "OK", "status":true, "service_id": "monitor.check.redis"},
         {"checkName": "Memcache Health Check", "message": "KO - No configuration set for session.save_path", "status":false, "service_id": "monitor.check.memcache"},
         {"checkName": "PHP Extensions Health Check", "message": "OK", "status":true, "service_id": "monitor.check.php_extensions"}
-    ]
-}</pre>
-        </dd>
-
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>"><?php echo $request->getPathInfo().'rungroups' ?></a></dt>
-        <dd>Performs all health check groups and returns the results as an array of JSON objects.
-<pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'rungroups') ?>
-
-{
-"checks":
-    [
-        {"storage": "check_result_ok"},
-        {"api": "check_result_ok"},
     ]
 }</pre>
         </dd>

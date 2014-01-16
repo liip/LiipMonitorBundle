@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.0",
+        "symfony/framework-bundle": "~2.1",
         "zendframework/zenddiagnostics": "2.0.*@dev"
     },
     "suggest": {

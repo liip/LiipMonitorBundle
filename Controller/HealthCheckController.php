@@ -2,26 +2,24 @@
 
 namespace Liip\MonitorBundle\Controller;
 
+use Liip\MonitorBundle\Helper\ArrayReporter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Liip\Monitor\Check\Runner;
+use ZendDiagnostics\Runner\Runner;
 use Liip\MonitorBundle\Helper\PathHelper;
-use Liip\Monitor\Check\CheckChain;
 
 class HealthCheckController
 {
-    protected $healthCheckChain;
     protected $runner;
     protected $pathHelper;
 
     /**
-     * @param \Liip\Monitor\Check\CheckChain $healthCheckChain
-     * @param \Liip\Monitor\Check\Runner $runner
-     * @param \Liip\MonitorBundle\Helper\PathHelper $pathHelper
+     * @param Runner     $runner
+     * @param PathHelper $pathHelper
      */
-    public function __construct(CheckChain $healthCheckChain, Runner $runner, PathHelper $pathHelper)
+    public function __construct(Runner $runner, PathHelper $pathHelper)
     {
-        $this->healthCheckChain = $healthCheckChain;
         $this->runner = $runner;
         $this->pathHelper = $pathHelper;
     }
@@ -62,15 +60,13 @@ class HealthCheckController
      */
     public function listAction()
     {
-        return $this->getJsonResponse($this->healthCheckChain->getAvailableChecks());
-    }
+        $ret = array();
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listGroups()
-    {
-        return $this->getJsonResponse($this->healthCheckChain->getGroups());
+        foreach ($this->runner->getChecks() as $alias => $check) {
+            $ret[] = $alias;
+        }
+
+        return new JsonResponse($ret);
     }
 
     /**
@@ -78,21 +74,12 @@ class HealthCheckController
      */
     public function runAllChecksAction()
     {
-        $results = $this->runner->runAllChecks();
-        $data = array();
-        $globalStatus = 'OK';
-        foreach ($results as $id => $result) {
-            $tmp = $result->toArray();
-            $tmp['service_id'] = $id;
+        $report = $this->runTests();
 
-            if ($tmp['status'] > 0) {
-                $globalStatus = 'KO';
-            }
-
-            $data[] = $tmp;
-        }
-
-        return $this->getJsonResponse(array('checks' => $data, 'globalStatus' => $globalStatus));
+        return new JsonResponse(array(
+            'checks' => $report->getResults(),
+            'globalStatus' => $report->getGlobalStatus()
+        ));
     }
 
 
@@ -102,33 +89,21 @@ class HealthCheckController
      */
     public function runSingleCheckAction($checkId)
     {
-        $result = $this->runner->runCheckById($checkId)->toArray();
-        $result['service_id'] = $checkId;
+        $results = $this->runTests($checkId)->getResults();
 
-        return $this->getJsonResponse($result);
+        return new JsonResponse($results[0]);
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string|null $checkId
+     * @return ArrayReporter
      */
-    public function runAllGroupChecksAction()
+    protected function runTests($checkId = null)
     {
-        $results = $this->runner->runAllChecksByGroup();
-        $data = array();
+        $reporter = new ArrayReporter();
+        $this->runner->addReporter($reporter);
+        $this->runner->run($checkId);
 
-        foreach ($results as $id => $result) {
-            $data[$id] = $result->getStatusName();
-        }
-
-        return $this->getJsonResponse($data);
-    }
-
-    /**
-     * @param $data
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function getJsonResponse($data)
-    {
-        return new Response(json_encode($data), 200, array('Content-Type' => 'application/json'));
+        return $reporter;
     }
 }
