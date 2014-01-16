@@ -2,12 +2,11 @@
 
 namespace Liip\MonitorBundle\Command;
 
+use Liip\MonitorBundle\Helper\ConsoleReporter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Liip\Monitor\Result\CheckResult;
 
 class HealthCheckCommand extends ContainerAwareCommand
 {
@@ -20,8 +19,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                 new InputArgument(
                     'checkName',
                     InputArgument::OPTIONAL,
-                    'The name of the service to be used to perform the health check.',
-                    'all'
+                    'The name of the service to be used to perform the health check.'
                 ),
             ));
     }
@@ -29,41 +27,13 @@ class HealthCheckCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
-        $runner = $this->getContainer()->get('liip_monitor.check.runner');
+        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $runner->addReporter(new ConsoleReporter($output));
 
-        if ($checkName == 'all') {
-            $results = $runner->runAllChecks();
-        } else {
-            $results = array($runner->runCheckById($checkName));
+        if (0 === count($runner->getChecks())) {
+            $output->writeln('<error>No checks configured.</error>');
         }
 
-        $error = false;
-        foreach ($results as $result) {
-            $msg = sprintf('%s: %s', $result->getCheckName(), $result->getMessage());
-
-            switch ($result->getStatus()) {
-                case CheckResult::OK:
-                    $output->writeln(sprintf('<info>OK</info> %s', $msg));
-                    break;
-
-                case CheckResult::WARNING:
-                    $output->writeln(sprintf('<comment>WARNING</comment> %s', $msg));
-                    break;
-
-                case CheckResult::CRITICAL:
-                    $error = true;
-                    $output->writeln(sprintf('<error>CRITICAL %s</error>', $msg));
-                    break;
-
-                case CheckResult::UNKNOWN:
-                    $output->writeln(sprintf('<error>UNKNOWN</error> %s', $msg));
-                    break;
-            }
-        }
-
-        $output->writeln('done!');
-
-        // return a negative value if an error occurs
-        return $error ? 1 : 0;
+        $runner->run($checkName);
     }
 }

@@ -2,18 +2,17 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use Liip\Monitor\Check\Check;
-use Liip\Monitor\Result\CheckResult;
-use Liip\Monitor\Exception\CheckFailedException;
-
 use Symfony\Bundle\TwigBundle\DependencyInjection\Configuration;
+use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Result\Failure;
+use ZendDiagnostics\Result\Success;
 
 /**
  * Checks if error pages have been customized.
  *
  * @author Cédric Girard <c.girard@lexik.fr>
  */
-class CustomErrorPagesCheck extends Check
+class CustomErrorPagesCheck implements CheckInterface
 {
     /**
      * @var string
@@ -44,53 +43,40 @@ class CustomErrorPagesCheck extends Check
         $this->exceptionController = $exceptionController;
     }
 
-    /**
-     * @see Liip\Monitor\Check\CheckInterface::check()
-     */
     public function check()
     {
-        try {
-            // check if twig exception controller is not the default one.
-            $config = new Configuration();
-            $tree =  $config->getConfigTreeBuilder()->buildTree();
+        // check if twig exception controller is not the default one.
+        $config = new Configuration();
+        $tree =  $config->getConfigTreeBuilder()->buildTree();
 
-            $reflectionTree = new \ReflectionClass($tree);
-            $reflectionChildren = $reflectionTree->getProperty('children');
-            $reflectionChildren->setAccessible(true);
+        $reflectionTree = new \ReflectionClass($tree);
+        $reflectionChildren = $reflectionTree->getProperty('children');
+        $reflectionChildren->setAccessible(true);
 
-            $values = $reflectionChildren->getValue($tree);
+        $values = $reflectionChildren->getValue($tree);
 
-            // we suppose pages has been customized if the exception controller is not the default one,
-            // so we don't look for template file in this case.
-            if ($values['exception_controller']->getDefaultValue() == $this->exceptionController) {
-                $missingTemplate = array();
+        // we suppose pages has been customized if the exception controller is not the default one,
+        // so we don't look for template file in this case.
+        if ($values['exception_controller']->getDefaultValue() == $this->exceptionController) {
+            $missingTemplate = array();
 
-                foreach ($this->errorCodes as $errorCode) {
-                    $template = sprintf('%s/Resources/TwigBundle/views/Exception/error%d.html.twig', $this->kernelRootDir, $errorCode);
+            foreach ($this->errorCodes as $errorCode) {
+                $template = sprintf('%s/Resources/TwigBundle/views/Exception/error%d.html.twig', $this->kernelRootDir, $errorCode);
 
-                    if (!file_exists($template)) {
-                        $missingTemplate[] = $errorCode;
-                    }
-                }
-
-                if (count($missingTemplate) > 0) {
-                    throw new CheckFailedException(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplate)));
+                if (!file_exists($template)) {
+                    $missingTemplate[] = $errorCode;
                 }
             }
 
-            $result = $this->buildResult('OK', CheckResult::OK);
-
-        } catch (\Exception $e) {
-            $result = $this->buildResult($e->getMessage(), CheckResult::CRITICAL);
+            if (count($missingTemplate) > 0) {
+                return new Failure(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplate)));
+            }
         }
 
-        return $result;
+        return new Success();
     }
 
-    /**
-     * @see Liip\Monitor\Check\Check::getName()
-     */
-    public function getName()
+    public function getLabel()
     {
         return 'Custom error pages';
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="liip_monitor.check.writable_directory.class">ZendDiagnostics\Check\DirWritable</parameter>
+    </parameters>
+
+    <services>
+        <service id="liip_monitor.check.writable_directory" public="false" class="%liip_monitor.check.writable_directory.class%">
+            <argument>%liip_monitor.check.writable_directory%</argument>
+            <tag name="liip_monitor.check" alias="writable_directory" />
+        </service>
+    </services>
+</container>
