@@ -14,9 +14,9 @@ use ZendDiagnostics\Result\Collection as ResultsCollection;
  */
 class ArrayReporter implements ReporterInterface
 {
-    protected $globalStatus = 'OK';
-    protected $results = array();
-    protected $serviceIds = array();
+    private $globalStatus = 'OK';
+    private $results = array();
+    private $serviceIds = array();
 
     /**
      * @return array

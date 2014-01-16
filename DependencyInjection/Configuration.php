@@ -26,8 +26,8 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('liip_monitor', 'array');
 
         $rootNode
-            ->fixXmlConfig('check', 'checks')
             ->children()
+                ->booleanNode('enable_controller')->defaultFalse()->end()
                 ->arrayNode('checks')
                     ->canBeUnset()
                     ->children()
