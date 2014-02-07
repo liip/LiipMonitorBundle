@@ -47,13 +47,13 @@ class SymfonyVersionCheck extends Check
         // Get GitHub JSON request
 
         $opts = array(
- 50                 'http'=>array(
- 51                 'method'=>"GET",
- 52                 'header'=>"User-Agent: LiipMonitorBundle\r\n"
- 53                 )
- 54         );
- 55 
- 56     $context  = stream_context_create($opts);
+                  'http'=>array(
+                  'method'=>"GET",
+                  'header'=>"User-Agent: LiipMonitorBundle\r\n"
+                  )
+        );
+  
+        $context  = stream_context_create($opts);
 
         $githubUrl = 'https://api.github.com/repos/symfony/symfony/tags';
         $githubJSONResponse = file_get_contents($githubUrl, false, $context);
