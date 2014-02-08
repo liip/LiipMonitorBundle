@@ -47,10 +47,10 @@ class SymfonyVersionCheck extends Check
         // Get GitHub JSON request
 
         $opts = array(
-                  'http'=>array(
-                  'method'=>"GET",
-                  'header'=>"User-Agent: LiipMonitorBundle\r\n"
-                  )
+            'http' => array(
+                'method' => "GET",
+                'header' => "User-Agent: LiipMonitorBundle\r\n"
+            )
         );
   
         $context  = stream_context_create($opts);
