@@ -46,8 +46,17 @@ class SymfonyVersionCheck extends Check
     {
         // Get GitHub JSON request
 
+        $opts = array(
+            'http' => array(
+                'method' => "GET",
+                'header' => "User-Agent: LiipMonitorBundle\r\n"
+            )
+        );
+  
+        $context  = stream_context_create($opts);
+
         $githubUrl = 'https://api.github.com/repos/symfony/symfony/tags';
-        $githubJSONResponse = file_get_contents($githubUrl);
+        $githubJSONResponse = file_get_contents($githubUrl, false, $context);
 
         // Convert it to a PHP object
 
