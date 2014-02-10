@@ -39,8 +39,7 @@ class RabbitMQCheck implements CheckInterface
         $user = 'guest',
         $password = 'guest',
         $vhost = '/'
-    )
-    {
+    ) {
         $this->host     = $host;
         $this->port     = $port;
         $this->user     = $user;
