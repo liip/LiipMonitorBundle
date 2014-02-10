@@ -16,7 +16,6 @@ class ArrayReporter implements ReporterInterface
 {
     private $globalStatus = 'OK';
     private $results = array();
-    private $serviceIds = array();
 
     /**
      * @return array
@@ -37,7 +36,7 @@ class ArrayReporter implements ReporterInterface
     /**
      * {@inheritDoc}
      */
-    public function onAfterRun(CheckInterface $check, ResultInterface $result)
+    public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
             case $result instanceof SuccessInterface:
@@ -62,7 +61,7 @@ class ArrayReporter implements ReporterInterface
             'message' => $result->getMessage(),
             'status' => $status,
             'status_name' => $statusName,
-            'service_id' => $this->serviceIds[spl_object_hash($check)]
+            'service_id' => $checkAlias
         );
     }
 
@@ -71,15 +70,13 @@ class ArrayReporter implements ReporterInterface
      */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
-        foreach ($checks as $alias => $check) {
-            $this->serviceIds[spl_object_hash($check)] = $alias;
-        }
+        return;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onBeforeRun(CheckInterface $check)
+    public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
         return;
     }

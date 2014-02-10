@@ -25,7 +25,7 @@ class ConsoleReporter implements ReporterInterface
     /**
      * {@inheritDoc}
      */
-    public function onAfterRun(CheckInterface $check, ResultInterface $result)
+    public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
             case $result instanceof SuccessInterface:
@@ -60,7 +60,7 @@ class ConsoleReporter implements ReporterInterface
     /**
      * {@inheritDoc}
      */
-    public function onBeforeRun(CheckInterface $check)
+    public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
         return;
     }
