@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Helper;
 
 use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Result\ResultInterface;
+use ZendDiagnostics\Result\SkipInterface;
 use ZendDiagnostics\Result\SuccessInterface;
 use ZendDiagnostics\Result\WarningInterface;
 use ZendDiagnostics\Runner\Reporter\ReporterInterface;
@@ -51,8 +52,13 @@ class ArrayReporter implements ReporterInterface
                 $this->globalStatus = 'KO';
                 break;
 
-            default:
+            case $result instanceof SkipInterface:
                 $status = 2;
+                $statusName = 'check_result_skip';
+                break;
+
+            default:
+                $status = 3;
                 $statusName = 'check_result_critical';
         }
 

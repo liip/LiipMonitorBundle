@@ -5,6 +5,7 @@ namespace Liip\MonitorBundle\Helper;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Result\ResultInterface;
+use ZendDiagnostics\Result\SkipInterface;
 use ZendDiagnostics\Result\SuccessInterface;
 use ZendDiagnostics\Result\WarningInterface;
 use ZendDiagnostics\Runner\Reporter\ReporterInterface;
@@ -34,6 +35,10 @@ class ConsoleReporter implements ReporterInterface
 
             case $result instanceof WarningInterface:
                 $this->output->write('<comment>WARNING</comment>');
+                break;
+
+            case $result instanceof SkipInterface:
+                $this->output->write('<question>SKIP</question>');
                 break;
 
             default:
