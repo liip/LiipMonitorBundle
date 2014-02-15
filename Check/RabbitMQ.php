@@ -12,7 +12,7 @@ use ZendDiagnostics\Result\Success;
  *
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class RabbitMQCheck implements CheckInterface
+class RabbitMQ implements CheckInterface
 {
     /**
      * @var string

@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Result\Success;
 
-class DoctrineDbalCheck implements CheckInterface
+class DoctrineDbal implements CheckInterface
 {
     protected $manager;
     protected $connectionName;

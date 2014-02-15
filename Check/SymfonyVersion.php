@@ -12,7 +12,7 @@ use ZendDiagnostics\Result\Warning;
  *
  * @author Roderik van der Veer <roderik@vanderveer.be>
  */
-class SymfonyVersionCheck implements CheckInterface
+class SymfonyVersion implements CheckInterface
 {
     /**
      * {@inheritdoc}
@@ -47,7 +47,7 @@ class SymfonyVersionCheck implements CheckInterface
                 'header' => "User-Agent: LiipMonitorBundle\r\n"
             )
         );
-  
+
         $context  = stream_context_create($opts);
 
         $githubUrl = 'https://api.github.com/repos/symfony/symfony/tags';

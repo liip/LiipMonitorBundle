@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="liip_monitor.check.rabbit_mq.class">Liip\MonitorBundle\Check\RabbitMQCheck</parameter>
+        <parameter key="liip_monitor.check.rabbit_mq.class">Liip\MonitorBundle\Check\RabbitMQ</parameter>
     </parameters>
 
     <services>

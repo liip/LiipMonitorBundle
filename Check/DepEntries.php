@@ -11,7 +11,7 @@ use ZendDiagnostics\Result\Success;
  *
  * @author Cédric Girard <c.girard@lexik.fr>
  */
-class DepEntriesCheck implements CheckInterface
+class DepEntries implements CheckInterface
 {
     /**
      * @var string

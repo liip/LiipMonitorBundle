@@ -10,7 +10,7 @@ use ZendDiagnostics\Result\Success;
 /**
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class RedisCheck implements CheckInterface
+class Redis implements CheckInterface
 {
     /**
      * @var string

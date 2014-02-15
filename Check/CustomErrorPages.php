@@ -12,7 +12,7 @@ use ZendDiagnostics\Result\Success;
  *
  * @author Cédric Girard <c.girard@lexik.fr>
  */
-class CustomErrorPagesCheck implements CheckInterface
+class CustomErrorPages implements CheckInterface
 {
     /**
      * @var string
