@@ -20,8 +20,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "liip/monitor": "1.0.*",
-        "symfony/framework-bundle": "~2.0"
+        "symfony/framework-bundle": "~2.1",
+        "zendframework/zenddiagnostics": "2.0.*@dev"
     },
     "suggest": {
         "sensio/distribution-bundle": "To be able to use the composer ScriptHandler"
@@ -32,7 +32,7 @@
     "target-dir": "Liip/MonitorBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }

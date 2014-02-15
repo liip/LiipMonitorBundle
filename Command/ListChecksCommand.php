@@ -4,8 +4,6 @@ namespace Liip\MonitorBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class ListChecksCommand extends ContainerAwareCommand
@@ -14,25 +12,20 @@ class ListChecksCommand extends ContainerAwareCommand
     {
         $this
             ->setName('monitor:list')
-            ->addOption('group', 'g', InputOption::VALUE_OPTIONAL, 'List the checks by group')
             ->setDescription('Lists Health Checks');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $chain = $this->getContainer()->get('liip_monitor.check_chain');
-        if (!$input->getOption('group')) {
-            foreach ($chain->getGroups() as $group) {
+        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $checks = $runner->getChecks();
 
-                $output->writeln(sprintf('Group <info>%s</info>', $group));
-                foreach ($chain->getChecksByGroup($group) as $service_id) {
-                    $output->writeln('  - ' . $service_id);
-                }
-            }
-        } else {
-            foreach ($chain->getAvailableChecks() as $service_id) {
-                $output->writeln($service_id);
-            }
+        if (0 === count($checks)) {
+            $output->writeln('<error>No checks configured.</error>');
+        }
+
+        foreach ($runner->getChecks() as $check) {
+            $output->writeln($check->getLabel());
         }
     }
 }

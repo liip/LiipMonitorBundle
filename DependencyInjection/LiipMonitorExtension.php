@@ -5,9 +5,7 @@ namespace Liip\MonitorBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator,
     Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
-    Symfony\Component\DependencyInjection\Reference;
+    Symfony\Component\DependencyInjection\Loader;
 
 class LiipMonitorExtension extends Extension
 {
@@ -19,11 +17,15 @@ class LiipMonitorExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader =  new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('config.yml');
+        $loader =  new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('runner.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        if ($config['enable_controller']) {
+            $loader->load('controller.xml');
+        }
 
         if (empty($config['checks'])) {
             return;
@@ -34,79 +36,26 @@ class LiipMonitorExtension extends Extension
                 continue;
             }
 
-            $serviceId = $this->getAlias().'.check.'.$check;
-            $service = $container->getDefinition($serviceId);
+            $loader->load('checks/'.$check.'.xml');
+            $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
+
             switch ($check) {
-                case 'custom_error_pages':
-                    $service->addArgument($values['error_codes']);
-                    $service->addArgument($values['path']);
-                    $service->addArgument($values['controller']);
-                    break;
-
-                case 'symfony_version_check':
-                    break;
-
-                case 'deps_entries':
-                    if (!is_string($values)) {
-                        $values = '%kernel.root_dir%';
-                    }
-                    $service->addArgument($values);
-                    break;
-
-                case 'memcache':
-                    $service->replaceArgument(0, $values['host']);
-                    $service->replaceArgument(1, $values['port']);
-                    break;
-
-                case 'redis':
-                    $service->replaceArgument(0, $values['host']);
-                    $service->replaceArgument(1, $values['port']);
-                    break;
-
-                case 'doctrine_dbal':
-                    $service->addArgument(new Reference('doctrine'));
-                    $service->addArgument($values);
-                    break;
-
-                case 'http_service':
-                    $service->replaceArgument(0, $values['host']);
-                    $service->replaceArgument(1, $values['port']);
-                    $service->replaceArgument(2, $values['path']);
-                    $service->replaceArgument(3, $values['status_code']);
-                    $service->replaceArgument(4, $values['content']);
-                    break;
-
-                case 'rabbit_mq':
-                    $service->replaceArgument(0, $values['host']);
-                    $service->replaceArgument(1, $values['port']);
-                    $service->replaceArgument(2, $values['user']);
-                    $service->replaceArgument(3, $values['password']);
-                    $service->replaceArgument(4, $values['vhost']);
-                    break;
-
                 case 'php_extensions':
-                    $service->addArgument($values);
-                    break;
-
-                case 'process_active':
-                    $service->addArgument($values);
-                    break;
-
                 case 'writable_directory':
-                    $service->addArgument($values);
-                    break;
+                case 'process_running':
+                case 'doctrine_dbal':
+                    $container->setParameter($prefix, $values);
+                    continue;
 
-                case 'disc_usage':
-                    $service->addArgument($values['percentage']);
-                    $service->addArgument($values['path']);
-                    break;
-
-                case 'security_advisory':
-                    $service->addArgument($values['lock_file']);
-                    break;
+                case 'symfony_version':
+                    continue;
             }
 
-            $service->addTag('liip_monitor.check', array('alias' => $check));
+            if (is_array($values)) {
+                foreach ($values as $key => $value) {
+                    $container->setParameter($prefix . '.' . $key, $value);
+                }
+            }
         }
     }
 }

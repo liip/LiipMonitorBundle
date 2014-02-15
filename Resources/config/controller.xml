@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="liip_monitor.health_controller.class">Liip\MonitorBundle\Controller\HealthCheckController</parameter>
+        <parameter key="liip_monitor.helper.class">Liip\MonitorBundle\Helper\PathHelper</parameter>
+    </parameters>
+
+    <services>
+        <service id="liip_monitor.helper" class="%liip_monitor.helper.class%">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%">
+            <argument type="service" id="liip_monitor.runner" />
+            <argument type="service" id="liip_monitor.helper" />
+        </service>
+    </services>
+</container>

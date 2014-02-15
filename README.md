@@ -94,15 +94,10 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
-## Check groups ##
-
-All built-in checks are assigned to the group `default`.
-See [check groups](https://github.com/liip/LiipMonitor/tree/master#check-groups) in the `LiipMonitor` library for details.
-
 
 ## Available Health Checks ##
 
-On top of all the checks provided by the LiipMonitor library this Bundle adds the following
+On top of all the checks provided by the ZendDiagnostics library this Bundle adds the following
 Symfony2 specific health checks:
 
 ### CustomErrorPagesCheck ###
@@ -113,11 +108,27 @@ Checks if error pages have been customized for given error codes.
 
 Checks all entries from `deps` are defined in `deps.lock`.
 
+### DiskUsageCheck ###
+
+Checks that disk usage percentage is under a specific warning/critical threshold.
+
+### DoctrineDbalCheck ###
+
+Checks that a doctrine dbal connection is available.
+
+### RabbitMQCheck ###
+
+Checks that a RabbitMQ server is running.
+
+### RedisCheck ###
+
+Checks that a Redis server is running.
+
 ### SymfonyVersionCheck ###
 
 Checks the version of this website against the latest stable release.
 
-### Running Checks ###
+## Running Checks ##
 
 There are two ways of running the health checks: by using the CLI or by using the REST API
 provided by the bundle. Let's see what commands we have available for the CLI:
@@ -148,32 +159,71 @@ To run an individual check you need to provide the check id to the `health` comm
 
     PHP Extensions Health Check: OK
 
-
 ### Run health checks as composer post-install/update scripts
 
 To run health checks as a composer post-install or post-update script, simply add the
-`Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth` ScriptHandler to the 
+`Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth` ScriptHandler to the
 `post-install-cmd / post-update-cmd` command sections of your `composer.json`:
 
-``` json
-    "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
-        ],
-        "post-update-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
-        ]
-    },
+```json
+"scripts": {
+    "post-install-cmd": [
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+        "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
+    ],
+    "post-update-cmd": [
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+        "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
+    ]
+},
+```
 
+## Full Default Config ##
 
+```yaml
+liip_monitor:
+    enable_controller:    false
+    checks:
+        php_extensions:       []
+        process_running:      ~
+        writable_directory:   []
+        disk_usage:
+            warning:              '70'
+            critical:             '90'
+            path:                 '%kernel.cache_dir%'
+        doctrine_dbal:        null
+        memcache:
+            host:                 localhost
+            port:                 '11211'
+        redis:
+            host:                 localhost
+            port:                 '6379'
+        http_service:
+            host:                 localhost
+            port:                 '80'
+            path:                 /
+            status_code:          '200'
+            content:              null
+        rabbit_mq:
+            host:                 localhost
+            port:                 '5672'
+            user:                 guest
+            password:             guest
+            vhost:                /
+        dep_entries:          ~
+        symfony_version:      ~
+        custom_error_pages:
+            error_codes:          [] # Required
+            path:                 '%kernel.root_dir%'
+            controller:           '%twig.exception_listener.controller%'
+        security_advisory:
+            lock_file:            '%kernel.root_dir%/../composer.lock'
 ```
 
 ## REST API DOCS ##
@@ -199,7 +249,7 @@ Copy the script into your scripts directory in Nagios and create a command like 
     }
 
 Running the command with the Hostname flag (-H) will check "http://$HOSTNAME$/monitor/health/run".
-You can also use the Address flag (-A) to check a specified URL: 
+You can also use the Address flag (-A) to check a specified URL:
 
     command_line    $USER1$/check_symfony2.pl -A https://mysite.org/monitor/health/run
 
