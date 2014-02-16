@@ -128,6 +128,10 @@ Checks that a Redis server is running.
 
 Checks the version of this website against the latest stable release.
 
+### SymfonyRequirements ###
+
+Checks Symfony2 requirements file.
+
 ## Running Checks ##
 
 There are two ways of running the health checks: by using the CLI or by using the REST API
@@ -197,6 +201,14 @@ liip_monitor:
             warning:              '70'
             critical:             '90'
             path:                 '%kernel.cache_dir%'
+        symfony_requirements:
+            file:                 '%kernel.root_dir%/SymfonyRequirements.php'
+        apc_memory:
+            warning:              '70'
+            critical:             '90'
+        apc_fragmentation:
+            warning:              '70'
+            critical:             '90'
         doctrine_dbal:        null
         memcache:
             host:                 localhost
