@@ -3,15 +3,15 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Check\AbstractCheck;
 use ZendDiagnostics\Result\Success;
 
-class DoctrineDbal implements CheckInterface
+class DoctrineDbal extends AbstractCheck
 {
     protected $manager;
     protected $connectionName;
 
-    public function __construct(ManagerRegistry $manager, $connectionName = null)
+    public function __construct(ManagerRegistry $manager, $connectionName)
     {
         $this->manager = $manager;
         $this->connectionName = $connectionName;
@@ -23,10 +23,5 @@ class DoctrineDbal implements CheckInterface
         $connection->fetchColumn('SELECT 1');
 
         return new Success();
-    }
-
-    public function getLabel()
-    {
-        return "Doctrine DBAL Connnection";
     }
 }

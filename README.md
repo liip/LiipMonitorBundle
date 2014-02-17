@@ -209,7 +209,9 @@ liip_monitor:
         apc_fragmentation:
             warning:              '70'
             critical:             '90'
-        doctrine_dbal:        null
+
+        # Connection name or an array of connection names.
+        doctrine_dbal:            null # Example: [default, crm]
         memcache:
             host:                 localhost
             port:                 '11211'
