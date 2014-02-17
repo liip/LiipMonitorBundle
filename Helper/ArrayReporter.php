@@ -43,7 +43,6 @@ class ArrayReporter implements ReporterInterface
             case $result instanceof SuccessInterface:
                 $status = 0;
                 $statusName = 'check_result_ok';
-                $this->globalStatus = 'KO';
                 break;
 
             case $result instanceof WarningInterface:
@@ -60,6 +59,7 @@ class ArrayReporter implements ReporterInterface
             default:
                 $status = 3;
                 $statusName = 'check_result_critical';
+                $this->globalStatus = 'KO';
         }
 
         $this->results[] = array(
