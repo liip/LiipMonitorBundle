@@ -332,6 +332,16 @@ liip_monitor:
 
         # Find and validate YAML files
         file_yaml:            [] # Example: ['path/to/my.yml']
+
+        expressions:
+
+            # Prototype
+            alias:
+                label:                ~ # Required
+                warningCheck:         null # Example: ini('apc.stat') == 0
+                criticalCheck:        null # Example: ini('short_open_tag') == 1
+                warningMessage:       null
+                criticalMessage:      null
 ```
 
 ## REST API DOCS ##
