@@ -55,10 +55,10 @@ Then register the bundle in the `AppKernel.php` file:
         return $bundles;
     }
 
-If you want to enable the REST API provided by the bundle then add the following to your `routing.yml`:
+If you want to enable the REST API provided by the bundle then add the following to your `routing.xml`:
 
     _monitor:
-        resource: "@LiipMonitorBundle/Resources/config/routing.yml"
+        resource: "@LiipMonitorBundle/Resources/config/routing.xml"
         prefix: /monitor/health
 
 And finally don't forget to install the bundle assets into your web root:
@@ -241,7 +241,7 @@ liip_monitor:
 ## REST API DOCS ##
 
 For documentation on the REST API see: [http://myproject.org/monitor/health/](http://myproject.org/monitor/health/).
-Don't forget to add the bundle routes in your `routing.yml` file.
+Don't forget to add the bundle routes in your `routing.xml` file.
 
 
 ## Nagios integration ##
