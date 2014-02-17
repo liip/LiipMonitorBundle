@@ -16,10 +16,10 @@ class ExpressionCollection implements CheckCollectionInterface
         foreach ($configs as $alias => $config) {
             $this->checks[sprintf('expression_%s', $alias)] = new Expression(
                 $config['label'],
-                $config['warningCheck'],
-                $config['criticalCheck'],
-                $config['warningMessage'],
-                $config['criticalMessage']
+                $config['warning_expression'],
+                $config['critical_expression'],
+                $config['warning_message'],
+                $config['critical_message']
             );
         }
     }
