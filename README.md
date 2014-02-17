@@ -195,7 +195,9 @@ liip_monitor:
     enable_controller:    false
     checks:
         php_extensions:       []
-        process_running:      ~
+
+        # Process name/pid or an array of process names/pids.
+        process_running:      ~ # Example: [apache, foo]
         writable_directory:   []
         disk_usage:
             warning:              '70'
