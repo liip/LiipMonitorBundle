@@ -336,12 +336,12 @@ liip_monitor:
         expressions:
 
             # Prototype
-            alias:
-                label:                ~ # Required
-                warningCheck:         null # Example: ini('apc.stat') == 0
-                criticalCheck:        null # Example: ini('short_open_tag') == 1
-                warningMessage:       null
-                criticalMessage:      null
+                alias:
+                    label:                ~ # Required
+                    warning_expression:   null # Example: ini('apc.stat') == 0
+                    critical_expression:  null # Example: ini('short_open_tag') == 1
+                    warning_message:      null
+                    critical_message:     null
 ```
 
 ## REST API DOCS ##
