@@ -61,6 +61,11 @@ If you want to enable the REST API provided by the bundle then add the following
         resource: "@LiipMonitorBundle/Resources/config/routing.xml"
         prefix: /monitor/health
 
+Enable the controller in your configuration:
+
+    liip_monitor:
+        enable_controller: true    
+
 And finally don't forget to install the bundle assets into your web root:
 
     $ ./app/console assets:install web --symlink --relative
