@@ -5,14 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="liip_monitor.check.memcache.class">ZendDiagnostics\Check\Memcache</parameter>
+        <parameter key="liip_monitor.check.memcache.class">Liip\MonitorBundle\Check\MemcacheCollection</parameter>
     </parameters>
 
     <services>
         <service id="liip_monitor.check.memcache" public="false" class="%liip_monitor.check.memcache.class%">
-            <argument>%liip_monitor.check.memcache.host%</argument>
-            <argument>%liip_monitor.check.memcache.port%</argument>
-            <tag name="liip_monitor.check" alias="memcache" />
+            <argument>%liip_monitor.check.memcache%</argument>
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>
