@@ -47,6 +47,7 @@ class LiipMonitorExtension extends Extension
                 case 'http_service':
                 case 'memcache':
                 case 'redis':
+                case 'rabbit_mq':
                     $container->setParameter($prefix, $values);
                     continue;
 

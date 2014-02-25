@@ -5,17 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="liip_monitor.check.rabbit_mq.class">Liip\MonitorBundle\Check\RabbitMQ</parameter>
+        <parameter key="liip_monitor.check.rabbit_mq.class">Liip\MonitorBundle\Check\RabbitMQCollection</parameter>
     </parameters>
 
     <services>
         <service id="liip_monitor.check.rabbit_mq" public="false" class="%liip_monitor.check.rabbit_mq.class%">
-            <argument>%liip_monitor.check.rabbit_mq.host%</argument>
-            <argument>%liip_monitor.check.rabbit_mq.port%</argument>
-            <argument>%liip_monitor.check.rabbit_mq.user%</argument>
-            <argument>%liip_monitor.check.rabbit_mq.password%</argument>
-            <argument>%liip_monitor.check.rabbit_mq.vhost%</argument>
-            <tag name="liip_monitor.check" alias="rabbit_mq" />
+            <argument>%liip_monitor.check.rabbit_mq%</argument>
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>
