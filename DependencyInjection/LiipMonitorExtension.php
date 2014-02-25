@@ -46,6 +46,7 @@ class LiipMonitorExtension extends Extension
                 case 'doctrine_dbal':
                 case 'http_service':
                 case 'memcache':
+                case 'redis':
                     $container->setParameter($prefix, $values);
                     continue;
 
