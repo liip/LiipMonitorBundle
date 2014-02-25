@@ -44,6 +44,7 @@ class LiipMonitorExtension extends Extension
                 case 'writable_directory':
                 case 'process_running':
                 case 'doctrine_dbal':
+                case 'http_service':
                     $container->setParameter($prefix, $values);
                     continue;
 
