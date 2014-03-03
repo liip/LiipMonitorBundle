@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Check\AbstractCheck;
 use PhpAmqpLib\Connection\AMQPConnection;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
@@ -12,7 +12,7 @@ use ZendDiagnostics\Result\Success;
  *
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class RabbitMQ implements CheckInterface
+class RabbitMQ extends AbstractCheck
 {
     /**
      * @var string
@@ -64,10 +64,5 @@ class RabbitMQ implements CheckInterface
         $conn->channel();
 
         return new Success();
-    }
-
-    public function getLabel()
-    {
-        return 'RabbitMQ';
     }
 }

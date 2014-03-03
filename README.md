@@ -64,7 +64,7 @@ If you want to enable the REST API provided by the bundle then add the following
 Enable the controller in your configuration:
 
     liip_monitor:
-        enable_controller: true    
+        enable_controller: true
 
 And finally don't forget to install the bundle assets into your web root:
 
@@ -218,25 +218,37 @@ liip_monitor:
             critical:             '90'
 
         # Connection name or an array of connection names.
-        doctrine_dbal:            null # Example: [default, crm]
+        doctrine_dbal:        null # Example: [default, crm]
         memcache:
-            host:                 localhost
-            port:                 '11211'
+
+            # Prototype
+            name:
+                host:                 localhost
+                port:                 '11211'
         redis:
-            host:                 localhost
-            port:                 '6379'
+
+            # Prototype
+            name:
+                host:                 localhost
+                port:                 '6379'
         http_service:
-            host:                 localhost
-            port:                 '80'
-            path:                 /
-            status_code:          '200'
-            content:              null
+
+            # Prototype
+            name:
+                host:                 localhost
+                port:                 '80'
+                path:                 /
+                status_code:          '200'
+                content:              null
         rabbit_mq:
-            host:                 localhost
-            port:                 '5672'
-            user:                 guest
-            password:             guest
-            vhost:                /
+
+            # Prototype
+            name:
+                host:                 localhost
+                port:                 '5672'
+                user:                 guest
+                password:             guest
+                vhost:                /
         dep_entries:          ~
         symfony_version:      ~
         custom_error_pages:

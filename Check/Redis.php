@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Check\AbstractCheck;
 use Predis\Client;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
@@ -10,7 +10,7 @@ use ZendDiagnostics\Result\Success;
 /**
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class Redis implements CheckInterface
+class Redis extends AbstractCheck
 {
     /**
      * @var string
@@ -56,10 +56,5 @@ class Redis implements CheckInterface
         }
 
         return new Success();
-    }
-
-    public function getLabel()
-    {
-        return 'Redis';
     }
 }
