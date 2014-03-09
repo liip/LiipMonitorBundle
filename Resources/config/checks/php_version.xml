@@ -10,7 +10,8 @@
 
     <services>
         <service id="liip_monitor.check.php_version" public="false" class="%liip_monitor.check.php_version.class%">
-            <argument>%liip_monitor.check.php_version%</argument>
+            <argument>%liip_monitor.check.php_version.version%</argument>
+            <argument>%liip_monitor.check.php_version.operator%</argument>
             <tag name="liip_monitor.check" alias="php_version"/>
         </service>
     </services>

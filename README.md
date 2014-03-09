@@ -200,6 +200,13 @@ liip_monitor:
     enable_controller:    false
     checks:
         php_extensions:       []
+        php_version:
+
+            # Expected php version.
+            version:              5.3.8
+
+            # version comparision operator.
+            operator:             '>='
 
         # Process name/pid or an array of process names/pids.
         process_running:      ~ # Example: [apache, foo]
