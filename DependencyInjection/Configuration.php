@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('php_version')
                             ->children()
                                 ->scalarNode('version')->defaultValue('5.3.8')->info('Expected php version.')->end()
-                                ->scalarNode('operator')->defaultValue('>=')->info('version comparision operator.')->end()
+                                ->scalarNode('operator')->defaultValue('>=')->info('Version comparision operator.')->end()
                             ->end()
                         ->end()
                         ->variableNode('process_running')
