@@ -55,7 +55,7 @@ Then register the bundle in the `AppKernel.php` file:
         return $bundles;
     }
 
-If you want to enable the REST API provided by the bundle then add the following to your `routing.xml`:
+If you want to enable the REST API provided by the bundle then add the following to your `routing.yml`:
 
     _monitor:
         resource: "@LiipMonitorBundle/Resources/config/routing.xml"
