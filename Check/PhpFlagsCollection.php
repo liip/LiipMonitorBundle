@@ -17,9 +17,6 @@ class PhpFlagsCollection implements CheckCollectionInterface
      */
     public function __construct(array $configs)
     {
-        var_dump($configs);
-
-
         foreach ($configs as $setting => $value) {
             $check = new PhpFlag($setting, $value);
             $check->setLabel(sprintf('PHP flag "%s"', $setting));

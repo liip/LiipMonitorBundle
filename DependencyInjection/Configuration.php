@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                         ->end()
                         ->arrayNode('php_flags')
+                            ->info('Pairs of a PHP setting and an expected value')
                             ->example('session.use_only_cookies: false')
                             ->useAttributeAsKey('setting')
                             ->prototype('scalar')->defaultValue(true)->end()
