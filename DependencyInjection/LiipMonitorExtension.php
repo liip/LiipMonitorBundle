@@ -43,6 +43,7 @@ class LiipMonitorExtension extends Extension
                 case 'php_extensions':
                 case 'php_version':
                 case 'php_flags':
+                case 'readable_directory':
                 case 'writable_directory':
                 case 'process_running':
                 case 'doctrine_dbal':
