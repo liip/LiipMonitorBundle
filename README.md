@@ -201,6 +201,12 @@ liip_monitor:
     checks:
         php_extensions:       []
 
+        # Pairs of a PHP setting and an expected value
+        php_flags:            # Example: session.use_only_cookies: false
+
+            # Prototype
+            setting:              ~
+
         # Pairs of a version and a comparison operator
         php_version:          # Example: 5.4.15: >=
 
