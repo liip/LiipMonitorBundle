@@ -41,6 +41,7 @@ class LiipMonitorExtension extends Extension
 
             switch ($check) {
                 case 'php_extensions':
+                case 'php_flags':
                 case 'writable_directory':
                 case 'process_running':
                 case 'doctrine_dbal':
