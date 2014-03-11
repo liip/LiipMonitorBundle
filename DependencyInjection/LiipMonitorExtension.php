@@ -40,6 +40,7 @@ class LiipMonitorExtension extends Extension
             $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
 
             switch ($check) {
+                case 'class_exists':
                 case 'php_extensions':
                 case 'php_version':
                 case 'php_flags':
