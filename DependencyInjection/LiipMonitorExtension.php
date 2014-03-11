@@ -52,6 +52,7 @@ class LiipMonitorExtension extends Extension
                 case 'memcache':
                 case 'redis':
                 case 'rabbit_mq':
+                case 'stream_wrapper_exists':
                     $container->setParameter($prefix, $values);
                     continue;
 
