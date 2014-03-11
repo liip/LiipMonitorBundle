@@ -24,11 +24,13 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.1",
+        "symfony/framework-bundle": "~2.3",
         "zendframework/zenddiagnostics": "~1.0"
     },
     "suggest": {
-        "sensio/distribution-bundle": "To be able to use the composer ScriptHandler"
+        "sensio/distribution-bundle": "To be able to use the composer ScriptHandler",
+        "predis/predis": "To use the Redis check",
+        "videlalvaro/php-amqplib": "To use the RabbitMQ check"
     },
     "autoload": {
         "psr-0": { "Liip\\MonitorBundle": "" }
