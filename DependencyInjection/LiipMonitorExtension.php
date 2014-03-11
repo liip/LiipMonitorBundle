@@ -41,6 +41,7 @@ class LiipMonitorExtension extends Extension
 
             switch ($check) {
                 case 'class_exists':
+                case 'cpu_performance':
                 case 'php_extensions':
                 case 'php_version':
                 case 'php_flags':
