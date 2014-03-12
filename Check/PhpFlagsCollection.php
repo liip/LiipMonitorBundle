@@ -32,4 +32,4 @@ class PhpFlagsCollection implements CheckCollectionInterface
     {
         return $this->checks;
     }
-} 
+}

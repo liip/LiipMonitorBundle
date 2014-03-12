@@ -19,7 +19,7 @@ class PathHelper
     }
 
     /**
-     * @param array $routes
+     * @param  array $routes
      * @return array
      */
     public function generateRoutes(array $routes)
@@ -33,7 +33,7 @@ class PathHelper
     }
 
     /**
-     * @param array $routes
+     * @param  array  $routes
      * @return string
      */
     public function getRoutesJs(array $routes)
@@ -47,7 +47,7 @@ class PathHelper
     }
 
     /**
-     * @param array $paths
+     * @param  array  $paths
      * @return string
      */
     public function getScriptTags(array $paths)
@@ -61,7 +61,7 @@ class PathHelper
     }
 
     /**
-     * @param array $paths
+     * @param  array  $paths
      * @return string
      */
     public function getStyleTags(array $paths)

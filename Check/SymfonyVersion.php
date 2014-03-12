@@ -72,7 +72,7 @@ class SymfonyVersion implements CheckInterface
 
         // Filter out non final tags
 
-        $filteredTagList = array_filter($tags, function($tag) {
+        $filteredTagList = array_filter($tags, function ($tag) {
                 return !stripos($tag, "PR") && !stripos($tag, "RC") && !stripos($tag, "BETA");
             });
 

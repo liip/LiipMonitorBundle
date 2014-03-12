@@ -32,4 +32,4 @@ class PhpVersionCollection implements CheckCollectionInterface
     {
         return $this->checks;
     }
-} 
+}
