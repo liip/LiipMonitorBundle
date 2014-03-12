@@ -1,7 +1,6 @@
 <?php
 namespace Liip\MonitorBundle\Composer;
 
-use Symfony\Component\Process\Process;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseHandler;
 
 /**

@@ -32,7 +32,7 @@ class CustomErrorPages implements CheckInterface
     /**
      * Construct.
      *
-     * @param array $errorCodes
+     * @param array  $errorCodes
      * @param string $kernelRootDir
      * @param string $exceptionController
      */

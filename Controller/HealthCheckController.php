@@ -25,7 +25,7 @@ class HealthCheckController
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
@@ -82,9 +82,8 @@ class HealthCheckController
         ));
     }
 
-
     /**
-     * @param string $checkId
+     * @param  string                                     $checkId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runSingleCheckAction($checkId)
@@ -95,7 +94,7 @@ class HealthCheckController
     }
 
     /**
-     * @param string|null $checkId
+     * @param  string|null   $checkId
      * @return ArrayReporter
      */
     protected function runTests($checkId = null)
