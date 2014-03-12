@@ -76,6 +76,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('http_service', array('foo' => null), 'ZendDiagnostics\Check\HttpService', 'http_service_foo'),
             array('rabbit_mq', array('foo' => null), 'Liip\MonitorBundle\Check\RabbitMQ', 'rabbit_mq_foo'),
             array('symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'),
+            array('custom_error_pages', array('error_codes' => array(500), 'path' => __DIR__, 'controller' => 'foo'), 'Liip\MonitorBundle\Check\CustomErrorPages'),
             array('security_advisory', array('lock_file' => __DIR__.'/../../composer.lock'), 'ZendDiagnostics\Check\SecurityAdvisory'),
             array('stream_wrapper_exists', array('foo'), 'ZendDiagnostics\Check\StreamWrapperExists'),
         );
