@@ -1,5 +1,7 @@
 # Liip Monitor Bundle #
 
+[![Build Status](https://travis-ci.org/liip/LiipMonitorBundle.png)](https://travis-ci.org/liip/LiipMonitorBundle)
+
 This bundle provides a way to run a series of application related health checks.
 Health checks in the scope of this bundle go beyond simple actions like performing
 a _ping_ to a server to see if it's alive. For example a Memcache server can be
