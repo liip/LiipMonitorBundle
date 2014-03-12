@@ -40,9 +40,12 @@ class LiipMonitorExtension extends Extension
             $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
 
             switch ($check) {
+                case 'class_exists':
+                case 'cpu_performance':
                 case 'php_extensions':
                 case 'php_version':
                 case 'php_flags':
+                case 'readable_directory':
                 case 'writable_directory':
                 case 'process_running':
                 case 'doctrine_dbal':
@@ -50,6 +53,7 @@ class LiipMonitorExtension extends Extension
                 case 'memcache':
                 case 'redis':
                 case 'rabbit_mq':
+                case 'stream_wrapper_exists':
                     $container->setParameter($prefix, $values);
                     continue;
 
