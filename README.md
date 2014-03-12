@@ -111,10 +111,6 @@ Symfony2 specific health checks:
 
 Checks if error pages have been customized for given error codes.
 
-### DepsEntriesCheck ###
-
-Checks all entries from `deps` are defined in `deps.lock`.
-
 ### DiskUsageCheck ###
 
 Checks that disk usage percentage is under a specific warning/critical threshold.
@@ -263,7 +259,6 @@ liip_monitor:
                 user:                 guest
                 password:             guest
                 vhost:                /
-        dep_entries:          ~
         symfony_version:      ~
         custom_error_pages:
             error_codes:          [] # Required

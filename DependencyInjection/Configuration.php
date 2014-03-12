@@ -135,7 +135,6 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        ->scalarNode('dep_entries')->end()
                         ->booleanNode('symfony_version')->end()
                         ->arrayNode('custom_error_pages')
                             ->children()
