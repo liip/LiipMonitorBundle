@@ -11,7 +11,7 @@ env:
   - SYMFONY_VERSION=2.5.*@dev
 
 before_script:
-  - composer require --prefer-source --dev symfony/framework-bundle:${SYMFONY_VERSION}
+  - composer require --prefer-source symfony/symfony:${SYMFONY_VERSION}
 
 cache:
   directories:
