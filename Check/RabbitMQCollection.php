@@ -15,9 +15,9 @@ class RabbitMQCollection implements CheckCollectionInterface
     {
         foreach ($configs as $name => $config) {
             $check = new RabbitMQ($config['host'], $config['port'], $config['user'], $config['password'], $config['vhost']);
-            $check->setLabel(sprintf('Http Service "%s"', $name));
+            $check->setLabel(sprintf('Rabbit MQ "%s"', $name));
 
-            $this->checks[sprintf('http_service_%s', $name)] = $check;
+            $this->checks[sprintf('rabbit_mq_%s', $name)] = $check;
         }
     }
 
