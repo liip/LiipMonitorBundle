@@ -47,7 +47,7 @@ class PathHelper
     }
 
     /**
-     * @param  array  $paths
+     * @param  string[]  $paths
      * @return string
      */
     public function getScriptTags(array $paths)
@@ -61,7 +61,7 @@ class PathHelper
     }
 
     /**
-     * @param  array  $paths
+     * @param  string[]  $paths
      * @return string
      */
     public function getStyleTags(array $paths)
