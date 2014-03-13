@@ -25,6 +25,21 @@ class RabbitMQ extends AbstractCheck
     protected $port;
 
     /**
+     * @var string
+     */
+    protected $user;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    /**
+     * @var string
+     */
+    protected $vhost;
+
+    /**
      * Construct.
      *
      * @param string  $host
