@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="liip_monitor.check.file_yaml.class">ZendDiagnostics\Check\YamlFile</parameter>
+        <parameter key="liip_monitor.check.file_yaml.label">File (YAML)</parameter>
+    </parameters>
+
+    <services>
+        <service id="liip_monitor.check.file_yaml" public="false" class="%liip_monitor.check.file_yaml.class%">
+            <argument>%liip_monitor.check.file_yaml%</argument>
+            <call method="setLabel">
+                <argument>%liip_monitor.check.file_yaml.label%</argument>
+            </call>
+            <tag name="liip_monitor.check" alias="file_yaml" />
+        </service>
+    </services>
+</container>
