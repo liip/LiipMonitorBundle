@@ -214,19 +214,24 @@ liip_monitor:
 
         # Process name/pid or an array of process names/pids.
         process_running:      ~ # Example: [apache, foo]
+        readable_directory:   []
         writable_directory:   []
+        class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
+
+        # Benchmark CPU performance and return failure if it is below the given ratio.
+        cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
         disk_usage:
-            warning:              '70'
-            critical:             '90'
+            warning:              70
+            critical:             90
             path:                 '%kernel.cache_dir%'
         symfony_requirements:
             file:                 '%kernel.root_dir%/SymfonyRequirements.php'
         apc_memory:
-            warning:              '70'
-            critical:             '90'
+            warning:              70
+            critical:             90
         apc_fragmentation:
-            warning:              '70'
-            critical:             '90'
+            warning:              70
+            critical:             90
 
         # Connection name or an array of connection names.
         doctrine_dbal:        null # Example: [default, crm]
@@ -235,28 +240,28 @@ liip_monitor:
             # Prototype
             name:
                 host:                 localhost
-                port:                 '11211'
+                port:                 11211
         redis:
 
             # Prototype
             name:
                 host:                 localhost
-                port:                 '6379'
+                port:                 6379
         http_service:
 
             # Prototype
             name:
                 host:                 localhost
-                port:                 '80'
+                port:                 80
                 path:                 /
-                status_code:          '200'
+                status_code:          200
                 content:              null
         rabbit_mq:
 
             # Prototype
             name:
                 host:                 localhost
-                port:                 '5672'
+                port:                 5672
                 user:                 guest
                 password:             guest
                 vhost:                /
@@ -267,6 +272,19 @@ liip_monitor:
             controller:           '%twig.exception_listener.controller%'
         security_advisory:
             lock_file:            '%kernel.root_dir%/../composer.lock'
+        stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
+
+        # Find and validate INI files
+        file_ini:             [] # Example: ['path/to/my.ini']
+
+        # Find and validate JSON files
+        file_json:            [] # Example: ['path/to/my.json']
+
+        # Find and validate XML files
+        file_xml:             [] # Example: ['path/to/my.xml']
+
+        # Find and validate YAML files
+        file_yaml:            [] # Example: ['path/to/my.yml']
 ```
 
 ## REST API DOCS ##

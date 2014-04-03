@@ -79,6 +79,10 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('custom_error_pages', array('error_codes' => array(500), 'path' => __DIR__, 'controller' => 'foo'), 'Liip\MonitorBundle\Check\CustomErrorPages'),
             array('security_advisory', array('lock_file' => __DIR__.'/../../composer.lock'), 'ZendDiagnostics\Check\SecurityAdvisory'),
             array('stream_wrapper_exists', array('foo'), 'ZendDiagnostics\Check\StreamWrapperExists'),
+            array('file_ini', array('foo.ini'), 'ZendDiagnostics\Check\IniFile'),
+            array('file_json', array('foo.json'), 'ZendDiagnostics\Check\JsonFile'),
+            array('file_xml', array('foo.xml'), 'ZendDiagnostics\Check\XmlFile'),
+            array('file_yaml', array('foo.yaml'), 'ZendDiagnostics\Check\YamlFile'),
         );
     }
 

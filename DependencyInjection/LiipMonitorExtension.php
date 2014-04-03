@@ -54,6 +54,10 @@ class LiipMonitorExtension extends Extension
                 case 'redis':
                 case 'rabbit_mq':
                 case 'stream_wrapper_exists':
+                case 'file_ini':
+                case 'file_json':
+                case 'file_xml':
+                case 'file_yaml':
                     $container->setParameter($prefix, $values);
                     continue;
 
