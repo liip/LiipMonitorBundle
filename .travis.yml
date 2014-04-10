@@ -15,4 +15,4 @@ before_script:
 
 cache:
   directories:
-    - $COMPOSER_CACHE_DIR
+    - /home/travis/.composer/cache
