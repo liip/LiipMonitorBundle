@@ -12,7 +12,3 @@ env:
 
 before_script:
   - composer require --prefer-source symfony/symfony:${SYMFONY_VERSION}
-
-cache:
-  directories:
-    - $COMPOSER_CACHE_DIR
