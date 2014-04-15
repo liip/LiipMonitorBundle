@@ -256,6 +256,15 @@ liip_monitor:
                 path:                 /
                 status_code:          200
                 content:              null
+        guzzle_http_service:
+
+            # Prototype
+            name:
+                url:                  localhost
+                headers:              []
+                options:              []
+                status_code:          200
+                content:              null
         rabbit_mq:
 
             # Prototype

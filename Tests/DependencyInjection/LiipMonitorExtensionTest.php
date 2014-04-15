@@ -74,6 +74,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('memcache', array('foo' => null), 'ZendDiagnostics\Check\Memcache', 'memcache_foo'),
             array('redis', array('foo' => null), 'ZendDiagnostics\Check\Redis', 'redis_foo'),
             array('http_service', array('foo' => null), 'ZendDiagnostics\Check\HttpService', 'http_service_foo'),
+            array('guzzle_http_service', array('foo' => null), 'ZendDiagnostics\Check\GuzzleHttpService', 'guzzle_http_service_foo'),
             array('rabbit_mq', array('foo' => null), 'ZendDiagnostics\Check\RabbitMQ', 'rabbit_mq_foo'),
             array('symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'),
             array('custom_error_pages', array('error_codes' => array(500), 'path' => __DIR__, 'controller' => 'foo'), 'Liip\MonitorBundle\Check\CustomErrorPages'),
