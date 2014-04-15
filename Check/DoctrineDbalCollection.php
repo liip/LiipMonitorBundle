@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ConnectionRegistry;
 use ZendDiagnostics\Check\CheckCollectionInterface;
 
 /**
@@ -12,7 +12,7 @@ class DoctrineDbalCollection implements CheckCollectionInterface
 {
     private $checks = array();
 
-    public function __construct(ManagerRegistry $manager, $connections)
+    public function __construct(ConnectionRegistry $manager, $connections)
     {
         if (!is_array($connections)) {
             $connections = array($connections);
