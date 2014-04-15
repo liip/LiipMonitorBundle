@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Check;
 
 use ZendDiagnostics\Check\CheckCollectionInterface;
+use ZendDiagnostics\Check\RabbitMQ;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
