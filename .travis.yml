@@ -12,3 +12,6 @@ env:
 
 before_script:
   - composer require --prefer-source symfony/symfony:${SYMFONY_VERSION}
+
+notifications:
+  slack: liip:omECyFa2jBWp1yiRO6c6dash
