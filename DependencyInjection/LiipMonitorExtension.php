@@ -50,6 +50,7 @@ class LiipMonitorExtension extends Extension
                 case 'process_running':
                 case 'doctrine_dbal':
                 case 'http_service':
+                case 'guzzle_http_service':
                 case 'memcache':
                 case 'redis':
                 case 'rabbit_mq':

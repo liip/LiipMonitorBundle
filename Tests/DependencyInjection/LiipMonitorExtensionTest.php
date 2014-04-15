@@ -72,9 +72,10 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('doctrine_dbal', array('foo', 'bar'), 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection', 2),
             array('doctrine_dbal', array('foo', 'bar'), 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_bar_connection', 2),
             array('memcache', array('foo' => null), 'ZendDiagnostics\Check\Memcache', 'memcache_foo'),
-            array('redis', array('foo' => null), 'Liip\MonitorBundle\Check\Redis', 'redis_foo'),
+            array('redis', array('foo' => null), 'ZendDiagnostics\Check\Redis', 'redis_foo'),
             array('http_service', array('foo' => null), 'ZendDiagnostics\Check\HttpService', 'http_service_foo'),
-            array('rabbit_mq', array('foo' => null), 'Liip\MonitorBundle\Check\RabbitMQ', 'rabbit_mq_foo'),
+            array('guzzle_http_service', array('foo' => null), 'ZendDiagnostics\Check\GuzzleHttpService', 'guzzle_http_service_foo'),
+            array('rabbit_mq', array('foo' => null), 'ZendDiagnostics\Check\RabbitMQ', 'rabbit_mq_foo'),
             array('symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'),
             array('custom_error_pages', array('error_codes' => array(500), 'path' => __DIR__, 'controller' => 'foo'), 'Liip\MonitorBundle\Check\CustomErrorPages'),
             array('security_advisory', array('lock_file' => __DIR__.'/../../composer.lock'), 'ZendDiagnostics\Check\SecurityAdvisory'),
@@ -93,7 +94,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     protected function compile()
     {
-        $this->container->set('doctrine', $this->getMock('Doctrine\Common\Persistence\ManagerRegistry'));
+        $this->container->set('doctrine', $this->getMock('Doctrine\Common\Persistence\ConnectionRegistry'));
         $this->container->addCompilerPass(new CheckTagCompilerPass());
         $this->container->addCompilerPass(new CheckCollectionTagCompilerPass());
 

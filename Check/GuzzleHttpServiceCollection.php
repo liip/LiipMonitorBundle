@@ -3,22 +3,22 @@
 namespace Liip\MonitorBundle\Check;
 
 use ZendDiagnostics\Check\CheckCollectionInterface;
-use ZendDiagnostics\Check\RabbitMQ;
+use ZendDiagnostics\Check\GuzzleHttpService;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class RabbitMQCollection implements CheckCollectionInterface
+class GuzzleHttpServiceCollection implements CheckCollectionInterface
 {
     private $checks = array();
 
     public function __construct(array $configs)
     {
         foreach ($configs as $name => $config) {
-            $check = new RabbitMQ($config['host'], $config['port'], $config['user'], $config['password'], $config['vhost']);
-            $check->setLabel(sprintf('Rabbit MQ "%s"', $name));
+            $check = new GuzzleHttpService($config['url'], $config['headers'], $config['options'], $config['status_code'], $config['content']);
+            $check->setLabel(sprintf('Guzzle Http Service "%s"', $name));
 
-            $this->checks[sprintf('rabbit_mq_%s', $name)] = $check;
+            $this->checks[sprintf('guzzle_http_service_%s', $name)] = $check;
         }
     }
 
