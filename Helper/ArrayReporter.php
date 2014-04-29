@@ -15,7 +15,10 @@ use ZendDiagnostics\Result\Collection as ResultsCollection;
  */
 class ArrayReporter implements ReporterInterface
 {
-    private $globalStatus = 'OK';
+    const STATUS_OK = 'OK';
+    const STATUS_KO = 'KO';
+
+    private $globalStatus = self::STATUS_OK;
     private $results = array();
 
     /**
@@ -48,7 +51,7 @@ class ArrayReporter implements ReporterInterface
             case $result instanceof WarningInterface:
                 $status = 1;
                 $statusName = 'check_result_warning';
-                $this->globalStatus = 'KO';
+                $this->globalStatus = self::STATUS_KO;
                 break;
 
             case $result instanceof SkipInterface:
@@ -59,7 +62,7 @@ class ArrayReporter implements ReporterInterface
             default:
                 $status = 3;
                 $statusName = 'check_result_critical';
-                $this->globalStatus = 'KO';
+                $this->globalStatus = self::STATUS_KO;
         }
 
         $this->results[] = array(
