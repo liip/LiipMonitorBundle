@@ -13,8 +13,10 @@ class ScriptHandler extends BaseHandler
     public static function checkHealth($event)
     {
         $options = self::getOptions($event);
-        $appDir = $options['symfony-app-dir'];
+
+        // use Symfony 3.0 dir structure if available
+        $consoleDir = isset($options['symfony-bin-dir']) ? $options['symfony-bin-dir'] : $options['symfony-app-dir'];
         $event->getIO()->write('<info>Performing system health checks...</info>');
-        static::executeCommand($event, $appDir, 'monitor:health');
+        static::executeCommand($event, $consoleDir, 'monitor:health');
     }
 }
