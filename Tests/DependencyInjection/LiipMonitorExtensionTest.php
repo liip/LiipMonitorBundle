@@ -49,6 +49,26 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
 
+    public function testMailer()
+    {
+        $this->load();
+
+        $this->assertEquals(false, $this->container->getParameter('liip_monitor.mailer.enabled'));
+
+        $this->load(
+            array(
+                'mailer' => array(
+                    'enabled' => true,
+                    'recipient' => 'foo@example.com',
+                    'sender' => 'bar@example.com',
+                    'subject' => 'Health Check'
+                )
+            )
+        );
+
+        $this->assertEquals(true, $this->container->getParameter('liip_monitor.mailer.enabled'));
+    }
+
     public function checkProvider()
     {
         return array(

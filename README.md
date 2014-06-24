@@ -219,6 +219,11 @@ To run this reporter with the REST API, add a `reporters` query parameter:
 ```yaml
 liip_monitor:
     enable_controller:    false
+    mailer:
+        enabled:          false
+        recipient:        ~
+        sender:           ~
+        subject:          ~
     checks:
         php_extensions:       []
 
