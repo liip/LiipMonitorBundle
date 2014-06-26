@@ -27,7 +27,7 @@ class LiipMonitorExtension extends Extension
             $loader->load('controller.xml');
         }
 
-        if (isset($config['mailer']) && is_array($config['mailer'])) {
+        if ($config['mailer']['enabled']) {
             $loader->load('helper/swift_mailer.xml');
 
             foreach ($config['mailer'] as $key => $value) {
