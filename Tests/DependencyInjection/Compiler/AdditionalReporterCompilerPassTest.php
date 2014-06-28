@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcessWithAlias()
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner', $runner);
@@ -34,10 +34,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     */
-    public function testProcessWithoutNameAttribute()
+    public function testProcessWithoutAlias()
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner', $runner);
@@ -47,6 +44,15 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition('foo_reporter', $reporter);
 
         $this->compile();
+
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'liip_monitor.runner',
+            'addAdditionalReporter',
+            array(
+                'foo_reporter',
+                new Reference('foo_reporter')
+            )
+        );
     }
 
     protected function registerCompilerPass(ContainerBuilder $container)
