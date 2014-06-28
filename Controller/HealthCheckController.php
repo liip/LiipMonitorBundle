@@ -102,9 +102,15 @@ class HealthCheckController
      */
     protected function runTests(Request $request, $checkId = null)
     {
+        $reporters = $request->query->get('reporters', array());
+
+        if (!is_array($reporters)) {
+            $reporters = array($reporters);
+        }
+
         $reporter = new ArrayReporter();
         $this->runner->addReporter($reporter);
-        $this->runner->useAdditionalReporters($request->query->get('reporters', array()));
+        $this->runner->useAdditionalReporters($reporters);
         $this->runner->run($checkId);
 
         return $reporter;
