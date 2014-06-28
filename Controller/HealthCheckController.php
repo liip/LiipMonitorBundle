@@ -6,7 +6,7 @@ use Liip\MonitorBundle\Helper\ArrayReporter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use ZendDiagnostics\Runner\Runner;
+use Liip\MonitorBundle\Runner;
 use Liip\MonitorBundle\Helper\PathHelper;
 
 class HealthCheckController
@@ -70,11 +70,12 @@ class HealthCheckController
     }
 
     /**
+     * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function runAllChecksAction()
+    public function runAllChecksAction(Request $request)
     {
-        $report = $this->runTests();
+        $report = $this->runTests($request);
 
         return new JsonResponse(array(
             'checks' => $report->getResults(),
@@ -84,23 +85,26 @@ class HealthCheckController
 
     /**
      * @param  string                                     $checkId
+     * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function runSingleCheckAction($checkId)
+    public function runSingleCheckAction($checkId, Request $request)
     {
-        $results = $this->runTests($checkId)->getResults();
+        $results = $this->runTests($request, $checkId)->getResults();
 
         return new JsonResponse($results[0]);
     }
 
     /**
+     * @param  Request       $request
      * @param  string|null   $checkId
      * @return ArrayReporter
      */
-    protected function runTests($checkId = null)
+    protected function runTests(Request $request, $checkId = null)
     {
         $reporter = new ArrayReporter();
         $this->runner->addReporter($reporter);
+        $this->runner->useAdditionalReporters($request->query->get('reporters', array()));
         $this->runner->run($checkId);
 
         return $reporter;
