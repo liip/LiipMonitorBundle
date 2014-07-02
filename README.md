@@ -83,6 +83,7 @@ liip_monitor:
     checks:
         php_extensions: [apc, xdebug]
 ```
+
 ## Adding Health Checks ##
 
 Once you implemented the class then it's time to register the check service with our service container:
@@ -101,7 +102,6 @@ can reside either in your bundles or in your app specific code. The location doe
 as long as the service is properly tagged. The ``alias`` is optional and will then simply
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
-
 
 ## Available Health Checks ##
 
@@ -191,6 +191,28 @@ To run health checks as a composer post-install or post-update script, simply ad
     ]
 },
 ```
+
+## Adding Additional Reporters ##
+
+There are two default reporters: `ArrayReporter` for the REST API and `ConsoleReporter` for the CLI command. You can
+add additional reporters to be used by either of these.
+
+First, define an additional reporter service and tag it with `liip_monitor.additional_reporter`:
+
+```
+my_reporter:
+    class: My\Reporter
+    tags:
+        - { name: liip_monitor.additional_reporter, alias: my_reporter }
+```
+
+To run additional reporters with the CLI, add `--reporter=...` options for each one:
+
+    $ ./app/console monitor:health --reporter=my_reporter
+
+To run this reporter with the REST API, add a `reporters` query parameter:
+
+    /monitor/health?reporters[]=my_reporter
 
 ## Full Default Config ##
 
