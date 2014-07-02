@@ -25,7 +25,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                 new InputOption(
                     'reporter',
                     null,
-                    InputOption::VALUE_IS_ARRAY,
+                    InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                     'Additional reporters to run.',
                     array()
                 )
