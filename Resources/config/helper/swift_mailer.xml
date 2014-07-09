@@ -10,6 +10,7 @@
 
     <services>
         <service id="liip_monitor.reporter.swift_mailer" class="%liip_monitor.reporter.swift_mailer.class%">
+            <tag name="liip_monitor.additional_reporter" alias="swift_mailer" />
             <argument type="service" id="mailer" />
             <argument>%liip_monitor.mailer.recipient%</argument>
             <argument>%liip_monitor.mailer.sender%</argument>
