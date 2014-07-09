@@ -49,6 +49,56 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
 
+    public function testMailer()
+    {
+        $this->load();
+
+        $this->assertEquals(false, $this->container->has('liip_monitor.reporter.swift_mailer'));
+
+        $this->load(
+            array(
+                'mailer' => array(
+                    'recipient' => 'foo@example.com',
+                    'sender' => 'bar@example.com',
+                    'subject' => 'Health Check'
+                )
+            )
+        );
+
+        $this->assertEquals(true, $this->container->has('liip_monitor.reporter.swift_mailer'));
+    }
+
+    /**
+     * @dataProvider mailerConfigProvider
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testInvalidMailerConfig($config)
+    {
+        $this->load($config);
+    }
+
+    public function mailerConfigProvider()
+    {
+        return array(
+            array(
+                array(
+                    'mailer' => array(
+                        'recipient' => 'foo@example.com'
+                    )
+                )
+            ),
+            array(
+                array(
+                    'mailer' => array(
+                        'recipient' => 'foo@example.com',
+                        'sender' => 'bar@example.com',
+                        'subject' => null
+                    )
+                )
+            )
+        );
+    }
+
     public function checkProvider()
     {
         return array(

@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="liip_monitor.reporter.swift_mailer.class">Liip\MonitorBundle\Helper\SwiftMailerReporter</parameter>
+    </parameters>
+
+    <services>
+        <service id="liip_monitor.reporter.swift_mailer" class="%liip_monitor.reporter.swift_mailer.class%">
+            <tag name="liip_monitor.additional_reporter" alias="swift_mailer" />
+            <argument type="service" id="mailer" />
+            <argument>%liip_monitor.mailer.recipient%</argument>
+            <argument>%liip_monitor.mailer.sender%</argument>
+            <argument>%liip_monitor.mailer.subject%</argument>
+        </service>
+    </services>
+</container>
