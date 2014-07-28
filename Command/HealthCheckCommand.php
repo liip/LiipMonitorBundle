@@ -43,6 +43,6 @@ class HealthCheckCommand extends ContainerAwareCommand
             $output->writeln('<error>No checks configured.</error>');
         }
 
-        $runner->run($checkName);
+        return $runner->run($checkName)->getFailureCount() ? 1 : 0;
     }
 }
