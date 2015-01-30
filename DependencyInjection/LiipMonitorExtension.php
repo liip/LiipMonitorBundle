@@ -23,7 +23,12 @@ class LiipMonitorExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        if (null === $config['view_template']) {
+            $config['view_template'] = __DIR__ . '/../Resources/views/health/index.html.php';
+        }
+
         if ($config['enable_controller']) {
+            $container->setParameter(sprintf('%s.view_template', $this->getAlias()), $config['view_template']);
             $loader->load('controller.xml');
         }
 

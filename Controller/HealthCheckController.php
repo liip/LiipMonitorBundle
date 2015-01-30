@@ -13,15 +13,17 @@ class HealthCheckController
 {
     protected $runner;
     protected $pathHelper;
+    protected $template;
 
     /**
      * @param Runner     $runner
      * @param PathHelper $pathHelper
      */
-    public function __construct(Runner $runner, PathHelper $pathHelper)
+    public function __construct(Runner $runner, PathHelper $pathHelper, $template)
     {
         $this->runner = $runner;
         $this->pathHelper = $pathHelper;
+        $this->template = $template;
     }
 
     /**
@@ -49,7 +51,7 @@ class HealthCheckController
         // this is a hack to make the bundle template agnostic.
         // URL generation for Assets and Routes is still handled by the framework.
         ob_start();
-        include __DIR__ . '/../Resources/views/health/index.html.php';
+        include $this->template;
         $content = ob_get_clean();
 
         return new Response($content, 200, array('Content-Type' => 'text/html'));
