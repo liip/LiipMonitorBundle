@@ -34,40 +34,39 @@ Here's the web interface:
 
 ## Installation ##
 
-Add the following code to your ```composer.json``` file:
+Install with composer:
 
-    "require": {
-        ..
-        "liip/monitor-bundle": "dev-master"
-    },
-
-And then run the Composer update command:
-
-    $ php composer.phar update liip/monitor-bundle
+    $ composer require liip/monitor-bundle
 
 Then register the bundle in the `AppKernel.php` file:
 
-    public function registerBundles()
-    {
-        $bundles = array(
-            ...
-            new Liip\MonitorBundle\LiipMonitorBundle(),
-            ...
-        );
+```php
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new Liip\MonitorBundle\LiipMonitorBundle(),
+        // ...
+    );
 
-        return $bundles;
-    }
+    return $bundles;
+}
+```
 
 If you want to enable the REST API provided by the bundle then add the following to your `routing.yml`:
 
-    _monitor:
-        resource: "@LiipMonitorBundle/Resources/config/routing.xml"
-        prefix: /monitor/health
+```yml
+_monitor:
+    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
+    prefix: /monitor/health
+```
 
-Enable the controller in your configuration:
+Then, enable the controller in your configuration:
 
-    liip_monitor:
-        enable_controller: true
+```yml
+liip_monitor:
+    enable_controller: true
+```
 
 And finally don't forget to install the bundle assets into your web root:
 
@@ -76,7 +75,6 @@ And finally don't forget to install the bundle assets into your web root:
 ## Enabling built-in health checks
 
 To enable built-in health checks, add them to your `config.yml`
-
 
 ```yml
 liip_monitor:
@@ -88,13 +86,15 @@ liip_monitor:
 
 Once you implemented the class then it's time to register the check service with our service container:
 
-    services:
-        monitor.check.php_extensions:
-            class: Acme\HelloBundle\Check\PhpExtensionsCheck
-            arguments:
-                - [ xhprof, apc, memcache ]
-            tags:
-                - { name: liip_monitor.check, alias: php_extensions }
+```yml
+services:
+    monitor.check.php_extensions:
+        class: Acme\HelloBundle\Check\PhpExtensionsCheck
+        arguments:
+            - [ xhprof, apc, memcache ]
+        tags:
+            - { name: liip_monitor.check, alias: php_extensions }
+```
 
 The important bit there is to remember to tag your services with the `liip_monitor.check` tag.
 By doing that the check runner will be able to find your checks. Keep in mind that checks
@@ -103,38 +103,9 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
-## Available Health Checks ##
+## Available Built-in Health Checks ##
 
-On top of all the checks provided by the ZendDiagnostics library this Bundle adds the following
-Symfony2 specific health checks:
-
-### CustomErrorPagesCheck ###
-
-Checks if error pages have been customized for given error codes.
-
-### DiskUsageCheck ###
-
-Checks that disk usage percentage is under a specific warning/critical threshold.
-
-### DoctrineDbalCheck ###
-
-Checks that a doctrine dbal connection is available.
-
-### RabbitMQCheck ###
-
-Checks that a RabbitMQ server is running.
-
-### RedisCheck ###
-
-Checks that a Redis server is running.
-
-### SymfonyVersionCheck ###
-
-Checks the version of this website against the latest stable release.
-
-### SymfonyRequirements ###
-
-Checks Symfony2 requirements file.
+See "Full Default Config" below for a list of all built-in checks and their configuration.
 
 ## Running Checks ##
 
@@ -152,7 +123,7 @@ provided by the bundle. Let's see what commands we have available for the CLI:
 
 ### Run All the Checks ###
 
-    ./app/console monitor:health
+    $ ./app/console monitor:health
 
     Jackrabbit Health Check: OK
     Redis Health Check: OK
@@ -199,7 +170,7 @@ add additional reporters to be used by either of these.
 
 First, define an additional reporter service and tag it with `liip_monitor.additional_reporter`:
 
-```
+```yml
 my_reporter:
     class: My\Reporter
     tags:
@@ -216,16 +187,17 @@ To run this reporter with the REST API, add a `reporters` query parameter:
 
 ## Full Default Config ##
 
-```yaml
+```yml
 liip_monitor:
     enable_controller:    false
     mailer:
-        enabled:          false
-        recipient:        ~
-        sender:           ~
-        subject:          ~
+        enabled:              false
+        recipient:            ~ # Required
+        sender:               ~ # Required
+        subject:              ~ # Required
     checks:
-        php_extensions:       []
+        # Validate that a named extension or a collection of extensions is available
+        php_extensions:       [] # Example: [redis, mysqli]
 
         # Pairs of a PHP setting and an expected value
         php_flags:            # Example: session.use_only_cookies: false
@@ -239,41 +211,66 @@ liip_monitor:
             # Prototype
             version:              ~
 
-        # Process name/pid or an array of process names/pids.
+        # Process name/pid or an array of process names/pids
         process_running:      ~ # Example: [apache, foo]
-        readable_directory:   []
-        writable_directory:   []
+
+        # Validate that a given path (or a collection of paths) is a dir and is readable
+        readable_directory:   [] # Example: ["%kernel.cache_dir%"]
+
+        # Validate that a given path (or a collection of paths) is a dir and is writable
+        writable_directory:   [] # Example: ['%kernel.cache_dir%']
+
+        # Validate that a class or a collection of classes is available
         class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
 
-        # Benchmark CPU performance and return failure if it is below the given ratio.
+        # Benchmark CPU performance and return failure if it is below the given ratio
         cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
+
+        # Checks to see if the disk usage is below warning/critical percent thresholds
         disk_usage:
             warning:              70
             critical:             90
             path:                 '%kernel.cache_dir%'
+
+        # Checks Symfony2 requirements file
         symfony_requirements:
             file:                 '%kernel.root_dir%/SymfonyRequirements.php'
+
+        # Checks to see if the OpCache memory usage is below warning/critical thresholds
+        opcache_memory:
+            warning:              70
+            critical:             90
+
+        # Checks to see if the APC memory usage is below warning/critical thresholds
         apc_memory:
             warning:              70
             critical:             90
+
+        # Checks to see if the APC fragmentation is below warning/critical thresholds
         apc_fragmentation:
             warning:              70
             critical:             90
 
-        # Connection name or an array of connection names.
+        # Connection name or an array of connection names
         doctrine_dbal:        null # Example: [default, crm]
+
+        # Check if MemCache extension is loaded and given server is reachable
         memcache:
 
             # Prototype
             name:
                 host:                 localhost
                 port:                 11211
+
+        # Validate that a Redis service is running
         redis:
 
             # Prototype
             name:
                 host:                 localhost
                 port:                 6379
+
+        # Attempt connection to given HTTP host and (optionally) check status code and page content
         http_service:
 
             # Prototype
@@ -283,6 +280,8 @@ liip_monitor:
                 path:                 /
                 status_code:          200
                 content:              null
+
+        # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
         guzzle_http_service:
 
             # Prototype
@@ -292,6 +291,10 @@ liip_monitor:
                 options:              []
                 status_code:          200
                 content:              null
+                method:               GET
+                body:                 null
+
+        # Validate that a RabbitMQ service is running
         rabbit_mq:
 
             # Prototype
@@ -301,13 +304,21 @@ liip_monitor:
                 user:                 guest
                 password:             guest
                 vhost:                /
+
+        # Checks the version of this app against the latest stable release
         symfony_version:      ~
+
+        # Checks if error pages have been customized for given error codes
         custom_error_pages:
             error_codes:          [] # Required
             path:                 '%kernel.root_dir%'
             controller:           '%twig.exception_listener.controller%'
+
+        # Checks installed composer dependencies against the SensioLabs Security Advisory database
         security_advisory:
             lock_file:            '%kernel.root_dir%/../composer.lock'
+
+        # Validate that a stream wrapper or collection of stream wrappers exists
         stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
 
         # Find and validate INI files
