@@ -115,6 +115,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('cpu_performance', 0.5, 'ZendDiagnostics\Check\CpuPerformance'),
             array('disk_usage', array('path' => __DIR__), 'ZendDiagnostics\Check\DiskUsage'),
             array('symfony_requirements', array('file' => __DIR__.'/../../LiipMonitorBundle.php'), 'Liip\MonitorBundle\Check\SymfonyRequirements'),
+            array('opcache_memory', null, 'ZendDiagnostics\Check\OpCacheMemory'),
             array('apc_memory', null, 'ZendDiagnostics\Check\ApcMemory'),
             array('apc_fragmentation', null, 'ZendDiagnostics\Check\ApcFragmentation'),
             array('doctrine_dbal', 'foo', 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'),
