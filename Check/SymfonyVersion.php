@@ -8,7 +8,7 @@ use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
 
 /**
- * Checks the version of this website against the latest stable release.
+ * Checks the version of this app against the latest stable release.
  *
  * @author Roderik van der Veer <roderik@vanderveer.be>
  */
