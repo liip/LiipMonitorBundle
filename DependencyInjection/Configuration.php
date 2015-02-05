@@ -146,6 +146,8 @@ class Configuration implements ConfigurationInterface
                                     ->variableNode('options')->defaultValue(array())->end()
                                     ->integerNode('status_code')->defaultValue(200)->end()
                                     ->scalarNode('content')->defaultNull()->end()
+                                    ->scalarNode('method')->defaultValue('GET')->end()
+                                    ->scalarNode('body')->defaultNull()->end()
                                 ->end()
                             ->end()
                         ->end()
