@@ -21,12 +21,15 @@ class Expression implements CheckInterface
 
     public function __construct($label, $warningCheck = null, $criticalCheck = null, $warningMessage = null, $criticalMessage = null)
     {
-        $this->label = $label;
+        if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
+            throw new \Exception('The symfony/expression-language is required for this check.');
+        }
 
         if (!$warningCheck && !$criticalCheck) {
             throw new \InvalidArgumentException('Not checks set.');
         }
 
+        $this->label = $label;
         $this->warningCheck = $warningCheck;
         $this->warningMessage = $warningMessage;
         $this->criticalCheck = $criticalCheck;

@@ -99,6 +99,25 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         );
     }
 
+    /**
+     * @dataProvider invalidCheckProvider
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testInvalidExpressionConfig(array $config)
+    {
+        $this->load(array('checks' => array('expressions' => $config)));
+        $this->compile();
+    }
+
+    public function invalidCheckProvider()
+    {
+        return array(
+            array(array('foo')),
+            array(array('foo' => array('critical_expression' => 'true'))),
+            array(array('foo' => array('label' => 'foo'))),
+        );
+    }
+
     public function checkProvider()
     {
         return array(
@@ -135,6 +154,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('file_json', array('foo.json'), 'ZendDiagnostics\Check\JsonFile'),
             array('file_xml', array('foo.xml'), 'ZendDiagnostics\Check\XmlFile'),
             array('file_yaml', array('foo.yaml'), 'ZendDiagnostics\Check\YamlFile'),
+            array('expressions', array('foo' => array('label' => 'foo', 'critical_expression' => 'true')), 'Liip\MonitorBundle\Check\Expression', 'expression_foo'),
         );
     }
 
