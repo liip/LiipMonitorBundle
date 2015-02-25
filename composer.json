@@ -36,7 +36,8 @@
     "suggest": {
         "sensio/distribution-bundle": "To be able to use the composer ScriptHandler",
         "predis/predis": "To use the Redis check",
-        "videlalvaro/php-amqplib": "To use the RabbitMQ check"
+        "videlalvaro/php-amqplib": "To use the RabbitMQ check",
+        "symfony/expression-language": "To use the Expression check"
     },
     "autoload": {
         "psr-0": { "Liip\\MonitorBundle": "" }
