@@ -336,6 +336,14 @@ liip_monitor:
         # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
         expressions:
 
+            # Example:
+            opcache:
+                label:               OPcache
+                warning_expression:  ini('opcache.revalidate_freq') > 0
+                critical_expression: ini('opcache.enable')
+                warning_message:     OPcache not optimized for production
+                critical_message:    OPcache not enabled
+
             # Prototype
             alias:
                 label:                ~ # Required
