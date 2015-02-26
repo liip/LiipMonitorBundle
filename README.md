@@ -332,6 +332,17 @@ liip_monitor:
 
         # Find and validate YAML files
         file_yaml:            [] # Example: ['path/to/my.yml']
+
+        # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
+        expressions:
+
+            # Prototype
+            alias:
+                label:                ~ # Required
+                warning_expression:   null # Example: ini('apc.stat') == 0
+                critical_expression:  null # Example: ini('short_open_tag') == 1
+                warning_message:      null
+                critical_message:     null
 ```
 
 ## REST API DOCS ##
