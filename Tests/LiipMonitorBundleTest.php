@@ -19,6 +19,9 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $bundle;
 
+    /**
+     * Test bundle build to add all required compiler passes
+     */
     public function testBuildWithCompilerPasses()
     {
         $compilerPasses = array(
@@ -33,7 +36,6 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(
                 function ($compilerPass) use (&$compilerPasses) {
                     $class = get_class($compilerPass);
-                    $this->assertArrayHasKey($class, $compilerPasses);
                     unset($compilerPasses[$class]);
                 }
             );
