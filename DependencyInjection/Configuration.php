@@ -230,6 +230,15 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('expressions')
                             ->useAttributeAsKey('alias')
                             ->info('Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)')
+                            ->example(array(
+                                'opcache' => array(
+                                    'label' => 'OPcache',
+                                    'warning_expression' => "ini('opcache.revalidate_freq') > 0",
+                                    'critical_expression' => "ini('opcache.enable')",
+                                    'warning_message' => 'OPcache not optimized for production',
+                                    'critical_message' => 'OPcache not enabled'
+                                )
+                            ))
                             ->prototype('array')
                                 ->addDefaultsIfNotSet()
                                 ->validate()
