@@ -9,6 +9,9 @@
     <route id="liip_monitor_list_checks" pattern="/checks">
         <default key="_controller">liip_monitor.health_controller:listAction</default>
     </route>
+    <route id="liip_monitor_run_all_checks_http_status" pattern="/http_status_checks">
+        <default key="_controller">liip_monitor.health_controller:runAllChecksHttpStatusAction</default>
+    </route>
     <route id="liip_monitor_run_all_checks" pattern="/run">
         <default key="_controller">liip_monitor.health_controller:runAllChecksAction</default>
     </route>
