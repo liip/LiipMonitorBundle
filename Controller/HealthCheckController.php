@@ -86,6 +86,20 @@ class HealthCheckController
     }
 
     /**
+     * @param  Request                                    $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function runAllChecksHttpStatusAction(Request $request)
+    {
+        $report = $this->runTests($request);
+
+        return new Response(
+            '',
+            ($report->getGlobalStatus() === ArrayReporter::STATUS_OK ? 200 : 502)
+        );
+    }
+
+    /**
      * @param  string                                     $checkId
      * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
