@@ -74,13 +74,17 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
         </dd>
 
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>"><?php echo $request->getPathInfo().'http_status_checks' ?></a></dt>
-        <dd>Performs all health checks and returns the results within the HTTP Status Code.
+        <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise).
 <pre>
 $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>
 
 HTTP/1.1 200 OK
 </pre>
 
+<pre>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>
+
+HTTP/1.1 502 Bad Gateway
 </pre>
         </dd>
 
