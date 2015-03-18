@@ -220,6 +220,12 @@ liip_monitor:
         # Validate that a given path (or a collection of paths) is a dir and is writable
         writable_directory:   [] # Example: ['%kernel.cache_dir%']
 
+        # Process result last test in {branch}
+        travis_check:
+            username:   #username
+            repository:  #repository name
+            branch:     #branch
+
         # Validate that a class or a collection of classes is available
         class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
 
