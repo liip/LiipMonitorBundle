@@ -72,6 +72,7 @@ class LiipMonitorExtension extends Extension
                 case 'file_json':
                 case 'file_xml':
                 case 'file_yaml':
+                case 'travis_check':
                 case 'expressions':
                     $container->setParameter($prefix, $values);
                     continue;
