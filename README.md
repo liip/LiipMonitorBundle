@@ -1,7 +1,13 @@
-# Liip Monitor Bundle #
+# Liip Monitor Bundle
 
-[![Build Status](https://travis-ci.org/liip/LiipMonitorBundle.png)](https://travis-ci.org/liip/LiipMonitorBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/)
+[![Build Status](https://travis-ci.org/lafourchette/LiipMonitorBundle.png)](https://travis-ci.org/lafourchette/LiipMonitorBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/)
+
+## DISCLAIMER
+
+This is a backport of the LiipMonitorBundle 2.0.x branch to Symfony 2.0 and 2.1. If your Symfony version is above, please use the master branch.
+
+## Introduction
 
 This bundle provides a way to run a series of application related health checks.
 Health checks in the scope of this bundle go beyond simple actions like performing
@@ -30,9 +36,9 @@ delivers the results in JSON format.
 
 Here's the web interface:
 
-![Web Interface](http://img.skitch.com/20120312-fhyc74ese9jjpyd1wxjcdbs85b.jpg "Web Interface")
+@todo Interface screenshot to provide.
 
-## Installation ##
+## Installation
 
 Install with composer:
 
@@ -82,7 +88,7 @@ liip_monitor:
         php_extensions: [apc, xdebug]
 ```
 
-## Adding Health Checks ##
+## Adding Health Checks
 
 Once you implemented the class then it's time to register the check service with our service container:
 
@@ -103,16 +109,16 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
-## Available Built-in Health Checks ##
+## Available Built-in Health Checks
 
 See "Full Default Config" below for a list of all built-in checks and their configuration.
 
-## Running Checks ##
+## Running Checks
 
 There are two ways of running the health checks: by using the CLI or by using the REST API
 provided by the bundle. Let's see what commands we have available for the CLI:
 
-### List Checks ###
+### List Checks
 
     $ ./app/console monitor:list
 
@@ -121,7 +127,7 @@ provided by the bundle. Let's see what commands we have available for the CLI:
     monitor.check.memcache
     monitor.check.php_extensions
 
-### Run All the Checks ###
+### Run All the Checks
 
     $ ./app/console monitor:health
 
@@ -130,7 +136,7 @@ provided by the bundle. Let's see what commands we have available for the CLI:
     Memcache Health Check: KO - No configuration set for session.save_path
     PHP Extensions Health Check: OK
 
-### Run Individual Checks ###
+### Run Individual Checks
 
 To run an individual check you need to provide the check id to the `health` command:
 
@@ -163,7 +169,7 @@ To run health checks as a composer post-install or post-update script, simply ad
 },
 ```
 
-## Adding Additional Reporters ##
+## Adding Additional Reporters
 
 There are two default reporters: `ArrayReporter` for the REST API and `ConsoleReporter` for the CLI command. You can
 add additional reporters to be used by either of these.
@@ -185,7 +191,7 @@ To run this reporter with the REST API, add a `reporters` query parameter:
 
     /monitor/health?reporters[]=my_reporter
 
-## Full Default Config ##
+## Full Default Config
 
 ```yml
 liip_monitor:
@@ -353,17 +359,17 @@ liip_monitor:
                 critical_message:     null
 ```
 
-## REST API DOCS ##
+## REST API DOCS
 
 For documentation on the REST API see: [http://myproject.org/monitor/health/](http://myproject.org/monitor/health/).
 Don't forget to add the bundle routes in your `routing.xml` file.
 
 
-## Nagios integration ##
+## Nagios integration
 
 You can find a simple Nagios check written in Perl and Python in the Resources/scripts directory.
 
-### Perl Version ###
+### Perl Version
 
 This is dependent on perl modules available on CPAN Getopt::Std, WWW::Mechanize, and JSON
 
@@ -390,7 +396,7 @@ You can also specify the Warning (-w) and Critical (-c) levels for the check usi
 
 Any flags can be combined except -A and -H. THe -u and -p flags should always be used together.
 
-### Python Version ###
+### Python Version
 
 The Python version depends on the nagiosplugin library < 1.0.0.
 
@@ -405,7 +411,7 @@ To use the plugin with HTTP basic authentication, change the command to:
 
     command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$ -a username:password
 
-### Connecting Check to Host in Nagios ###
+### Connecting Check to Host in Nagios
 
 Add a service:
 

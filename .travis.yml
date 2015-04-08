@@ -2,27 +2,16 @@ language: php
 
 php:
     - 5.3
-    - 5.4
-    - 5.5
-    - 5.6
-    - hhvm
 
 env:
-  - SYMFONY_VERSION=2.6.*
+  - SYMFONY_VERSION=2.0.*
 
 matrix:
   include:
-    - php: 5.6
-      env: SYMFONY_VERSION=2.3.*
-    - php: 5.6
-      env: SYMFONY_VERSION=2.4.*
-    - php: 5.6
-      env: SYMFONY_VERSION=2.5.*
-    - php: 5.6
-      env: SYMFONY_VERSION=2.7.*@dev
+    - php: 5.3
+      env: SYMFONY_VERSION=2.0.*
+    - php: 5.3
+      env: SYMFONY_VERSION=2.1.*
 
 before_script:
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
-
-notifications:
-  slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
