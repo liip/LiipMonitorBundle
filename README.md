@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/lafourchette/LiipMonitorBundle.png)](https://travis-ci.org/lafourchette/LiipMonitorBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/)
 
-## DISCLAIMER
+## DISCLAIMER ##
 
 This is a backport of the LiipMonitorBundle 2.0.x branch to Symfony 2.0 and 2.1. If your Symfony version is above, please use the master branch.
 
