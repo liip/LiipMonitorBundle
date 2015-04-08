@@ -1,7 +1,7 @@
 # Liip Monitor Bundle
 
-[![Build Status](https://travis-ci.org/lafourchette/LiipMonitorBundle.png)](https://travis-ci.org/lafourchette/LiipMonitorBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/)
+[![Build Status](https://travis-ci.org/lafourchette/LiipMonitorBundle.svg?branch=1.1)](https://travis-ci.org/lafourchette/LiipMonitorBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/badges/quality-score.png?b=1.1)](https://scrutinizer-ci.com/g/lafourchette/LiipMonitorBundle/?branch=1.1)
 
 ## DISCLAIMER ##
 
