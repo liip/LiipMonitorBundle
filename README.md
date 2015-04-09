@@ -30,7 +30,7 @@ delivers the results in JSON format.
 
 Here's the web interface:
 
-![Web Interface](http://img.skitch.com/20120312-fhyc74ese9jjpyd1wxjcdbs85b.jpg "Web Interface")
+![Web Interface](https://raw.githubusercontent.com/liip/LiipMonitorBundle/master/Resources/doc/screenshot.png "Web Interface")
 
 ## Installation ##
 
