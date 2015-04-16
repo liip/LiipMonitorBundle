@@ -59,18 +59,16 @@ class HealthCheckCommand extends ContainerAwareCommand
         $results = $runner->run($checkName);
         if ($input->getOption('nagios')) {
             if ($results->getUnknownCount()) {
-                $returnCode = 3;
-            } else if($results->getFailureCount()) {
-                $returnCode = 2;
-            } else if($results->getWarningCount()) {
-                $returnCode = 1;
+                return 3;
+            } elseif ($results->getFailureCount()) {
+                return 2;
+            } elseif ($results->getWarningCount()) {
+                return 1;
             } else {
-                $returnCode = 0; // We may have som skipped although
+                return 0; // We may have some skipped tests although
             }
         } else {
-            $returnCode = $results->getFailureCount() ? 1 : 0;
+            return $results->getFailureCount() ? 1 : 0;
         }
-
-        return $returnCode;
     }
 }
