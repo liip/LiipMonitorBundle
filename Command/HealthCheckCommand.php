@@ -64,11 +64,9 @@ class HealthCheckCommand extends ContainerAwareCommand
                 return 2;
             } elseif ($results->getWarningCount()) {
                 return 1;
-            } else {
-                return 0; // We may have some skipped tests although
             }
-        } else {
-            return $results->getFailureCount() ? 1 : 0;
         }
+        
+        return $results->getFailureCount() ? 1 : 0;
     }
 }
