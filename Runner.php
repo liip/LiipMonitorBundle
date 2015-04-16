@@ -32,4 +32,12 @@ class Runner extends BaseRunner
             }
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalReporters()
+    {
+        return $this->additionalReporters;
+    }
 }
