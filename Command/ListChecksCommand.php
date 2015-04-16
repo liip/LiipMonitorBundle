@@ -24,8 +24,8 @@ class ListChecksCommand extends ContainerAwareCommand
             $output->writeln('<error>No checks configured.</error>');
         }
 
-        foreach ($runner->getChecks() as $check) {
-            $output->writeln($check->getLabel());
+        foreach ($runner->getChecks() as $alias => $check) {
+            $output->writeln(sprintf('<info>%s</info> %s', $alias, $check->getLabel()));
         }
     }
 }
