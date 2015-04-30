@@ -185,7 +185,11 @@ To run this reporter with the REST API, add a `reporters` query parameter:
 
     /monitor/health?reporters[]=my_reporter
 
-## Full Default Config ##
+You can list available reporters with:
+
+    $ ./app/console monitor:list --reporters
+
+## Full Default Config
 
 ```yml
 liip_monitor:
