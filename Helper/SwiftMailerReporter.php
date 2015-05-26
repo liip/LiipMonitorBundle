@@ -15,37 +15,26 @@ use ZendDiagnostics\Runner\Reporter\ReporterInterface;
  */
 class SwiftMailerReporter implements ReporterInterface
 {
-    /**
-     * @var Swift_Mailer
-     */
     private $mailer;
-    /**
-     * @var string
-     */
     private $recipient;
-    /**
-     * @var string
-     */
     private $subject;
-    /**
-     * @var
-     */
     private $sender;
+    private $sendOnWarning;
 
     /**
-     * Constructor.
-     *
      * @param Swift_Mailer $mailer
-     * @param string $recipient
-     * @param $sender
-     * @param string $subject
+     * @param string       $recipient
+     * @param string       $sender
+     * @param string       $subject
+     * @param bool         $sendOnWarning
      */
-    public function __construct(Swift_Mailer $mailer, $recipient, $sender, $subject)
+    public function __construct(Swift_Mailer $mailer, $recipient, $sender, $subject, $sendOnWarning = true)
     {
         $this->mailer = $mailer;
         $this->recipient = $recipient;
         $this->sender = $sender;
         $this->subject = $subject;
+        $this->sendOnWarning = $sendOnWarning;
     }
 
     /**
@@ -81,30 +70,46 @@ class SwiftMailerReporter implements ReporterInterface
      */
     public function onFinish(ResultsCollection $results)
     {
-        if ($results->getFailureCount() > 0
-            || $results->getWarningCount() > 0
-            || $results->getUnknownCount() > 0
-        ) {
-            $body = '';
+        if ($results->getUnknownCount() > 0) {
+            $this->sendEmail($results);
 
-            foreach ($results as $check) {
-                /* @var $check  CheckInterface */
-                /* @var $result ResultInterface */
-                $result = isset($results[$check]) ? $results[$check] : null;
-
-                if ($result instanceof ResultInterface) {
-                    $body .= sprintf("Check: %s\n", $check->getLabel());
-                    $body .= sprintf("Message: %s\n\n", $result->getMessage());
-                }
-            }
-
-            $message = Swift_Message::newInstance()
-                ->setSubject($this->subject)
-                ->setFrom($this->sender)
-                ->setTo($this->recipient)
-                ->setBody($body);
-
-            $this->mailer->send($message);
+            return;
         }
+
+        if ($results->getWarningCount() > 0 && $this->sendOnWarning) {
+            $this->sendEmail($results);
+
+            return;
+        }
+
+        if ($results->getFailureCount() > 0) {
+            $this->sendEmail($results);
+
+            return;
+        }
+    }
+
+    private function sendEmail(ResultsCollection $results)
+    {
+        $body = '';
+
+        foreach ($results as $check) {
+            /* @var $check  CheckInterface */
+            /* @var $result ResultInterface */
+            $result = isset($results[$check]) ? $results[$check] : null;
+
+            if ($result instanceof ResultInterface) {
+                $body .= sprintf("Check: %s\n", $check->getLabel());
+                $body .= sprintf("Message: %s\n\n", $result->getMessage());
+            }
+        }
+
+        $message = Swift_Message::newInstance()
+            ->setSubject($this->subject)
+            ->setFrom($this->sender)
+            ->setTo($this->recipient)
+            ->setBody($body);
+
+        $this->mailer->send($message);
     }
 }

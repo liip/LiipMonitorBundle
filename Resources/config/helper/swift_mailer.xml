@@ -15,6 +15,7 @@
             <argument>%liip_monitor.mailer.recipient%</argument>
             <argument>%liip_monitor.mailer.sender%</argument>
             <argument>%liip_monitor.mailer.subject%</argument>
+            <argument>%liip_monitor.mailer.send_on_warning%</argument>
         </service>
     </services>
 </container>

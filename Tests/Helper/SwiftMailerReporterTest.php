@@ -20,22 +20,22 @@ class SwiftMailerReporterTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider sendNoEmailProvider
      */
-    public function testSendNoEmail(ResultInterface $result)
+    public function testSendNoEmail(ResultInterface $result, $sendOnWarning)
     {
         $mailer = $this->prophesize('Swift_Mailer');
-        $mailer->send(Argument::type('Swift_Message'))->shouldNotBeCalled();
+        $mailer->send()->shouldNotBeCalled();
 
         $results = new Collection();
         $results[$this->prophesize('ZendDiagnostics\Check\CheckInterface')->reveal()] = $result;
 
-        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar');
+        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);
     }
 
     /**
      * @dataProvider sendEmailProvider
      */
-    public function testSendEmail(ResultInterface $result)
+    public function testSendEmail(ResultInterface $result, $sendOnWarning)
     {
         $mailer = $this->prophesize('Swift_Mailer');
         $mailer->send(Argument::type('Swift_Message'))->shouldBeCalled();
@@ -43,24 +43,26 @@ class SwiftMailerReporterTest extends \PHPUnit_Framework_TestCase
         $results = new Collection();
         $results[$this->prophesize('ZendDiagnostics\Check\CheckInterface')->reveal()] = $result;
 
-        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar');
+        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);
     }
 
     public function sendEmailProvider()
     {
         return array(
-            array(new Failure()),
-            array(new Warning()),
-            array(new Unknown())
+            array(new Failure(), true),
+            array(new Warning(), true),
+            array(new Unknown(), true),
+            array(new Failure(), false),
         );
     }
 
     public function sendNoEmailProvider()
     {
         return array(
-            array(new Success()),
-            array(new Skip()),
+            array(new Success(), true),
+            array(new Skip(), true),
+            array(new Warning(), false),
         );
     }
 }

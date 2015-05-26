@@ -60,12 +60,13 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
                 'mailer' => array(
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
-                    'subject' => 'Health Check'
+                    'subject' => 'Health Check',
+                    'send_on_warning' => true,
                 )
             )
         );
 
-        $this->assertEquals(true, $this->container->has('liip_monitor.reporter.swift_mailer'));
+        $this->assertContainerBuilderHasService('liip_monitor.reporter.swift_mailer');
     }
 
     /**

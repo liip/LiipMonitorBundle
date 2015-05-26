@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('recipient')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('sender')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('subject')->isRequired()->cannotBeEmpty()->end()
+                        ->booleanNode('send_on_warning')->defaultTrue()->end()
                     ->end()
                 ->end()
                 ->arrayNode('checks')
