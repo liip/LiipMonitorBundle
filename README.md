@@ -199,6 +199,7 @@ liip_monitor:
         recipient:            ~ # Required
         sender:               ~ # Required
         subject:              ~ # Required
+        send_on_warning:      true
     checks:
         # Validate that a named extension or a collection of extensions is available
         php_extensions:       [] # Example: [redis, mysqli]
