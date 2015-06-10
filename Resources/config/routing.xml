@@ -3,16 +3,16 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="liip_monitor_health_interface" pattern="/">
+    <route id="liip_monitor_health_interface" path="/">
         <default key="_controller">liip_monitor.health_controller:indexAction</default>
     </route>
-    <route id="liip_monitor_list_checks" pattern="/checks">
+    <route id="liip_monitor_list_checks" path="/checks">
         <default key="_controller">liip_monitor.health_controller:listAction</default>
     </route>
-    <route id="liip_monitor_run_all_checks" pattern="/run">
+    <route id="liip_monitor_run_all_checks" path="/run">
         <default key="_controller">liip_monitor.health_controller:runAllChecksAction</default>
     </route>
-    <route id="liip_monitor_run_single_check" pattern="/run/{checkId}">
+    <route id="liip_monitor_run_single_check" path="/run/{checkId}">
         <default key="_controller">liip_monitor.health_controller:runSingleCheckAction</default>
     </route>
 </routes>
