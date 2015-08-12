@@ -107,7 +107,7 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
         <dt><?php echo $request->getPathInfo().'run/check_id' ?></dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'checks/monitor.check.redis') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run/monitor.check.redis') ?>
 
 {
    "checkName": "Redis Health Check",
