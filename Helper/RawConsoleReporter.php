@@ -55,7 +55,17 @@ class RawConsoleReporter implements ReporterInterface
                 $this->output->write('FAIL');
         }
 
-        $this->output->writeln(sprintf(' %s', $check->getLabel()));
+        $performanceData = $this->getNagiosPerformanceData();
+
+        $this->output->writeln(sprintf(' %s', $check->getLabel() . $performanceData));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNagiosPerformanceData()
+    {
+        return '';
     }
 
     /**
