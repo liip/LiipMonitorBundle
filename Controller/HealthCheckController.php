@@ -100,6 +100,7 @@ class HealthCheckController
     }
 
     /**
+     * @param  string                                     $checkId
      * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
