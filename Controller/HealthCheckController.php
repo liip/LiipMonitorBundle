@@ -104,6 +104,21 @@ class HealthCheckController
      * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
+    public function runSingleCheckHttpStatusAction($checkId, Request $request)
+    {
+        $report = $this->runTests($request, $checkId);
+
+        return new Response(
+            '',
+            ($report->getGlobalStatus() === ArrayReporter::STATUS_OK ? 200 : 502)
+        );
+    }
+
+    /**
+     * @param  string                                     $checkId
+     * @param  Request                                    $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function runSingleCheckAction($checkId, Request $request)
     {
         $results = $this->runTests($request, $checkId)->getResults();

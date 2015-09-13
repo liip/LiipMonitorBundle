@@ -88,6 +88,21 @@ HTTP/1.1 502 Bad Gateway
 </pre>
         </dd>
 
+        <dt><?php echo $request->getPathInfo().'http_status_check/check_id' ?></dt>
+        <dd>Performs the health check specified by <code>check_id</code> and returns the result within the HTTP Status Code (200 if checks are OK, 502 otherwise).
+<pre>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis') ?>
+
+    HTTP/1.1 200 OK
+</pre>
+
+<pre>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis') ?>
+
+    HTTP/1.1 502 Bad Gateway
+</pre>
+        </dd>
+
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run') ?>"><?php echo $request->getPathInfo().'run' ?></a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
