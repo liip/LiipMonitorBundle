@@ -49,6 +49,10 @@ class LiipMonitorExtension extends Extension
                 continue;
             }
 
+            if ($check === 'groups') {
+                continue;
+            }
+
             $loader->load('checks/'.$check.'.xml');
             $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
 
