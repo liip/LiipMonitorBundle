@@ -44,49 +44,53 @@ class LiipMonitorExtension extends Extension
             return;
         }
 
-        foreach ($config['checks'] as $check => $values) {
-            if (empty($values)) {
+        $checksLoaded = array();
+        foreach ($config['checks']['groups'] as $group => $checks) {
+            if (empty($checks)) {
                 continue;
             }
 
-            if ($check === 'groups') {
-                continue;
-            }
-
-            $loader->load('checks/'.$check.'.xml');
-            $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
-
-            switch ($check) {
-                case 'class_exists':
-                case 'cpu_performance':
-                case 'php_extensions':
-                case 'php_version':
-                case 'php_flags':
-                case 'readable_directory':
-                case 'writable_directory':
-                case 'process_running':
-                case 'doctrine_dbal':
-                case 'http_service':
-                case 'guzzle_http_service':
-                case 'memcache':
-                case 'redis':
-                case 'rabbit_mq':
-                case 'stream_wrapper_exists':
-                case 'file_ini':
-                case 'file_json':
-                case 'file_xml':
-                case 'file_yaml':
-                case 'expressions':
-                    $container->setParameter($prefix, $values);
+            foreach ($checks as $check => $values) {
+                if (empty($values) || in_array($check, $checksLoaded)) {
                     continue;
+                }
 
-                case 'symfony_version':
-                    continue;
-            }
+                $loader->load('checks/'.$check.'.xml');
+                $checksLoaded[]  = $check;
+                $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
 
-            if (is_array($values)) {
-                foreach ($values as $key => $value) {
-                    $container->setParameter($prefix . '.' . $key, $value);
+                switch ($check) {
+                    case 'class_exists':
+                    case 'cpu_performance':
+                    case 'php_extensions':
+                    case 'php_version':
+                    case 'php_flags':
+                    case 'readable_directory':
+                    case 'writable_directory':
+                    case 'process_running':
+                    case 'doctrine_dbal':
+                    case 'http_service':
+                    case 'guzzle_http_service':
+                    case 'memcache':
+                    case 'redis':
+                    case 'rabbit_mq':
+                    case 'stream_wrapper_exists':
+                    case 'file_ini':
+                    case 'file_json':
+                    case 'file_xml':
+                    case 'file_yaml':
+                    case 'expressions':
+                        $container->setParameter($prefix, $values);
+                        continue;
+
+                    case 'symfony_version':
+                        continue;
+                }
+
+                if (is_array($values)) {
+                    foreach ($values as $key => $value) {
+                        $container->setParameter($prefix . '.' . $key, $value);
+                    }
                 }
             }
         }
