@@ -38,6 +38,33 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertCount(0, $this->container->get('liip_monitor.runner')->getChecks());
     }
 
+    public function testDefaultGroupParameterHasNoChecks()
+    {
+        $this->load();
+        $this->compile();
+
+        $this->assertTrue($this->container->hasParameter('liip_monitor.default_group'));
+        $this->assertSame('default', $this->container->getParameter('liip_monitor.default_group'));
+    }
+
+    public function testDefaultGroupParameter()
+    {
+        $this->load(array('checks' => array('php_extensions' => array('foo'))));
+        $this->compile();
+
+        $this->assertTrue($this->container->hasParameter('liip_monitor.default_group'));
+        $this->assertSame('default', $this->container->getParameter('liip_monitor.default_group'));
+    }
+
+    public function testDefaultGroupParameterCustom()
+    {
+        $this->load(array('checks' => array('php_extensions' => array('foo')), 'default_group' => 'foo_bar'));
+        $this->compile();
+
+        $this->assertTrue($this->container->hasParameter('liip_monitor.default_group'));
+        $this->assertSame('foo_bar', $this->container->getParameter('liip_monitor.default_group'));
+    }
+
     public function testEnableController()
     {
         $this->load();

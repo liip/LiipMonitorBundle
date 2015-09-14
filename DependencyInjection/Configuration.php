@@ -27,15 +27,17 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->beforeNormalization()
-                ->ifTrue(function ($v) {
-                    return isset($v['checks']) && is_array($v['checks']) && !isset($v['checks']['groups']);
-                })
-                ->then(function ($v) {
-                    $checks = $v['checks'];
-                    unset($v['checks']);
+                ->always(function ($v) {
+                    if (!isset($v['default_group'])) {
+                        $v['default_group'] = 'default';
+                    }
 
-                    $defaultGroup = isset($v['default_group']) ? $v['default_group'] : 'default';
-                    $v['checks']['groups'][$defaultGroup] = $checks;
+                    if (isset($v['checks']) && is_array($v['checks']) && !isset($v['checks']['groups'])) {
+                        $checks = $v['checks'];
+                        unset($v['checks']);
+
+                        $v['checks']['groups'][$v['default_group']] = $checks;
+                    }
 
                     return $v;
                 })
