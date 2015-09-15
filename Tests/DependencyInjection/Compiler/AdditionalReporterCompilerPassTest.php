@@ -3,7 +3,6 @@
 namespace Liip\MonitorBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass;
-use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
