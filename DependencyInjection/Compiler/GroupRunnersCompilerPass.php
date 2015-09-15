@@ -30,11 +30,14 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $groups = array_merge($groups, $this->getGroupsFromParameter($container));
         $groups = array_unique($groups);
 
+        $runners = array();
         foreach ($groups as $group) {
             $container->setDefinition('liip_monitor.runner_' . $group, $definition);
+            $runners[] = 'liip_monitor.runner_' . $group;
         }
 
         $container->setAlias('liip_monitor.runner', 'liip_monitor.runner_' . $defaultGroup);
+        $container->setParameter('liip_monitor.runners', $runners);
     }
 
     /**

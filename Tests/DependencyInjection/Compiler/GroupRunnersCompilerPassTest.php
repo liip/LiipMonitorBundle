@@ -7,9 +7,6 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * @author Kevin Bond <kevinbond@gmail.com>
- */
 class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()

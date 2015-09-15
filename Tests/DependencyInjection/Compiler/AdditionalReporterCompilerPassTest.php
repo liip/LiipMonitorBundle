@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass;
+use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -16,7 +17,8 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
     public function testProcessWithAlias()
     {
         $runner = new Definition();
-        $this->setDefinition('liip_monitor.runner', $runner);
+        $this->setDefinition('liip_monitor.runner_default', $runner);
+        $this->setParameter('liip_monitor.runners', array('liip_monitor.runner_default'));
 
         $reporter = new Definition();
         $reporter->addTag('liip_monitor.additional_reporter', array('alias' => 'foo'));
@@ -25,7 +27,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'liip_monitor.runner',
+            'liip_monitor.runner_default',
             'addAdditionalReporter',
             array(
                 'foo',
@@ -37,7 +39,8 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
     public function testProcessWithoutAlias()
     {
         $runner = new Definition();
-        $this->setDefinition('liip_monitor.runner', $runner);
+        $this->setDefinition('liip_monitor.runner_default', $runner);
+        $this->setParameter('liip_monitor.runners', array('liip_monitor.runner_default'));
 
         $reporter = new Definition();
         $reporter->addTag('liip_monitor.additional_reporter');
@@ -46,7 +49,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'liip_monitor.runner',
+            'liip_monitor.runner_default',
             'addAdditionalReporter',
             array(
                 'foo_reporter',
