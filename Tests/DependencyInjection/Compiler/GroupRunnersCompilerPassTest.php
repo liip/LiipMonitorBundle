@@ -16,6 +16,7 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner', $runner);
         $this->setParameter('liip_monitor.default_group', $defaultGroup);
+        $this->setParameter('liip_monitor.checks', array('groups' => array('foo' => array(), 'baz' => array())));
 
         $fooCheck = new Definition();
         $fooCheck->addTag('liip_monitor.check', array('group' => 'foo'));
@@ -33,6 +34,7 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('liip_monitor.runner_foo');
         $this->assertContainerBuilderHasService('liip_monitor.runner_foobar');
         $this->assertContainerBuilderHasService('liip_monitor.runner_bar');
+        $this->assertContainerBuilderHasService('liip_monitor.runner_baz');
     }
 
     protected function registerCompilerPass(ContainerBuilder $container)

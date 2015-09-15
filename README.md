@@ -112,7 +112,6 @@ Application-Servers, such as cron-servers etc.)
 For that purpose you could easily define your checks in different groups via the configuration for the built-in checks 
 or via tag-attributes for your custom checks:
 
-
 Example for built-in:
 ```yml
 liip_monitor:
@@ -133,7 +132,8 @@ services:
         arguments:
             - [ xhprof, apc, memcache ]
         tags:
-            - { name: liip_monitor.check, alias: php_extensions, groups: [cron] }
+            - { name: liip_monitor.check, alias: php_extensions, group: cron }
+            - { name: liip_monitor.check, alias: php_extensions, group: app_server }
 ```
 
 ## Available Built-in Health Checks ##
