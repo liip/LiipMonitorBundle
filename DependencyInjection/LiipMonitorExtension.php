@@ -47,16 +47,21 @@ class LiipMonitorExtension extends Extension
             return;
         }
 
-        $container->setParameter(sprintf('%s.checks', $this->getAlias()), $config['checks']);
-
         $checksLoaded = array();
+        $containerParams = array();
         foreach ($config['checks']['groups'] as $group => $checks) {
             if (empty($checks)) {
                 continue;
             }
 
             foreach ($checks as $check => $values) {
-                if (empty($values) || in_array($check, $checksLoaded)) {
+                if (empty($values)) {
+                    continue;
+                }
+
+                $containerParams['groups'][$group][$check] = $values;
+
+                if (in_array($check, $checksLoaded)) {
                     continue;
                 }
 
@@ -99,5 +104,7 @@ class LiipMonitorExtension extends Extension
                 }
             }
         }
+
+        $container->setParameter(sprintf('%s.checks', $this->getAlias()), $containerParams);
     }
 }
