@@ -48,44 +48,6 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContains(array('group' => 'app_server', 'alias' => 'check_collection1'), $tags);
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     */
-    public function testServiceNotFoundException()
-    {
-        $checkConfig = array(
-            'groups' => array(
-                'default' => array(
-                    'check1'
-                )
-            )
-        );
-        $this->setParameter('liip_monitor.checks', $checkConfig);
-
-        $this->compile();
-    }
-
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\LogicException
-     */
-    public function testMissingTagInServiceDefinition()
-    {
-        $checkConfig = array(
-            'groups' => array(
-                'default' => array(
-                    'check1'
-                )
-            )
-        );
-        $this->setParameter('liip_monitor.checks', $checkConfig);
-
-        $check1 = new Definition();
-        $check1->addTag('liip_monitor.wrong_tag', array('alias' => 'check1'));
-        $this->setDefinition('liip_monitor.check.check1', $check1);
-
-        $this->compile();
-    }
-
     protected function registerCompilerPass(ContainerBuilder $container)
     {
         $container->addCompilerPass(new AddGroupsCompilerPass());
