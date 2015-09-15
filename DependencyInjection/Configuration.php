@@ -54,7 +54,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('send_on_warning')->defaultTrue()->end()
                     ->end()
                 ->end()
-                ->scalarNode('default_group')->end()
+                ->scalarNode('default_group')->defaultValue('default')->end()
                 ->arrayNode('checks')
                     ->canBeUnset()
                     ->children()

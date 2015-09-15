@@ -103,6 +103,39 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
+## Grouping Health Checks
+
+All Health Checks would probably be in a default-group and all checks would be executed for that group. In same cases 
+it would be useful to group some Health Checks (e.g. you want to execute different checks on different types of 
+Application-Servers, such as cron-servers etc.)
+
+For that purpose you could easily define your checks in different groups via the configuration for the built-in checks 
+or via tag-attributes for your custom checks:
+
+
+Example for built-in:
+```yml
+liip_monitor:
+    default_group: default
+    checks:
+        groups:
+            default: # checks you may want to execute on every server
+                php_extensions: [apc, xdebug]
+            cron: # checks you may want to execute only on cron-servers
+                php_extensions: [redis]
+```
+
+Example for tagged Services:
+```yml
+services:
+    monitor.check.php_extensions:
+        class: Acme\HelloBundle\Check\PhpExtensionsCheck
+        arguments:
+            - [ xhprof, apc, memcache ]
+        tags:
+            - { name: liip_monitor.check, alias: php_extensions, groups: [cron] }
+```
+
 ## Available Built-in Health Checks ##
 
 See "Full Default Config" below for a list of all built-in checks and their configuration.
@@ -194,168 +227,177 @@ You can list available reporters with:
 ```yml
 liip_monitor:
     enable_controller:    false
+    view_template:        null
     mailer:
         enabled:              false
         recipient:            ~ # Required
         sender:               ~ # Required
         subject:              ~ # Required
         send_on_warning:      true
+    default_group:        default
     checks:
-        # Validate that a named extension or a collection of extensions is available
-        php_extensions:       [] # Example: [redis, mysqli]
 
-        # Pairs of a PHP setting and an expected value
-        php_flags:            # Example: session.use_only_cookies: false
-
-            # Prototype
-            setting:              ~
-
-        # Pairs of a version and a comparison operator
-        php_version:          # Example: 5.4.15: >=
-
-            # Prototype
-            version:              ~
-
-        # Process name/pid or an array of process names/pids
-        process_running:      ~ # Example: [apache, foo]
-
-        # Validate that a given path (or a collection of paths) is a dir and is readable
-        readable_directory:   [] # Example: ["%kernel.cache_dir%"]
-
-        # Validate that a given path (or a collection of paths) is a dir and is writable
-        writable_directory:   [] # Example: ['%kernel.cache_dir%']
-
-        # Validate that a class or a collection of classes is available
-        class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
-
-        # Benchmark CPU performance and return failure if it is below the given ratio
-        cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
-
-        # Checks to see if the disk usage is below warning/critical percent thresholds
-        disk_usage:
-            warning:              70
-            critical:             90
-            path:                 '%kernel.cache_dir%'
-
-        # Checks Symfony2 requirements file
-        symfony_requirements:
-            file:                 '%kernel.root_dir%/SymfonyRequirements.php'
-
-        # Checks to see if the OpCache memory usage is below warning/critical thresholds
-        opcache_memory:
-            warning:              70
-            critical:             90
-
-        # Checks to see if the APC memory usage is below warning/critical thresholds
-        apc_memory:
-            warning:              70
-            critical:             90
-
-        # Checks to see if the APC fragmentation is below warning/critical thresholds
-        apc_fragmentation:
-            warning:              70
-            critical:             90
-
-        # Connection name or an array of connection names
-        doctrine_dbal:        null # Example: [default, crm]
-
-        # Check if MemCache extension is loaded and given server is reachable
-        memcache:
+        # Grouping checks
+        groups:
 
             # Prototype
             name:
-                host:                 localhost
-                port:                 11211
 
-        # Validate that a Redis service is running
-        redis:
+                # Validate that a named extension or a collection of extensions is available
+                php_extensions:       [] # Example: session.use_only_cookies: false
 
-            # Prototype
-            name:
-                host:                 localhost
-                port:                 6379
+                # Pairs of a PHP setting and an expected value
+                php_flags:            # Example: session.use_only_cookies: false
 
-        # Attempt connection to given HTTP host and (optionally) check status code and page content
-        http_service:
+                    # Prototype
+                    setting:              ~
 
-            # Prototype
-            name:
-                host:                 localhost
-                port:                 80
-                path:                 /
-                status_code:          200
-                content:              null
+                # Pairs of a version and a comparison operator
+                php_version:          # Example: 5.4.15: >=
 
-        # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
-        guzzle_http_service:
+                    # Prototype
+                    version:              ~
 
-            # Prototype
-            name:
-                url:                  localhost
-                headers:              []
-                options:              []
-                status_code:          200
-                content:              null
-                method:               GET
-                body:                 null
+                # Process name/pid or an array of process names/pids
+                process_running:      ~ # Example: [apache, foo]
 
-        # Validate that a RabbitMQ service is running
-        rabbit_mq:
+                # Validate that a given path (or a collection of paths) is a dir and is readable
+                readable_directory:   [] # Example: ["%kernel.cache_dir%"]
 
-            # Prototype
-            name:
-                host:                 localhost
-                port:                 5672
-                user:                 guest
-                password:             guest
-                vhost:                /
+                # Validate that a given path (or a collection of paths) is a dir and is writable
+                writable_directory:   [] # Example: ["%kernel.cache_dir%"]
 
-        # Checks the version of this app against the latest stable release
-        symfony_version:      ~
+                # Validate that a class or a collection of classes is available
+                class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
 
-        # Checks if error pages have been customized for given error codes
-        custom_error_pages:
-            error_codes:          [] # Required
-            path:                 '%kernel.root_dir%'
-            controller:           '%twig.exception_listener.controller%'
+                # Benchmark CPU performance and return failure if it is below the given ratio
+                cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
 
-        # Checks installed composer dependencies against the SensioLabs Security Advisory database
-        security_advisory:
-            lock_file:            '%kernel.root_dir%/../composer.lock'
+                # Checks to see if the disk usage is below warning/critical percent thresholds
+                disk_usage:
+                    warning:              70
+                    critical:             90
+                    path:                 '%kernel.cache_dir%'
 
-        # Validate that a stream wrapper or collection of stream wrappers exists
-        stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
+                # Checks Symfony2 requirements file
+                symfony_requirements:
+                    file:                 '%kernel.root_dir%/SymfonyRequirements.php'
 
-        # Find and validate INI files
-        file_ini:             [] # Example: ['path/to/my.ini']
+                # Checks to see if the OpCache memory usage is below warning/critical thresholds
+                opcache_memory:
+                    warning:              70
+                    critical:             90
 
-        # Find and validate JSON files
-        file_json:            [] # Example: ['path/to/my.json']
+                # Checks to see if the APC memory usage is below warning/critical thresholds
+                apc_memory:
+                    warning:              70
+                    critical:             90
 
-        # Find and validate XML files
-        file_xml:             [] # Example: ['path/to/my.xml']
+                # Checks to see if the APC fragmentation is below warning/critical thresholds
+                apc_fragmentation:
+                    warning:              70
+                    critical:             90
 
-        # Find and validate YAML files
-        file_yaml:            [] # Example: ['path/to/my.yml']
+                # Connection name or an array of connection names
+                doctrine_dbal:        null # Example: [default, crm]
 
-        # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
-        expressions:
+                # Check if MemCache extension is loaded and given server is reachable
+                memcache:
 
-            # Example:
-            opcache:
-                label:               OPcache
-                warning_expression:  ini('opcache.revalidate_freq') > 0
-                critical_expression: ini('opcache.enable')
-                warning_message:     OPcache not optimized for production
-                critical_message:    OPcache not enabled
+                    # Prototype
+                    name:
+                        host:                 localhost
+                        port:                 11211
 
-            # Prototype
-            alias:
-                label:                ~ # Required
-                warning_expression:   null # Example: ini('apc.stat') == 0
-                critical_expression:  null # Example: ini('short_open_tag') == 1
-                warning_message:      null
-                critical_message:     null
+                # Validate that a Redis service is running
+                redis:
+
+                    # Prototype
+                    name:
+                        host:                 localhost
+                        port:                 6379
+
+                # Attempt connection to given HTTP host and (optionally) check status code and page content
+                http_service:
+
+                    # Prototype
+                    name:
+                        host:                 localhost
+                        port:                 80
+                        path:                 /
+                        status_code:          200
+                        content:              null
+
+                # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
+                guzzle_http_service:
+
+                    # Prototype
+                    name:
+                        url:                  localhost
+                        headers:              []
+                        options:              []
+                        status_code:          200
+                        content:              null
+                        method:               GET
+                        body:                 null
+
+                # Validate that a RabbitMQ service is running
+                rabbit_mq:
+
+                    # Prototype
+                    name:
+                        host:                 localhost
+                        port:                 5672
+                        user:                 guest
+                        password:             guest
+                        vhost:                /
+
+                # Checks the version of this app against the latest stable release
+                symfony_version:      ~
+
+                # Checks if error pages have been customized for given error codes
+                custom_error_pages:
+                    error_codes:          [] # Required
+                    path:                 '%kernel.root_dir%'
+                    controller:           '%twig.exception_listener.controller%'
+
+                # Checks installed composer dependencies against the SensioLabs Security Advisory database
+                security_advisory:
+                    lock_file:            '%kernel.root_dir%/../composer.lock'
+
+                # Validate that a stream wrapper or collection of stream wrappers exists
+                stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
+
+                # Find and validate INI files
+                file_ini:             [] # Example: ['path/to/my.ini']
+
+                # Find and validate JSON files
+                file_json:            [] # Example: ['path/to/my.json']
+
+                # Find and validate XML files
+                file_xml:             [] # Example: ['path/to/my.xml']
+
+                # Find and validate YAML files
+                file_yaml:            [] # Example: ['path/to/my.yml']
+
+                # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
+                expressions:
+
+                    # Example:
+                    opcache:             
+                        label:               OPcache
+                        warning_expression:  ini('opcache.revalidate_freq') > 0
+                        critical_expression: ini('opcache.enable')
+                        warning_message:     OPcache not optimized for production
+                        critical_message:    OPcache not enabled
+
+                    # Prototype
+                    alias:
+                        label:                ~ # Required
+                        warning_expression:   null # Example: ini('apc.stat') == 0
+                        critical_expression:  null # Example: ini('short_open_tag') == 1
+                        warning_message:      null
+                        critical_message:     null
 ```
 
 ## REST API DOCS ##
