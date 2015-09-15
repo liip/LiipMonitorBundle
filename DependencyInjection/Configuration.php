@@ -22,8 +22,6 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        var_dump(__METHOD__);
-
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('liip_monitor', 'array');
 

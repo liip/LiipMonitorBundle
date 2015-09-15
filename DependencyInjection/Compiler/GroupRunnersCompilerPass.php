@@ -21,7 +21,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $checkServices           = $container->findTaggedServiceIds('liip_monitor.check');
         $checkCollectionServices = $container->findTaggedServiceIds('liip_monitor.check_collection');
 
-        $groups = [$defaultGroup];
+        $groups = array($defaultGroup);
         $groups = array_merge($groups, $this->getGroups($checkServices));
         $groups = array_merge($groups, $this->getGroups($checkCollectionServices));
         $groups = array_unique($groups);
