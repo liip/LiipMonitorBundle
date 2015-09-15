@@ -10,14 +10,19 @@ class CheckCollectionTagCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('liip_monitor.runner')) {
+        if (false === $container->hasParameter('liip_monitor.default_group')) {
             return;
         }
 
-        $definition = $container->getDefinition('liip_monitor.runner');
+        $defaultGroup = $container->getParameter('liip_monitor.default_group');
 
         foreach ($container->findTaggedServiceIds('liip_monitor.check_collection') as $id => $tags) {
-            $definition->addMethodCall('addChecks', array(new Reference($id)));
+            foreach ($tags as $attributes) {
+                $group = empty($attributes['group']) ? $defaultGroup : $attributes['group'];
+
+                $runnerDefinition = $container->getDefinition('liip_monitor.runner_' . $group);
+                $runnerDefinition->addMethodCall('addChecks', array(new Reference($id)));
+            }
         }
     }
 }

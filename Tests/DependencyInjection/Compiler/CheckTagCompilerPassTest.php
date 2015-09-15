@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
+use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -15,8 +16,11 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
+        $defaultGroup = 'gruppo_predefinito';
+
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner', $runner);
+        $this->setParameter('liip_monitor.default_group', $defaultGroup);
 
         $check = new Definition();
         $check->addTag('liip_monitor.check');
@@ -25,7 +29,7 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'liip_monitor.runner',
+            'liip_monitor.runner_' . $defaultGroup,
             'addCheck',
             array(
                 new Reference('example_check'),
@@ -36,6 +40,7 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
 
     protected function registerCompilerPass(ContainerBuilder $container)
     {
+        $container->addCompilerPass(new GroupRunnersCompilerPass());
         $container->addCompilerPass(new CheckTagCompilerPass());
     }
 }

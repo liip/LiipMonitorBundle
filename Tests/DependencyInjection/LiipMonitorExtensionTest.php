@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Tests\DependencyInjection;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
+use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
@@ -194,6 +195,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     protected function compile()
     {
         $this->container->set('doctrine', $this->getMock('Doctrine\Common\Persistence\ConnectionRegistry'));
+        $this->container->addCompilerPass(new GroupRunnersCompilerPass());
         $this->container->addCompilerPass(new CheckTagCompilerPass());
         $this->container->addCompilerPass(new CheckCollectionTagCompilerPass());
 

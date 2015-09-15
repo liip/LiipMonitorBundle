@@ -9,7 +9,10 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('liip_monitor.runner')) {
+        $noRunner       = false === $container->hasDefinition('liip_monitor.runner');
+        $noDefaultGroup = false === $container->hasParameter('liip_monitor.default_group');
+
+        if ($noRunner || $noDefaultGroup) {
             return;
         }
 
@@ -43,8 +46,9 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $groups = array();
         foreach ($services as $serviceId => $tags) {
             foreach ($tags as $attributes) {
-                $group = isset($attributes['group']) ? $attributes['group'] : 'default';
-                $groups[$group] = true;
+                if (!empty($attributes['group'])) {
+                    $groups[$attributes['group']] = true;
+                }
             }
         }
 

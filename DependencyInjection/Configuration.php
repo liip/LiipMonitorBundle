@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->beforeNormalization()
                 ->always(function ($v) {
-                    if (!isset($v['default_group'])) {
+                    if (empty($v['default_group'])) {
                         $v['default_group'] = 'default';
                     }
 

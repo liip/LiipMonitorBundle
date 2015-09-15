@@ -14,7 +14,7 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $defaultGroup = 'groupe par défaut';
+        $defaultGroup = 'groupe_par_défaut';
 
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner', $runner);
