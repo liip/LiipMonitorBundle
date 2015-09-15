@@ -38,7 +38,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
         $checkCollections = array();
 
         foreach ($data as $group => $groupChecks) {
-            foreach ($groupChecks as $checkName) {
+            foreach ($groupChecks as $checkName => $checkValues) {
                 $serviceId = self::SERVICE_ID_PREFIX . $checkName;
                 $checkDefinition = $container->getDefinition($serviceId);
 
@@ -47,7 +47,6 @@ class AddGroupsCompilerPass implements CompilerPassInterface
                 } elseif ($checkDefinition->hasTag('liip_monitor.check_collection')) {
                     $checkCollections[$checkName][] = $group;
                 }
-
             }
         }
 

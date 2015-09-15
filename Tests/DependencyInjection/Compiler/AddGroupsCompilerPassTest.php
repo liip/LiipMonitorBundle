@@ -14,11 +14,11 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
         $checkConfig = array(
             'groups' => array(
                 'default' => array(
-                    'check1'
+                    'check1' => array()
                 ),
                 'app_server' => array(
-                    'check1',
-                    'check_collection1'
+                    'check1' => array(),
+                    'check_collection1' => array()
                 )
             )
         );
