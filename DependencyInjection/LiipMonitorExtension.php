@@ -46,6 +46,8 @@ class LiipMonitorExtension extends Extension
             return;
         }
 
+        $container->setParameter(sprintf('%s.checks', $this->getAlias()), $config['checks']);
+
         $checksLoaded = array();
         foreach ($config['checks']['groups'] as $group => $checks) {
             if (empty($checks)) {
