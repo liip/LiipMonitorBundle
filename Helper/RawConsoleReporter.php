@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\Helper;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Result\ResultInterface;
@@ -16,10 +17,19 @@ use ZendDiagnostics\Result\Collection as ResultsCollection;
  */
 class RawConsoleReporter implements ReporterInterface
 {
+    /**
+     * @var OutputInterface
+     */
     protected $output;
 
-    public function __construct(OutputInterface $output)
+    /**
+     * @param OutputInterface $output
+     */
+    public function __construct(OutputInterface $output = null)
     {
+        if (is_null($output)) {
+            $output = new ConsoleOutput();
+        }
         $this->output = $output;
     }
 
@@ -45,7 +55,17 @@ class RawConsoleReporter implements ReporterInterface
                 $this->output->write('FAIL');
         }
 
-        $this->output->writeln(sprintf(' %s', $check->getLabel()));
+        $performanceData = $this->getNagiosPerformanceData();
+
+        $this->output->writeln(sprintf(' %s', $check->getLabel() . $performanceData));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNagiosPerformanceData()
+    {
+        return '';
     }
 
     /**

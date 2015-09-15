@@ -39,16 +39,24 @@ class HealthCheckCommand extends ContainerAwareCommand
             ));
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
         $runner = $this->getContainer()->get('liip_monitor.runner');
 
         if ($input->getOption('nagios')) {
-            $runner->addReporter(new RawConsoleReporter($output));
+            $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
         } else {
-            $runner->addReporter(new ConsoleReporter($output));
+            $reporter = $this->getContainer()->get('liip_monitor.helper.console_reporter');
         }
+
+        $runner->addReporter($reporter);
         $runner->useAdditionalReporters($input->getOption('reporter'));
 
         if (0 === count($runner->getChecks())) {
