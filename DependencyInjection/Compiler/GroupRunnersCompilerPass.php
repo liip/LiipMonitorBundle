@@ -27,6 +27,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $groups = array($defaultGroup);
         $groups = array_merge($groups, $this->getGroups($checkServices));
         $groups = array_merge($groups, $this->getGroups($checkCollectionServices));
+        $groups = array_merge($groups, $this->getGroupsFromParameter($container));
         $groups = array_unique($groups);
 
         foreach ($groups as $group) {
@@ -53,5 +54,24 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         }
 
         return array_keys($groups);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    private function getGroupsFromParameter(ContainerBuilder $container)
+    {
+        $groups = array();
+
+        if ($container->hasParameter('liip_monitor.checks')) {
+            $checks = $container->getParameter('liip_monitor.checks');
+            foreach ($checks['groups'] as $group => $_) {
+                $groups[] = $group;
+            }
+        }
+
+        return $groups;
     }
 }
