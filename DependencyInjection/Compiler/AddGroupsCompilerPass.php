@@ -34,8 +34,8 @@ class AddGroupsCompilerPass implements CompilerPassInterface
      */
     private function parseGroups(ContainerBuilder $container, array $data)
     {
-        $checks = [];
-        $checkCollections = [];
+        $checks = array();
+        $checkCollections = array();
 
         foreach ($data as $group => $groupChecks) {
             foreach ($groupChecks as $checkName) {
