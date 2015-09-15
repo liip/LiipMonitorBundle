@@ -40,7 +40,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
      */
     private function getGroups(array $services)
     {
-        $groups = [];
+        $groups = array();
         foreach ($services as $serviceId => $tags) {
             foreach ($tags as $attributes) {
                 $group = isset($attributes['group']) ? $attributes['group'] : 'default';
