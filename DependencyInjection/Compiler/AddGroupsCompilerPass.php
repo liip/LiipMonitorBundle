@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class AddGroupsCompilerPass implements CompilerPassInterface
 {
@@ -38,7 +39,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
         $checkCollections = array();
 
         foreach ($data as $group => $groupChecks) {
-            foreach ($groupChecks as $checkName => $checkValues) {
+            foreach (array_keys($groupChecks) as $checkName) {
                 $serviceId = self::SERVICE_ID_PREFIX . $checkName;
                 $checkDefinition = $container->getDefinition($serviceId);
 
@@ -58,15 +59,29 @@ class AddGroupsCompilerPass implements CompilerPassInterface
      * @param array            $checks
      * @param string           $tag
      */
-    private function addGroupTags(ContainerBuilder $container, array $checks, $tag) {
+    private function addGroupTags(ContainerBuilder $container, array $checks, $tag)
+    {
         foreach ($checks as $checkName => $groups) {
             $serviceId = self::SERVICE_ID_PREFIX . $checkName;
             $serviceDefinition = $container->getDefinition($serviceId);
-
             $serviceDefinition->clearTag($tag);
 
             foreach ($groups as $group) {
-                $serviceDefinition->addTag($tag, array('group' => $group, 'alias' => $checkName));
+                $tmpDefinition = clone $serviceDefinition;
+                $tmpDefinition->addTag($tag, array('group' => $group, 'alias' => $checkName));
+
+                foreach ($tmpDefinition->getArguments() as $argumentIndex => $argument) {
+                    if ($argument instanceof Definition) {
+                        continue;
+                    }
+
+                    if (is_string($argument) && preg_match('/^__(.*)__$/', $argument, $matches)) {
+                        $newArgument = $container->getParameter($matches[1] . '.' . $group);
+                        $tmpDefinition->replaceArgument($argumentIndex, $newArgument);
+                    }
+                }
+
+                $container->setDefinition($serviceId . '.' . $group, $tmpDefinition);
             }
         }
     }

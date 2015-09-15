@@ -11,7 +11,7 @@
     <services>
         <service id="liip_monitor.check.doctrine_dbal" public="false" class="%liip_monitor.check.doctrine_dbal.class%">
             <argument type="service" id="doctrine" />
-            <argument>%liip_monitor.check.doctrine_dbal%</argument>
+            <argument>__liip_monitor.check.doctrine_dbal__</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
     </services>

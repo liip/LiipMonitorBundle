@@ -10,8 +10,8 @@
 
     <services>
         <service id="liip_monitor.check.apc_fragmentation" public="false" class="%liip_monitor.check.apc_fragmentation.class%">
-            <argument>%liip_monitor.check.apc_fragmentation.warning%</argument>
-            <argument>%liip_monitor.check.apc_fragmentation.critical%</argument>
+            <argument>__liip_monitor.check.apc_fragmentation.warning__</argument>
+            <argument>__liip_monitor.check.apc_fragmentation.critical__</argument>
             <tag name="liip_monitor.check" alias="apc_fragmentation" />
         </service>
     </services>

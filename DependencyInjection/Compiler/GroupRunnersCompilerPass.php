@@ -7,6 +7,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class GroupRunnersCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         $noRunner       = false === $container->hasDefinition('liip_monitor.runner');
@@ -32,7 +35,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
 
         $runners = array();
         foreach ($groups as $group) {
-            $container->setDefinition('liip_monitor.runner_' . $group, $definition);
+            $container->setDefinition('liip_monitor.runner_' . $group, clone $definition);
             $runners[] = 'liip_monitor.runner_' . $group;
         }
 

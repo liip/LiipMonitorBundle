@@ -10,8 +10,8 @@
 
     <services>
         <service id="liip_monitor.check.opcache_memory" public="false" class="%liip_monitor.check.opcache_memory.class%">
-            <argument>%liip_monitor.check.opcache_memory.warning%</argument>
-            <argument>%liip_monitor.check.opcache_memory.critical%</argument>
+            <argument>__liip_monitor.check.opcache_memory.warning__</argument>
+            <argument>__liip_monitor.check.opcache_memory.critical__</argument>
             <tag name="liip_monitor.check" alias="opcache_memory" />
         </service>
     </services>

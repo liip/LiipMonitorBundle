@@ -10,7 +10,7 @@
 
     <services>
         <service id="liip_monitor.check.php_flags" public="false" class="%liip_monitor.check.php_flags.class%">
-            <argument>%liip_monitor.check.php_flags%</argument>
+            <argument>__liip_monitor.check.php_flags__</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
     </services>

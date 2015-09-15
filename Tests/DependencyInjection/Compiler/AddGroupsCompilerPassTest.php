@@ -34,17 +34,19 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        $serviceDefinition = $this->container->getDefinition('liip_monitor.check.check1');
+        $serviceDefinition = $this->container->getDefinition('liip_monitor.check.check1.default');
         $tags = $serviceDefinition->getTag('liip_monitor.check');
 
-        $this->assertCount(2, $tags);
         $this->assertContains(array('group' => 'default', 'alias' => 'check1'), $tags);
+
+        $serviceDefinition = $this->container->getDefinition('liip_monitor.check.check1.app_server');
+        $tags = $serviceDefinition->getTag('liip_monitor.check');
+
         $this->assertContains(array('group' => 'app_server', 'alias' => 'check1'), $tags);
 
-        $serviceDefinition = $this->container->getDefinition('liip_monitor.check.check_collection1');
+        $serviceDefinition = $this->container->getDefinition('liip_monitor.check.check_collection1.app_server');
         $tags = $serviceDefinition->getTag('liip_monitor.check_collection');
 
-        $this->assertCount(1, $tags);
         $this->assertContains(array('group' => 'app_server', 'alias' => 'check_collection1'), $tags);
     }
 

@@ -9,12 +9,34 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class ListChecksCommand extends ContainerAwareCommand
 {
+    /**
+     * @var string
+     */
+    private $defaultGroup;
+
+    /**
+     * @param string $defaultGroup
+     * @param null $name
+     */
+    public function __construct($defaultGroup, $name = null)
+    {
+        $this->defaultGroup = $defaultGroup;
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this
             ->setName('monitor:list')
             ->setDescription('Lists Health Checks')
             ->addOption('reporters', 'r', InputOption::VALUE_NONE, 'List registered additional reporters')
+            ->addOption(
+                'group',
+                'g',
+                InputOption::VALUE_REQUIRED,
+                'List checks for given group',
+                $this->defaultGroup
+            )
         ;
     }
 
@@ -25,14 +47,15 @@ class ListChecksCommand extends ContainerAwareCommand
                 $this->listReporters($output);
                 break;
             default:
-                $this->listChecks($output);
+                $this->listChecks($input, $output);
                 break;
         }
     }
 
-    protected function listChecks(OutputInterface $output)
+    protected function listChecks(InputInterface $input, OutputInterface $output)
     {
-        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $group = $input->getOption('group');
+        $runner = $this->getContainer()->get('liip_monitor.runner_' . $group);
         $checks = $runner->getChecks();
 
         if (0 === count($checks)) {

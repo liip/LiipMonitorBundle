@@ -10,7 +10,7 @@
 
     <services>
         <service id="liip_monitor.check.class_exists" public="false" class="%liip_monitor.check.class_exists.class%">
-            <argument>%liip_monitor.check.class_exists%</argument>
+            <argument>__liip_monitor.check.class_exists__</argument>
             <tag name="liip_monitor.check" alias="class_exists" />
         </service>
     </services>

@@ -2,8 +2,6 @@
 
 namespace Liip\MonitorBundle\Command;
 
-use Liip\MonitorBundle\Helper\ConsoleReporter;
-use Liip\MonitorBundle\Helper\RawConsoleReporter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,6 +10,21 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class HealthCheckCommand extends ContainerAwareCommand
 {
+    /**
+     * @var string
+     */
+    private $defaultGroup;
+
+    /**
+     * @param string $defaultGroup
+     * @param null $name
+     */
+    public function __construct($defaultGroup, $name = null)
+    {
+        $this->defaultGroup = $defaultGroup;
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this
@@ -35,6 +48,13 @@ class HealthCheckCommand extends ContainerAwareCommand
                     null,
                     InputOption::VALUE_NONE,
                     'Suitable for using as a nagios NRPE command.'
+                ),
+                new InputOption(
+                    'group',
+                    'g',
+                    InputOption::VALUE_REQUIRED,
+                    'List checks for given group',
+                    $this->defaultGroup
                 )
             ));
     }
@@ -48,7 +68,8 @@ class HealthCheckCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
-        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $group = $input->getOption('group');
+        $runner = $this->getContainer()->get('liip_monitor.runner_' . $group);
 
         if ($input->getOption('nagios')) {
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
