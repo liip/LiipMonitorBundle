@@ -79,6 +79,8 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 
                 $container->setDefinition($serviceId . '.' . $group, $tmpDefinition);
             }
+
+            $container->removeDefinition($serviceId);
         }
     }
 }
