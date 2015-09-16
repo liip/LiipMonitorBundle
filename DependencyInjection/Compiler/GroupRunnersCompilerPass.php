@@ -73,7 +73,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
 
         if ($container->hasParameter('liip_monitor.checks')) {
             $checks = $container->getParameter('liip_monitor.checks');
-            foreach ($checks['groups'] as $group => $_) {
+            foreach (array_keys($checks['groups']) as $group) {
                 $groups[] = $group;
             }
         }
