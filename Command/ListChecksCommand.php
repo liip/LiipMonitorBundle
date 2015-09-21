@@ -38,6 +38,7 @@ class ListChecksCommand extends ContainerAwareCommand
                 'List checks for given group',
                 $this->defaultGroup
             )
+            ->addOption('groups', 'G', InputOption::VALUE_NONE, 'List all registered groups')
         ;
     }
 
@@ -49,6 +50,9 @@ class ListChecksCommand extends ContainerAwareCommand
                 break;
             case $input->getOption('all'):
                 $this->listAllChecks($output);
+                break;
+            case $input->getOption('groups'):
+                $this->listGroups($output);
                 break;
             default:
                 $this->listChecks($input, $output);
@@ -98,6 +102,17 @@ class ListChecksCommand extends ContainerAwareCommand
 
         foreach (array_keys($reporters) as $reporter) {
             $output->writeln($reporter);
+        }
+    }
+
+    protected function listGroups(OutputInterface $output)
+    {
+        $runnerServiceIds = $this->getContainer()->getParameter('liip_monitor.runners');
+
+        foreach ($runnerServiceIds as $serviceId) {
+            if (preg_match('/liip_monitor.runner_(.+)/', $serviceId, $matches)) {
+                $output->writeln($matches[1]);
+            }
         }
     }
 
