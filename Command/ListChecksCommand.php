@@ -30,6 +30,7 @@ class ListChecksCommand extends ContainerAwareCommand
             ->setName('monitor:list')
             ->setDescription('Lists Health Checks')
             ->addOption('reporters', 'r', InputOption::VALUE_NONE, 'List registered additional reporters')
+            ->addOption('all', 'a', InputOption::VALUE_NONE, 'List all configured checks')
             ->addOption(
                 'group',
                 'g',
@@ -45,6 +46,9 @@ class ListChecksCommand extends ContainerAwareCommand
         switch(true){
             case $input->getOption('reporters'):
                 $this->listReporters($output);
+                break;
+            case $input->getOption('all'):
+                $this->listAllChecks($output);
                 break;
             default:
                 $this->listChecks($input, $output);
@@ -63,18 +67,28 @@ class ListChecksCommand extends ContainerAwareCommand
             return;
         }
 
-        $runner = $this->getContainer()->get($runnerServiceId);
-        $checks = $runner->getChecks();
+        $this->doListChecks($output, $runnerServiceId);
+    }
 
-        if (0 === count($checks)) {
-            $output->writeln('<error>No checks configured.</error>');
-        }
+    /**
+     * @param OutputInterface $output
+     */
+    protected function listAllChecks(OutputInterface $output)
+    {
+        $runners = $this->getContainer()->getParameter('liip_monitor.runners');
 
-        foreach ($runner->getChecks() as $alias => $check) {
-            $output->writeln(sprintf('<info>%s</info> %s', $alias, $check->getLabel()));
+        foreach ($runners as $runnerServiceId) {
+            $output->writeln(
+                sprintf('<fg=yellow;options=bold>%s</>', str_replace('liip_monitor.runner_', '', $runnerServiceId))
+            );
+
+            $this->doListChecks($output, $runnerServiceId);
         }
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     protected function listReporters(OutputInterface $output)
     {
         $reporters = $this->getContainer()->get('liip_monitor.runner')->getAdditionalReporters();
@@ -84,6 +98,24 @@ class ListChecksCommand extends ContainerAwareCommand
 
         foreach (array_keys($reporters) as $reporter) {
             $output->writeln($reporter);
+        }
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param $runnerServiceId
+     */
+    private function doListChecks(OutputInterface $output, $runnerServiceId)
+    {
+        $runner = $this->getContainer()->get($runnerServiceId);
+        $checks = $runner->getChecks();
+
+        if (0 === count($checks)) {
+            $output->writeln('<error>No checks configured.</error>');
+        }
+
+        foreach ($runner->getChecks() as $alias => $check) {
+            $output->writeln(sprintf('<info>%s</info> %s', $alias, $check->getLabel()));
         }
     }
 }
