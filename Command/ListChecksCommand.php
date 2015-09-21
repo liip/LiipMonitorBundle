@@ -55,7 +55,15 @@ class ListChecksCommand extends ContainerAwareCommand
     protected function listChecks(InputInterface $input, OutputInterface $output)
     {
         $group = $input->getOption('group');
-        $runner = $this->getContainer()->get('liip_monitor.runner_' . $group);
+        $runnerServiceId = 'liip_monitor.runner_' . $group;
+
+        if (!$this->getContainer()->has($runnerServiceId)) {
+            $output->writeln('<error>No such group.</error>');
+
+            return;
+        }
+
+        $runner = $this->getContainer()->get($runnerServiceId);
         $checks = $runner->getChecks();
 
         if (0 === count($checks)) {
