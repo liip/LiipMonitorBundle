@@ -29,8 +29,8 @@ class ListChecksCommand extends ContainerAwareCommand
         $this
             ->setName('monitor:list')
             ->setDescription('Lists Health Checks')
+            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Lists Health Checks of all groups')
             ->addOption('reporters', 'r', InputOption::VALUE_NONE, 'List registered additional reporters')
-            ->addOption('all', 'a', InputOption::VALUE_NONE, 'List all configured checks')
             ->addOption(
                 'group',
                 'g',
@@ -79,12 +79,8 @@ class ListChecksCommand extends ContainerAwareCommand
      */
     protected function listAllChecks(OutputInterface $output)
     {
-        $runners = $this->getContainer()->getParameter('liip_monitor.runners');
-
-        foreach ($runners as $runnerServiceId) {
-            $output->writeln(
-                sprintf('<fg=yellow;options=bold>%s</>', str_replace('liip_monitor.runner_', '', $runnerServiceId))
-            );
+        foreach ($this->getGroups() as $runnerServiceId => $group) {
+            $output->writeln(sprintf('<fg=yellow;options=bold>%s</>', $group));
 
             $this->doListChecks($output, $runnerServiceId);
         }
@@ -105,14 +101,13 @@ class ListChecksCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     protected function listGroups(OutputInterface $output)
     {
-        $runnerServiceIds = $this->getContainer()->getParameter('liip_monitor.runners');
-
-        foreach ($runnerServiceIds as $serviceId) {
-            if (preg_match('/liip_monitor.runner_(.+)/', $serviceId, $matches)) {
-                $output->writeln($matches[1]);
-            }
+        foreach ($this->getGroups() as $group) {
+            $output->writeln($group);
         }
     }
 
@@ -132,5 +127,23 @@ class ListChecksCommand extends ContainerAwareCommand
         foreach ($runner->getChecks() as $alias => $check) {
             $output->writeln(sprintf('<info>%s</info> %s', $alias, $check->getLabel()));
         }
+    }
+
+    /**
+     * @return array key/value $serviceId/$group
+     */
+    private function getGroups()
+    {
+        $runnerServiceIds = $this->getContainer()->getParameter('liip_monitor.runners');
+
+        $groups = array();
+
+        foreach ($runnerServiceIds as $serviceId) {
+            if (preg_match('/liip_monitor.runner_(.+)/', $serviceId, $matches)) {
+                $groups[$serviceId] = $matches[1];
+            }
+        }
+
+        return $groups;
     }
 }
