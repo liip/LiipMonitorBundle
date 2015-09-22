@@ -203,9 +203,9 @@ liip_monitor:
     default_group: default
     checks:
         groups:
-            default: # checks you may want to execute on every server
+            default: # checks you may want to execute by default
                 php_extensions: [apc, xdebug]
-            cron: # checks you may want to execute only on cron-servers
+            cron: # checks you may want to execute only on cron servers
                 php_extensions: [redis]
 ```
 
