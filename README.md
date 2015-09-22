@@ -222,6 +222,56 @@ You can list available reporters with:
 
     $ ./app/console monitor:list --reporters
 
+## Grouping Checks
+
+It is possible to group the health checks for different environments (e.g. application server, cron runner, ...).
+If not specified differently, all health checks belong to the `default` group.
+
+### Define groups for build-in checks
+
+To define groups for built-in health checks, add the following grouping hint to your `config.yml`:
+
+```yml
+liip_monitor:
+    default_group: default
+    checks:
+        groups:
+            default: # checks you may want to execute on every server
+                php_extensions: [apc, xdebug]
+            cron: # checks you may want to execute only on cron-servers
+                php_extensions: [redis]
+```
+
+This creates two groups, `default` and `cron`, each having different checks.
+
+### Define groups for tagged Services
+
+To define groups for tagged services, add a `group` attribute to the respective tags:
+
+```yml
+services:
+    monitor.check.php_extensions:
+        class: Acme\HelloBundle\Check\PhpExtensionsCheck
+        arguments:
+            - [ xhprof, apc, memcache ]
+        tags:
+            - { name: liip_monitor.check, alias: php_extensions, group: cron }
+            - { name: liip_monitor.check, alias: php_extensions, group: app_server }
+```
+
+### Specify group for CLI commands
+
+Both CLI commands have a `--group=...` option. If it is not given, the default group is used.
+
+    ./app/console monitor:list --group=app_server
+
+    ./app/console monitor:health --group=app_server
+
+Additionally, the `monitor:list` command has two more options, `--groups` and `--all`. The former to list all
+registered groups, the latter to list the health checks of all groups.
+
+### Specifiy group for HTTP API
+
 ## Full Default Config
 
 ```yml
