@@ -103,39 +103,6 @@ as long as the service is properly tagged. The ``alias`` is optional and will th
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
 
-## Grouping Health Checks
-
-All Health Checks would probably be in a default-group and all checks would be executed for that group. In same cases 
-it would be useful to group some Health Checks (e.g. you want to execute different checks on different types of 
-Application-Servers, such as cron-servers etc.)
-
-For that purpose you could easily define your checks in different groups via the configuration for the built-in checks 
-or via tag-attributes for your custom checks:
-
-Example for built-in:
-```yml
-liip_monitor:
-    default_group: default
-    checks:
-        groups:
-            default: # checks you may want to execute on every server
-                php_extensions: [apc, xdebug]
-            cron: # checks you may want to execute only on cron-servers
-                php_extensions: [redis]
-```
-
-Example for tagged Services:
-```yml
-services:
-    monitor.check.php_extensions:
-        class: Acme\HelloBundle\Check\PhpExtensionsCheck
-        arguments:
-            - [ xhprof, apc, memcache ]
-        tags:
-            - { name: liip_monitor.check, alias: php_extensions, group: cron }
-            - { name: liip_monitor.check, alias: php_extensions, group: app_server }
-```
-
 ## Available Built-in Health Checks ##
 
 See "Full Default Config" below for a list of all built-in checks and their configuration.
