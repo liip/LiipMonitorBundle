@@ -237,8 +237,6 @@ Both CLI commands have a `--group=...` option. If it is not given, the default g
 Additionally, the `monitor:list` command has two more options, `--groups` and `--all`. The former to list all
 registered groups, the latter to list the health checks of all groups.
 
-### Specifiy group for HTTP API
-
 ## Full Default Config
 
 ```yml
