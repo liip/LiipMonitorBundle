@@ -19,14 +19,12 @@ class HealthCheckController
 
     /**
      * @param ContainerInterface $container
-     * @param Runner             $runner
      * @param PathHelper         $pathHelper
      * @param                    $template
      */
-    public function __construct(ContainerInterface $container, Runner $runner, PathHelper $pathHelper, $template)
+    public function __construct(ContainerInterface $container, PathHelper $pathHelper, $template)
     {
         $this->container = $container;
-        $this->runner = $runner;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
     }
