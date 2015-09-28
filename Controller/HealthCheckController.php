@@ -150,9 +150,12 @@ class HealthCheckController
         }
 
         $reporter = new ArrayReporter();
-        $this->runner->addReporter($reporter);
-        $this->runner->useAdditionalReporters($reporters);
-        $this->runner->run($checkId);
+
+        if ($runner = $this->getRunner($request)) {
+            $runner->addReporter($reporter);
+            $runner->useAdditionalReporters($reporters);
+            $runner->run($checkId);
+        }
 
         return $reporter;
     }
