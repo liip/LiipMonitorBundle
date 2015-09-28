@@ -71,11 +71,8 @@ class HealthCheckController
 
         $runner = $this->getRunner($request);
 
-
-        if ($runner) {
-            foreach ($runner->getChecks() as $alias => $check) {
-                $ret[] = $alias;
-            }
+        foreach ($runner->getChecks() as $alias => $check) {
+            $ret[] = $alias;
         }
 
         return new JsonResponse($ret);
@@ -151,11 +148,11 @@ class HealthCheckController
 
         $reporter = new ArrayReporter();
 
-        if ($runner = $this->getRunner($request)) {
-            $runner->addReporter($reporter);
-            $runner->useAdditionalReporters($reporters);
-            $runner->run($checkId);
-        }
+        $runner = $this->getRunner($request);
+
+        $runner->addReporter($reporter);
+        $runner->useAdditionalReporters($reporters);
+        $runner->run($checkId);
 
         return $reporter;
     }
@@ -163,7 +160,8 @@ class HealthCheckController
     /**
      * @param Request $request
      *
-     * @return null|Runner
+     * @return Runner
+     * @throws \Exception
      */
     private function getRunner(Request $request)
     {
@@ -175,6 +173,10 @@ class HealthCheckController
 
         $runnerServiceId = 'liip_monitor.runner_' . $group;
 
-        return $this->container->has($runnerServiceId) ? $this->container->get($runnerServiceId) : null;
+        if ($this->container->has($runnerServiceId)) {
+            return $this->container->get($runnerServiceId);
+        }
+
+        throw new \RuntimeException(sprintf('Unknown check group "%s"', $group));
     }
 }
