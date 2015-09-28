@@ -79,6 +79,42 @@ class HealthCheckController
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function listAllAction()
+    {
+        $allChecks = array();
+        $runners = $this->container->getParameter('liip_monitor.runners');
+
+        foreach ($runners as $runnerServiceId) {
+            $runner = $this->container->get($runnerServiceId);
+            $group = str_replace('liip_monitor.runner_', '', $runnerServiceId);
+
+            foreach ($runner->getChecks() as $alias => $check) {
+                $allChecks[$group][] = $alias;
+            }
+        }
+
+        return new JsonResponse($allChecks);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function listGroupsAction()
+    {
+        $groups = array();
+        $runners = $this->container->getParameter('liip_monitor.runners');
+
+        foreach ($runners as $runnerServiceId) {
+            $group = str_replace('liip_monitor.runner_', '', $runnerServiceId);
+            $groups[] = $group;
+        }
+
+        return new JsonResponse($groups);
+    }
+
+    /**
      * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
