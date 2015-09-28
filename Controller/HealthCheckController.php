@@ -224,8 +224,8 @@ class HealthCheckController
 
         if (!$group) {
             $group = $this->container->getParameter('liip_monitor.default_group');
-            return $group;
         }
+
         return $group;
     }
 }

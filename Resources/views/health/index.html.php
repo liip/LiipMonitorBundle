@@ -73,6 +73,45 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 ]</pre>
         </dd>
 
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'all_checks') ?>"><?php echo $request->getPathInfo().'all_checks' ?></a></dt>
+        <dd>
+            Returns a list of available groups abd health checks as a JSON object.
+            <pre>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'all_checks') ?>
+
+{
+    default: [
+        "monitor.check.jackrabbit",
+        "monitor.check.redis",
+        "monitor.check.memcache",
+        "monitor.check.php_extensions"
+    ],
+    app_server: [
+        "monitor.check.jackrabbit",
+        "monitor.check.redis",
+    ],
+    cron_server: [
+        "monitor.check.redis",
+        "monitor.check.memcache",
+        "monitor.check.php_extensions"
+    ]
+}
+</pre>
+        </dd>
+
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>"><?php echo $request->getPathInfo().'groups' ?></a></dt>
+        <dd>
+            Returns a list of available health checks groups as a JSON array.
+            <pre>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
+
+[
+    "default",
+    "app_server",
+    "cron_server"
+]</pre>
+        </dd>
+
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>"><?php echo $request->getPathInfo().'http_status_checks' ?></a></dt>
         <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise).
 <pre>
@@ -145,6 +184,17 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
             </dl>
         </dd>
     </dl>
+    <h3>Grouping Checks</h3>
+
+        The following URLs accept an optional query parameter <code>?group=</code> to specify the check group:
+        <dl>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks?group='.$group) ?>"><?php echo $request->getPathInfo().'checks?group='.$group ?></a></dt>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks?group='.$group) ?>"><?php echo $request->getPathInfo().'http_status_checks?group='.$group ?></a></dt>
+            <dt><?php echo $request->getPathInfo().'http_status_check/check_id?group='.$group ?></dt>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run?group='.$group) ?>"><?php echo $request->getPathInfo().'run?group='.$group ?></a></dt>
+            <dt><?php echo $request->getPathInfo().'run/check_id?group='.$group ?></dt>
+        </dl>
+
 </div>
 <?php echo $javascript; ?>
 </body>
