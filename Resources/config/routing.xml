@@ -12,6 +12,9 @@
     <route id="liip_monitor_list_all_checks" path="/all_checks">
         <default key="_controller">liip_monitor.health_controller:listAllAction</default>
     </route>
+    <route id="liip_monitor_list_groups" path="/groups">
+        <default key="_controller">liip_monitor.health_controller:listGroupsAction</default>
+    </route>
     <route id="liip_monitor_run_all_checks_http_status" path="/http_status_checks">
         <default key="_controller">liip_monitor.health_controller:runAllChecksHttpStatusAction</default>
     </route>

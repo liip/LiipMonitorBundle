@@ -102,6 +102,22 @@ class HealthCheckController
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function listGroupsAction()
+    {
+        $groups = array();
+        $runners = $this->container->getParameter('liip_monitor.runners');
+
+        foreach ($runners as $runnerServiceId) {
+            $group = str_replace('liip_monitor.runner_', '', $runnerServiceId);
+            $groups[] = $group;
+        }
+
+        return new JsonResponse($groups);
+    }
+
+    /**
      * @param  Request                                    $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
