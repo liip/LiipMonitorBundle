@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Controller;
 
 use Liip\MonitorBundle\Helper\ArrayReporter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,16 +12,20 @@ use Liip\MonitorBundle\Helper\PathHelper;
 
 class HealthCheckController
 {
+    protected $container;
     protected $runner;
     protected $pathHelper;
     protected $template;
 
     /**
-     * @param Runner     $runner
-     * @param PathHelper $pathHelper
+     * @param ContainerInterface $container
+     * @param Runner             $runner
+     * @param PathHelper         $pathHelper
+     * @param                    $template
      */
-    public function __construct(Runner $runner, PathHelper $pathHelper, $template)
+    public function __construct(ContainerInterface $container, Runner $runner, PathHelper $pathHelper, $template)
     {
+        $this->container = $container;
         $this->runner = $runner;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
