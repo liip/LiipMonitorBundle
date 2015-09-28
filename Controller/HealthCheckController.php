@@ -37,9 +37,11 @@ class HealthCheckController
      */
     public function indexAction(Request $request)
     {
+        $group = $this->getGroup($request);
+
         $urls = $this->pathHelper->getRoutesJs(array(
-            'liip_monitor_run_all_checks' => array(),
-            'liip_monitor_run_single_check' => array('checkId' => 'replaceme')
+            'liip_monitor_run_all_checks' => array('group' => $group),
+            'liip_monitor_run_single_check' => array('checkId' => 'replaceme', 'group' => $group)
         ));
 
         $css = $this->pathHelper->getStyleTags(array(
@@ -201,11 +203,7 @@ class HealthCheckController
      */
     private function getRunner(Request $request)
     {
-        $group = $request->query->get('group');
-
-        if (!$group) {
-            $group = $this->container->getParameter('liip_monitor.default_group');
-        }
+        $group = $this->getGroup($request);
 
         $runnerServiceId = 'liip_monitor.runner_' . $group;
 
@@ -214,5 +212,20 @@ class HealthCheckController
         }
 
         throw new \RuntimeException(sprintf('Unknown check group "%s"', $group));
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    private function getGroup(Request $request)
+    {
+        $group = $request->query->get('group');
+
+        if (!$group) {
+            $group = $this->container->getParameter('liip_monitor.default_group');
+            return $group;
+        }
+        return $group;
     }
 }
