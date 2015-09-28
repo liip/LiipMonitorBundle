@@ -65,12 +65,17 @@ class HealthCheckController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $ret = array();
 
-        foreach ($this->runner->getChecks() as $alias => $check) {
-            $ret[] = $alias;
+        $runner = $this->getRunner($request);
+
+
+        if ($runner) {
+            foreach ($runner->getChecks() as $alias => $check) {
+                $ret[] = $alias;
+            }
         }
 
         return new JsonResponse($ret);
@@ -150,5 +155,23 @@ class HealthCheckController
         $this->runner->run($checkId);
 
         return $reporter;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return null|Runner
+     */
+    private function getRunner(Request $request)
+    {
+        $group = $request->query->get('group');
+
+        if (!$group) {
+            $group = $this->container->getParameter('liip_monitor.default_group');
+        }
+
+        $runnerServiceId = 'liip_monitor.runner_' . $group;
+
+        return $this->container->has($runnerServiceId) ? $this->container->get($runnerServiceId) : null;
     }
 }
