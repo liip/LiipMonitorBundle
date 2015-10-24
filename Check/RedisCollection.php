@@ -23,7 +23,7 @@ class RedisCollection implements CheckCollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChecks()
     {

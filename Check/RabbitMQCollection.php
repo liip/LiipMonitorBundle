@@ -23,7 +23,7 @@ class RabbitMQCollection implements CheckCollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChecks()
     {

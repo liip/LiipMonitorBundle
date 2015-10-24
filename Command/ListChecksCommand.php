@@ -20,7 +20,7 @@ class ListChecksCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        switch(true){
+        switch (true) {
             case $input->getOption('reporters'):
                 $this->listReporters($output);
                 break;

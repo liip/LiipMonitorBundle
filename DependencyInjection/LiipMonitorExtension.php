@@ -17,7 +17,7 @@ class LiipMonitorExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader =  new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('runner.xml');
         $loader->load('helper.xml');
 
@@ -25,7 +25,7 @@ class LiipMonitorExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         if (null === $config['view_template']) {
-            $config['view_template'] = __DIR__ . '/../Resources/views/health/index.html.php';
+            $config['view_template'] = __DIR__.'/../Resources/views/health/index.html.php';
         }
 
         if ($config['enable_controller']) {
@@ -79,11 +79,16 @@ class LiipMonitorExtension extends Extension
 
                 case 'symfony_version':
                     continue;
+
+                case 'opcache_memory':
+                    if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
+                        throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
+                    }
             }
 
             if (is_array($values)) {
                 foreach ($values as $key => $value) {
-                    $container->setParameter($prefix . '.' . $key, $value);
+                    $container->setParameter($prefix.'.'.$key, $value);
                 }
             }
         }

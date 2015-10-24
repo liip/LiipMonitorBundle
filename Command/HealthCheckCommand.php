@@ -2,8 +2,6 @@
 
 namespace Liip\MonitorBundle\Command;
 
-use Liip\MonitorBundle\Helper\ConsoleReporter;
-use Liip\MonitorBundle\Helper\RawConsoleReporter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,12 +33,12 @@ class HealthCheckCommand extends ContainerAwareCommand
                     null,
                     InputOption::VALUE_NONE,
                     'Suitable for using as a nagios NRPE command.'
-                )
+                ),
             ));
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int
@@ -74,7 +72,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                 return 1;
             }
         }
-        
+
         return $results->getFailureCount() ? 1 : 0;
     }
 }

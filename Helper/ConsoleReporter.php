@@ -34,7 +34,7 @@ class ConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
@@ -65,7 +65,7 @@ class ConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
@@ -73,7 +73,7 @@ class ConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
@@ -81,7 +81,7 @@ class ConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStop(ResultsCollection $results)
     {
@@ -89,7 +89,7 @@ class ConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onFinish(ResultsCollection $results)
     {

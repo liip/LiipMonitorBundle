@@ -17,6 +17,11 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
      */
     public function testChecksLoaded($name, $config, $checkClass, $checkAlias = null, $checkCount = 1)
     {
+        // skip checks for missing classes
+        if (!class_exists($checkClass)) {
+            $this->setExpectedException('InvalidArgumentException');
+        }
+
         if (!$checkAlias) {
             $checkAlias = $name;
         }
@@ -62,7 +67,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
                     'send_on_warning' => true,
-                )
+                ),
             )
         );
 
@@ -84,19 +89,19 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array(
                 array(
                     'mailer' => array(
-                        'recipient' => 'foo@example.com'
-                    )
-                )
+                        'recipient' => 'foo@example.com',
+                    ),
+                ),
             ),
             array(
                 array(
                     'mailer' => array(
                         'recipient' => 'foo@example.com',
                         'sender' => 'bar@example.com',
-                        'subject' => null
-                    )
-                )
-            )
+                        'subject' => null,
+                    ),
+                ),
+            ),
         );
     }
 

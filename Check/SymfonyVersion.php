@@ -43,12 +43,12 @@ class SymfonyVersion implements CheckInterface
 
         $opts = array(
             'http' => array(
-                'method' => "GET",
-                'header' => "User-Agent: LiipMonitorBundle\r\n"
-            )
+                'method' => 'GET',
+                'header' => "User-Agent: LiipMonitorBundle\r\n",
+            ),
         );
 
-        $context  = stream_context_create($opts);
+        $context = stream_context_create($opts);
 
         $githubUrl = 'https://api.github.com/repos/symfony/symfony/tags';
         $githubJSONResponse = file_get_contents($githubUrl, false, $context);
@@ -57,7 +57,7 @@ class SymfonyVersion implements CheckInterface
 
         $githubResponseArray = json_decode($githubJSONResponse, true);
         if (empty($githubResponseArray)) {
-            throw new \Exception("No valid response or no tags received from GitHub.");
+            throw new \Exception('No valid response or no tags received from GitHub.');
         }
 
         $tags = array();
@@ -68,18 +68,18 @@ class SymfonyVersion implements CheckInterface
 
         // Sort tags
 
-        usort($tags, "version_compare");
+        usort($tags, 'version_compare');
 
         // Filter out non final tags
 
         $filteredTagList = array_filter($tags, function ($tag) {
-                return !stripos($tag, "PR") && !stripos($tag, "RC") && !stripos($tag, "BETA");
+                return !stripos($tag, 'PR') && !stripos($tag, 'RC') && !stripos($tag, 'BETA');
             });
 
         // The first one is the last stable release for Symfony 2
 
         $reverseFilteredTagList = array_reverse($filteredTagList);
 
-        return str_replace("v", "", $reverseFilteredTagList[0]);
+        return str_replace('v', '', $reverseFilteredTagList[0]);
     }
 }
