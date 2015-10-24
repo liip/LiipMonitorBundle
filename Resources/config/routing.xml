@@ -12,7 +12,7 @@
     <route id="liip_monitor_run_all_checks_http_status" path="/http_status_checks">
         <default key="_controller">liip_monitor.health_controller:runAllChecksHttpStatusAction</default>
     </route>
-    <route id="liip_monitor_run_single_check_http_status" pattern="/http_status_check/{checkId}">
+    <route id="liip_monitor_run_single_check_http_status" path="/http_status_check/{checkId}">
         <default key="_controller">liip_monitor.health_controller:runSingleCheckHttpStatusAction</default>
     </route>
     <route id="liip_monitor_run_all_checks" path="/run">
