@@ -17,6 +17,11 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
      */
     public function testChecksLoaded($name, $config, $checkClass, $checkAlias = null, $checkCount = 1)
     {
+        // skip checks for missing classes
+        if (!class_exists($checkClass)) {
+            $this->setExpectedException('InvalidArgumentException');
+        }
+
         if (!$checkAlias) {
             $checkAlias = $name;
         }

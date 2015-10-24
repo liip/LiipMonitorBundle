@@ -79,6 +79,11 @@ class LiipMonitorExtension extends Extension
 
                 case 'symfony_version':
                     continue;
+
+                case 'opcache_memory':
+                    if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
+                        throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
+                    }
             }
 
             if (is_array($values)) {

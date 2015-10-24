@@ -31,9 +31,16 @@ matrix:
       env: SYMFONY_VERSION=2.8.*@dev
     - php: 5.6
       env: SYMFONY_VERSION=3.0.*@dev
+    - php: 5.3
+      env: SYMFONY_VERSION=2.3.* COMPOSER_FLAGS="--prefer-lowest"
 
-before_script:
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
+before_install:
+  - composer self-update
+  - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
+
+install: composer update --prefer-source $COMPOSER_FLAGS
+
+script: phpunit --coverage-text
 
 notifications:
   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
