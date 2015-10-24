@@ -27,7 +27,7 @@ class ProcessRunningCollection implements CheckCollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChecks()
     {

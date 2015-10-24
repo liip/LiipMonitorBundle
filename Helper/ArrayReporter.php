@@ -38,7 +38,7 @@ class ArrayReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
@@ -70,12 +70,12 @@ class ArrayReporter implements ReporterInterface
             'message' => $result->getMessage(),
             'status' => $status,
             'status_name' => $statusName,
-            'service_id' => $checkAlias
+            'service_id' => $checkAlias,
         );
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
@@ -83,7 +83,7 @@ class ArrayReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
@@ -91,7 +91,7 @@ class ArrayReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStop(ResultsCollection $results)
     {
@@ -99,7 +99,7 @@ class ArrayReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onFinish(ResultsCollection $results)
     {

@@ -29,7 +29,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
             'addAdditionalReporter',
             array(
                 'foo',
-                new Reference('foo_reporter')
+                new Reference('foo_reporter'),
             )
         );
     }
@@ -50,7 +50,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
             'addAdditionalReporter',
             array(
                 'foo_reporter',
-                new Reference('foo_reporter')
+                new Reference('foo_reporter'),
             )
         );
     }

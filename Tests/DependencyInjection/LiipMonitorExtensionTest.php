@@ -62,7 +62,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
                     'send_on_warning' => true,
-                )
+                ),
             )
         );
 
@@ -84,19 +84,19 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array(
                 array(
                     'mailer' => array(
-                        'recipient' => 'foo@example.com'
-                    )
-                )
+                        'recipient' => 'foo@example.com',
+                    ),
+                ),
             ),
             array(
                 array(
                     'mailer' => array(
                         'recipient' => 'foo@example.com',
                         'sender' => 'bar@example.com',
-                        'subject' => null
-                    )
-                )
-            )
+                        'subject' => null,
+                    ),
+                ),
+            ),
         );
     }
 

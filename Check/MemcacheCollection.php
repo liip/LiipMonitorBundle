@@ -23,7 +23,7 @@ class MemcacheCollection implements CheckCollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChecks()
     {
