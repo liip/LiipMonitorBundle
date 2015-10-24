@@ -34,7 +34,7 @@ class RawConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
@@ -57,7 +57,7 @@ class RawConsoleReporter implements ReporterInterface
 
         $performanceData = $this->getNagiosPerformanceData();
 
-        $this->output->writeln(sprintf(' %s', $check->getLabel() . $performanceData));
+        $this->output->writeln(sprintf(' %s', $check->getLabel().$performanceData));
     }
 
     /**
@@ -69,7 +69,7 @@ class RawConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
@@ -77,7 +77,7 @@ class RawConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
@@ -85,7 +85,7 @@ class RawConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onStop(ResultsCollection $results)
     {
@@ -93,7 +93,7 @@ class RawConsoleReporter implements ReporterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function onFinish(ResultsCollection $results)
     {

@@ -5,7 +5,7 @@ namespace Liip\MonitorBundle\Tests;
 use Liip\MonitorBundle\LiipMonitorBundle;
 
 /**
- * Liip\MonitorBundle\Tests\LiipMonitorBundleTest
+ * Liip\MonitorBundle\Tests\LiipMonitorBundleTest.
  */
 class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
     protected $bundle;
 
     /**
-     * Test bundle build to add all required compiler passes
+     * Test bundle build to add all required compiler passes.
      */
     public function testBuildWithCompilerPasses()
     {
@@ -45,7 +45,7 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Sets up test
+     * Sets up test.
      */
     protected function setUp()
     {

@@ -26,7 +26,7 @@ class PhpVersionCollection implements CheckCollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChecks()
     {
