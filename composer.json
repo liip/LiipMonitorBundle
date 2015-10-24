@@ -39,9 +39,8 @@
         "symfony/expression-language": "To use the Expression check"
     },
     "autoload": {
-        "psr-0": { "Liip\\MonitorBundle": "" }
+        "psr-4": { "Liip\\MonitorBundle\\": "" }
     },
-    "target-dir": "Liip/MonitorBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.1-dev"
