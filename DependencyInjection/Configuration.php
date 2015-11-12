@@ -280,7 +280,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->addDefaultsIfNotSet()
                             ->validate()
-                                ->ifTrue(function($value) { return (!$value['warning_expression'] && !$value['critical_expression']); })
+                                ->ifTrue(function ($value) { return (!$value['warning_expression'] && !$value['critical_expression']); })
                                 ->thenInvalid('A warning_expression or a critical_expression must be set.')
                             ->end()
                             ->children()
