@@ -47,7 +47,7 @@ class CustomErrorPages implements CheckInterface
     {
         // check if twig exception controller is not the default one.
         $config = new Configuration();
-        $tree =  $config->getConfigTreeBuilder()->buildTree();
+        $tree = $config->getConfigTreeBuilder()->buildTree();
 
         $reflectionTree = new \ReflectionClass($tree);
         $reflectionChildren = $reflectionTree->getProperty('children');

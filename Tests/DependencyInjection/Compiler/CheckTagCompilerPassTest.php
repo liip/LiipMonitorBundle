@@ -33,7 +33,7 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
             'addCheck',
             array(
                 new Reference('example_check'),
-                'example_check'
+                'example_check',
             )
         );
     }

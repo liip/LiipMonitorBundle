@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\MonitorBundle\Composer;
 
 use Composer\Script\CommandEvent;
@@ -7,7 +8,6 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseHandler;
 /**
  * Composer ScriptHandler can be used to run postInstall/postUpdate health checks
  * when running composer.phar update/install.
- *
  */
 class ScriptHandler extends BaseHandler
 {

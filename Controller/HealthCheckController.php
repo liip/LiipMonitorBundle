@@ -30,7 +30,8 @@ class HealthCheckController
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
@@ -39,18 +40,18 @@ class HealthCheckController
 
         $urls = $this->pathHelper->getRoutesJs(array(
             'liip_monitor_run_all_checks' => array('group' => $group),
-            'liip_monitor_run_single_check' => array('checkId' => 'replaceme', 'group' => $group)
+            'liip_monitor_run_single_check' => array('checkId' => 'replaceme', 'group' => $group),
         ));
 
         $css = $this->pathHelper->getStyleTags(array(
             'bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css',
-            'bundles/liipmonitor/css/style.css'
+            'bundles/liipmonitor/css/style.css',
         ));
 
         $javascript = $this->pathHelper->getScriptTags(array(
             'bundles/liipmonitor/javascript/jquery-1.7.1.min.js',
             'bundles/liipmonitor/javascript/ember-0.9.5.min.js',
-            'bundles/liipmonitor/javascript/app.js'
+            'bundles/liipmonitor/javascript/app.js',
         ));
 
         // this is a hack to make the bundle template agnostic.
@@ -115,7 +116,8 @@ class HealthCheckController
     }
 
     /**
-     * @param  Request                                    $request
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runAllChecksAction(Request $request)
@@ -124,12 +126,13 @@ class HealthCheckController
 
         return new JsonResponse(array(
             'checks' => $report->getResults(),
-            'globalStatus' => $report->getGlobalStatus()
+            'globalStatus' => $report->getGlobalStatus(),
         ));
     }
 
     /**
-     * @param  Request                                    $request
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runAllChecksHttpStatusAction(Request $request)
@@ -143,8 +146,9 @@ class HealthCheckController
     }
 
     /**
-     * @param  string                                     $checkId
-     * @param  Request                                    $request
+     * @param string  $checkId
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runSingleCheckHttpStatusAction($checkId, Request $request)
@@ -158,8 +162,9 @@ class HealthCheckController
     }
 
     /**
-     * @param  string                                     $checkId
-     * @param  Request                                    $request
+     * @param string  $checkId
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function runSingleCheckAction($checkId, Request $request)
@@ -170,8 +175,9 @@ class HealthCheckController
     }
 
     /**
-     * @param  Request       $request
-     * @param  string|null   $checkId
+     * @param Request     $request
+     * @param string|null $checkId
+     *
      * @return ArrayReporter
      */
     protected function runTests(Request $request, $checkId = null)

@@ -32,7 +32,7 @@ class CheckCollectionTagCompilerPassTest extends AbstractCompilerPassTestCase
             'liip_monitor.runner_' . $defaultGroup,
             'addChecks',
             array(
-                new Reference('example_check_collection')
+                new Reference('example_check_collection'),
             )
         );
     }

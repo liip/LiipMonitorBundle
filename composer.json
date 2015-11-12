@@ -23,15 +23,15 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.3",
-        "zendframework/zenddiagnostics": "~1.0.2|~1.1"
+        "php": "^5.3.9|^7.0",
+        "symfony/framework-bundle": "~2.3|~3.0",
+        "zendframework/zenddiagnostics": "^1.0.2"
     },
     "require-dev": {
-        "matthiasnoback/symfony-dependency-injection-test": "~0.4",
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7.4",
         "sensiolabs/security-checker": "~1.3",
         "guzzle/guzzle": "~3.8",
-        "symfony/expression-language": "~2.3",
+        "symfony/expression-language": "~2.3|~3.0",
         "swiftmailer/swiftmailer": "~5.4"
 },
     "suggest": {
@@ -39,9 +39,8 @@
         "symfony/expression-language": "To use the Expression check"
     },
     "autoload": {
-        "psr-0": { "Liip\\MonitorBundle": "" }
+        "psr-4": { "Liip\\MonitorBundle\\": "" }
     },
-    "target-dir": "Liip/MonitorBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.1-dev"

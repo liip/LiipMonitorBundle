@@ -55,12 +55,12 @@ class HealthCheckCommand extends ContainerAwareCommand
                     InputOption::VALUE_REQUIRED,
                     'List checks for given group',
                     $this->defaultGroup
-                )
+                ),
             ));
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int
