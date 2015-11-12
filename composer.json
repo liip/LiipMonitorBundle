@@ -25,7 +25,8 @@
     "require": {
         "php": "^5.3.9|^7.0",
         "symfony/framework-bundle": "~2.3|~3.0",
-        "zendframework/zenddiagnostics": "^1.0.2"
+        "zendframework/zenddiagnostics": "^1.0.2",
+        "symfony/symfony": "3.0.*@dev"
     },
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^0.7.4",
