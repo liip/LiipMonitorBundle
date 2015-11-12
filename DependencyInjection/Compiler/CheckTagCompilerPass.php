@@ -21,7 +21,7 @@ class CheckTagCompilerPass implements CompilerPassInterface
                 $alias = empty($attributes['alias']) ? $id : $attributes['alias'];
                 $group = empty($attributes['group']) ? $defaultGroup : $attributes['group'];
 
-                $runnerDefinition = $container->getDefinition('liip_monitor.runner_' . $group);
+                $runnerDefinition = $container->getDefinition('liip_monitor.runner_'.$group);
                 $runnerDefinition->addMethodCall('addCheck', array(new Reference($id), $alias));
             }
         }

@@ -275,7 +275,7 @@ class Configuration implements ConfigurationInterface
                                 'critical_expression' => "ini('opcache.enable')",
                                 'warning_message' => 'OPcache not optimized for production',
                                 'critical_message' => 'OPcache not enabled',
-                            )
+                            ),
                         ))
                         ->prototype('array')
                             ->addDefaultsIfNotSet()

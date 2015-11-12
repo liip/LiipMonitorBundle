@@ -14,13 +14,13 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
         $checkConfig = array(
             'groups' => array(
                 'default' => array(
-                    'check1' => array()
+                    'check1' => array(),
                 ),
                 'app_server' => array(
                     'check1' => array(),
                     'check_collection1' => array(),
-                )
-            )
+                ),
+            ),
         );
         $this->setParameter('liip_monitor.checks', $checkConfig);
 
