@@ -4,7 +4,6 @@ namespace Liip\MonitorBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 class AddGroupsCompilerPass implements CompilerPassInterface
 {
@@ -40,7 +39,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 
         foreach ($data as $group => $groupChecks) {
             foreach (array_keys($groupChecks) as $checkName) {
-                $serviceId = self::SERVICE_ID_PREFIX . $checkName;
+                $serviceId = self::SERVICE_ID_PREFIX.$checkName;
                 $checkDefinition = $container->getDefinition($serviceId);
 
                 if ($checkDefinition->hasTag('liip_monitor.check')) {
@@ -62,7 +61,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
     private function addGroupTags(ContainerBuilder $container, array $checks, $tag)
     {
         foreach ($checks as $checkName => $groups) {
-            $serviceId = self::SERVICE_ID_PREFIX . $checkName;
+            $serviceId = self::SERVICE_ID_PREFIX.$checkName;
             $serviceDefinition = $container->getDefinition($serviceId);
             $serviceDefinition->clearTag($tag);
 
@@ -72,12 +71,12 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 
                 foreach ($tmpDefinition->getArguments() as $argumentIndex => $argument) {
                     if (is_string($argument) && preg_match('/^__(.*)__$/', $argument, $matches)) {
-                        $newArgument = $container->getParameter($matches[1] . '.' . $group);
+                        $newArgument = $container->getParameter($matches[1].'.'.$group);
                         $tmpDefinition->replaceArgument($argumentIndex, $newArgument);
                     }
                 }
 
-                $container->setDefinition($serviceId . '.' . $group, $tmpDefinition);
+                $container->setDefinition($serviceId.'.'.$group, $tmpDefinition);
             }
 
             $container->removeDefinition($serviceId);

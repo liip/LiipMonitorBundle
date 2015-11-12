@@ -203,13 +203,14 @@ class HealthCheckController
      * @param Request $request
      *
      * @return Runner
+     *
      * @throws \Exception
      */
     private function getRunner(Request $request)
     {
         $group = $this->getGroup($request);
 
-        $runnerServiceId = 'liip_monitor.runner_' . $group;
+        $runnerServiceId = 'liip_monitor.runner_'.$group;
 
         if ($this->container->has($runnerServiceId)) {
             return $this->container->get($runnerServiceId);
@@ -220,6 +221,7 @@ class HealthCheckController
 
     /**
      * @param Request $request
+     *
      * @return string
      */
     private function getGroup(Request $request)

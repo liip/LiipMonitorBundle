@@ -29,8 +29,8 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        $this->assertContainerBuilderHasAlias('liip_monitor.runner', 'liip_monitor.runner_' . $defaultGroup);
-        $this->assertContainerBuilderHasService('liip_monitor.runner_' . $defaultGroup);
+        $this->assertContainerBuilderHasAlias('liip_monitor.runner', 'liip_monitor.runner_'.$defaultGroup);
+        $this->assertContainerBuilderHasService('liip_monitor.runner_'.$defaultGroup);
         $this->assertContainerBuilderHasService('liip_monitor.runner_foo');
         $this->assertContainerBuilderHasService('liip_monitor.runner_foobar');
         $this->assertContainerBuilderHasService('liip_monitor.runner_bar');

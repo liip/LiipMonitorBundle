@@ -6,7 +6,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This class contains the configuration information for the bundle
+ * This class contains the configuration information for the bundle.
  *
  * This information is solely responsible for how the different configuration
  * sections are normalized, and merged.
@@ -274,7 +274,7 @@ class Configuration implements ConfigurationInterface
                                 'warning_expression' => "ini('opcache.revalidate_freq') > 0",
                                 'critical_expression' => "ini('opcache.enable')",
                                 'warning_message' => 'OPcache not optimized for production',
-                                'critical_message' => 'OPcache not enabled'
+                                'critical_message' => 'OPcache not enabled',
                             )
                         ))
                         ->prototype('array')

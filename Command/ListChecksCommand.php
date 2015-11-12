@@ -16,7 +16,7 @@ class ListChecksCommand extends ContainerAwareCommand
 
     /**
      * @param string $defaultGroup
-     * @param null $name
+     * @param null   $name
      */
     public function __construct($defaultGroup, $name = null)
     {
@@ -63,7 +63,7 @@ class ListChecksCommand extends ContainerAwareCommand
     protected function listChecks(InputInterface $input, OutputInterface $output)
     {
         $group = $input->getOption('group');
-        $runnerServiceId = 'liip_monitor.runner_' . $group;
+        $runnerServiceId = 'liip_monitor.runner_'.$group;
 
         if (!$this->getContainer()->has($runnerServiceId)) {
             $output->writeln('<error>No such group.</error>');

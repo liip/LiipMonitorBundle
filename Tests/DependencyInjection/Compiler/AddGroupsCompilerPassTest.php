@@ -18,7 +18,7 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
                 ),
                 'app_server' => array(
                     'check1' => array(),
-                    'check_collection1' => array()
+                    'check_collection1' => array(),
                 )
             )
         );

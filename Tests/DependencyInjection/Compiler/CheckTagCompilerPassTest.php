@@ -29,7 +29,7 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'liip_monitor.runner_' . $defaultGroup,
+            'liip_monitor.runner_'.$defaultGroup,
             'addCheck',
             array(
                 new Reference('example_check'),

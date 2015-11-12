@@ -20,7 +20,7 @@ class CheckCollectionTagCompilerPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $group = empty($attributes['group']) ? $defaultGroup : $attributes['group'];
 
-                $runnerDefinition = $container->getDefinition('liip_monitor.runner_' . $group);
+                $runnerDefinition = $container->getDefinition('liip_monitor.runner_'.$group);
                 $runnerDefinition->addMethodCall('addChecks', array(new Reference($id)));
             }
         }

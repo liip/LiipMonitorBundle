@@ -65,7 +65,7 @@ class LiipMonitorExtension extends Extension
 
                 if (!in_array($check, $checksLoaded)) {
                     $loader->load('checks/'.$check.'.xml');
-                    $checksLoaded[]  = $check;
+                    $checksLoaded[] = $check;
                 }
             }
         }
@@ -75,9 +75,9 @@ class LiipMonitorExtension extends Extension
 
     /**
      * @param ContainerBuilder $container
-     * @param string $checkName
-     * @param string $group
-     * @param array $values
+     * @param string           $checkName
+     * @param string           $group
+     * @param array            $values
      */
     private function setParameters(ContainerBuilder $container, $checkName, $group, $values)
     {
@@ -103,7 +103,7 @@ class LiipMonitorExtension extends Extension
             case 'file_xml':
             case 'file_yaml':
             case 'expressions':
-                $container->setParameter($prefix . '.' . $group, $values);
+                $container->setParameter($prefix.'.'.$group, $values);
                 continue;
 
             case 'symfony_version':

@@ -17,7 +17,7 @@ class HealthCheckCommand extends ContainerAwareCommand
 
     /**
      * @param string $defaultGroup
-     * @param null $name
+     * @param null   $name
      */
     public function __construct($defaultGroup, $name = null)
     {
@@ -69,7 +69,7 @@ class HealthCheckCommand extends ContainerAwareCommand
     {
         $checkName = $input->getArgument('checkName');
         $group = $input->getOption('group');
-        $runnerServiceId = 'liip_monitor.runner_' . $group;
+        $runnerServiceId = 'liip_monitor.runner_'.$group;
 
         if (!$this->getContainer()->has($runnerServiceId)) {
             $output->writeln('<error>No such group.</error>');
@@ -77,7 +77,7 @@ class HealthCheckCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $runner = $this->getContainer()->get('liip_monitor.runner_' . $group);
+        $runner = $this->getContainer()->get('liip_monitor.runner_'.$group);
 
         if ($input->getOption('nagios')) {
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
