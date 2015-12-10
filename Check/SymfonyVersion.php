@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Symfony\Component\HttpKernel\Kernel;
 use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
 
@@ -11,22 +12,41 @@ use ZendDiagnostics\Result\Warning;
  * Checks the version of this app against the latest stable release.
  *
  * @author Roderik van der Veer <roderik@vanderveer.be>
+ * @author Kevin Bond <kevinbond@gmail.com>
  */
 class SymfonyVersion implements CheckInterface
 {
+    const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
+    const VERSION_CHECK_URL = 'http://symfony.com/roadmap.json?version=%s';
+
     /**
      * {@inheritdoc}
      */
     public function check()
     {
-        $currentVersion = Kernel::VERSION;
-        $latestRelease = $this->getLatestSymfonyVersion(); // eg. 2.0.12
+        $currentBranch = Kernel::MAJOR_VERSION.'.'.Kernel::MINOR_VERSION;
 
-        if (version_compare($currentVersion, $latestRelease) >= 0) {
-            return new Success();
+        // use symfony.com version checker to see if current branch is still maintained
+        $response = $this->getResponseAndDecode(sprintf(self::VERSION_CHECK_URL, $currentBranch));
+
+        if (!isset($response['eol']) || !isset($response['is_eoled'])) {
+            throw new \Exception('Invalid response from Symfony version checker.');
         }
 
-        return new Warning(sprintf('Update to %s from %s.', $latestRelease, $currentVersion));
+        $endOfLife = \DateTime::createFromFormat('m/Y', $response['eol'])->format('F, Y');
+
+        if (true === $response['is_eoled']) {
+            return new Failure(sprintf('Symfony branch "%s" reached it\'s end of life in %s.', $currentBranch, $endOfLife));
+        }
+
+        $currentVersion = Kernel::VERSION;
+        $latestRelease = $this->getLatestVersion($currentBranch); // eg. 2.0.12
+
+        if (version_compare($currentVersion, $latestRelease) < 0) {
+            return new Warning(sprintf('There is a new release - update to %s from %s.', $latestRelease, $currentVersion));
+        }
+
+        return new Success(sprintf('Your current Symfony branch reaches it\'s end of life in %s.', $endOfLife));
     }
 
     /**
@@ -37,10 +57,58 @@ class SymfonyVersion implements CheckInterface
         return 'Symfony version';
     }
 
-    private function getLatestSymfonyVersion()
+    /**
+     * @param string $branch
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getLatestVersion($branch)
     {
-        // Get GitHub JSON request
+        $response = $this->getResponseAndDecode(self::PACKAGIST_URL);
 
+        if (!isset($response['package']['versions'])) {
+            throw new \Exception('Invalid response from packagist.');
+        }
+
+        $branch = 'v'.$branch;
+
+        // filter out branches and versions without current minor version
+        $versions = array_filter(
+            $response['package']['versions'],
+            function ($value) use ($branch) {
+                $value = $value['version'];
+
+                if (stripos($value, 'PR') || stripos($value, 'RC') && stripos($value, 'BETA')) {
+                    return false;
+                }
+
+                return 0 === strpos($value, $branch);
+            }
+        );
+
+        // just get versions
+        $versions = array_keys($versions);
+
+        // sort tags
+        usort($versions, 'version_compare');
+
+        // reverse to ensure latest is first
+        $versions = array_reverse($versions);
+
+        return str_replace('v', '', $versions[0]);
+    }
+
+    /**
+     * @param $url
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    private function getResponseAndDecode($url)
+    {
         $opts = array(
             'http' => array(
                 'method' => 'GET',
@@ -48,38 +116,12 @@ class SymfonyVersion implements CheckInterface
             ),
         );
 
-        $context = stream_context_create($opts);
+        $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
 
-        $githubUrl = 'https://api.github.com/repos/symfony/symfony/tags';
-        $githubJSONResponse = file_get_contents($githubUrl, false, $context);
-
-        // Convert it to a PHP object
-
-        $githubResponseArray = json_decode($githubJSONResponse, true);
-        if (empty($githubResponseArray)) {
-            throw new \Exception('No valid response or no tags received from GitHub.');
+        if (empty($array)) {
+            throw new \Exception(sprintf('Invalid response from "%s".', $url));
         }
 
-        $tags = array();
-
-        foreach ($githubResponseArray as $tag) {
-            $tags[] = $tag['name'];
-        }
-
-        // Sort tags
-
-        usort($tags, 'version_compare');
-
-        // Filter out non final tags
-
-        $filteredTagList = array_filter($tags, function ($tag) {
-                return !stripos($tag, 'PR') && !stripos($tag, 'RC') && !stripos($tag, 'BETA');
-            });
-
-        // The first one is the last stable release for Symfony 2
-
-        $reverseFilteredTagList = array_reverse($filteredTagList);
-
-        return str_replace('v', '', $reverseFilteredTagList[0]);
+        return $array;
     }
 }
