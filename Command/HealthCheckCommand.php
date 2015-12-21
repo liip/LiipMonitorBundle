@@ -34,6 +34,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                     InputOption::VALUE_NONE,
                     'Suitable for using as a nagios NRPE command.'
                 ),
+                new InputOption('group', 'g', InputOption::VALUE_REQUIRED, 'List checks for given group'),
             ));
     }
 
@@ -46,7 +47,21 @@ class HealthCheckCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
-        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $group = $input->getOption('group');
+
+        if (is_null($group)) {
+            $group = $this->getContainer()->getParameter('liip_monitor.default_group');
+        }
+
+        $runnerServiceId = 'liip_monitor.runner_'.$group;
+
+        if (!$this->getContainer()->has($runnerServiceId)) {
+            $output->writeln('<error>No such group.</error>');
+
+            return 1;
+        }
+
+        $runner = $this->getContainer()->get('liip_monitor.runner_'.$group);
 
         if ($input->getOption('nagios')) {
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');

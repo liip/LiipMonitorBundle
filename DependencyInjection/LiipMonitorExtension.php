@@ -41,55 +41,82 @@ class LiipMonitorExtension extends Extension
             }
         }
 
+        $container->setParameter(sprintf('%s.default_group', $this->getAlias()), $config['default_group']);
+
         if (empty($config['checks'])) {
             return;
         }
 
-        foreach ($config['checks'] as $check => $values) {
-            if (empty($values)) {
+        $checksLoaded = array();
+        $containerParams = array();
+        foreach ($config['checks']['groups'] as $group => $checks) {
+            if (empty($checks)) {
                 continue;
             }
 
-            $loader->load('checks/'.$check.'.xml');
-            $prefix = sprintf('%s.check.%s', $this->getAlias(), $check);
-
-            switch ($check) {
-                case 'class_exists':
-                case 'cpu_performance':
-                case 'php_extensions':
-                case 'php_version':
-                case 'php_flags':
-                case 'readable_directory':
-                case 'writable_directory':
-                case 'process_running':
-                case 'doctrine_dbal':
-                case 'http_service':
-                case 'guzzle_http_service':
-                case 'memcache':
-                case 'redis':
-                case 'rabbit_mq':
-                case 'stream_wrapper_exists':
-                case 'file_ini':
-                case 'file_json':
-                case 'file_xml':
-                case 'file_yaml':
-                case 'expressions':
-                    $container->setParameter($prefix, $values);
+            foreach ($checks as $check => $values) {
+                if (empty($values)) {
                     continue;
-
-                case 'symfony_version':
-                    continue;
-
-                case 'opcache_memory':
-                    if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
-                        throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
-                    }
-            }
-
-            if (is_array($values)) {
-                foreach ($values as $key => $value) {
-                    $container->setParameter($prefix.'.'.$key, $value);
                 }
+
+                $containerParams['groups'][$group][$check] = $values;
+                $this->setParameters($container, $check, $group, $values);
+
+                if (!in_array($check, $checksLoaded)) {
+                    $loader->load('checks/'.$check.'.xml');
+                    $checksLoaded[] = $check;
+                }
+            }
+        }
+
+        $container->setParameter(sprintf('%s.checks', $this->getAlias()), $containerParams);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $checkName
+     * @param string           $group
+     * @param array            $values
+     */
+    private function setParameters(ContainerBuilder $container, $checkName, $group, $values)
+    {
+        $prefix = sprintf('%s.check.%s', $this->getAlias(), $checkName);
+        switch ($checkName) {
+            case 'class_exists':
+            case 'cpu_performance':
+            case 'php_extensions':
+            case 'php_version':
+            case 'php_flags':
+            case 'readable_directory':
+            case 'writable_directory':
+            case 'process_running':
+            case 'doctrine_dbal':
+            case 'http_service':
+            case 'guzzle_http_service':
+            case 'memcache':
+            case 'redis':
+            case 'rabbit_mq':
+            case 'stream_wrapper_exists':
+            case 'file_ini':
+            case 'file_json':
+            case 'file_xml':
+            case 'file_yaml':
+            case 'expressions':
+                $container->setParameter($prefix.'.'.$group, $values);
+                continue;
+
+            case 'symfony_version':
+                continue;
+
+            case 'opcache_memory':
+                if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
+                }
+        }
+
+        if (is_array($values)) {
+            foreach ($values as $key => $value) {
+                $container->setParameter($prefix.'.'.$key.'.'.$group, $value);
             }
         }
     }

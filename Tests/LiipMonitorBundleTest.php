@@ -25,6 +25,8 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithCompilerPasses()
     {
         $compilerPasses = array(
+            'Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass' => true,
+            'Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass' => true,
             'Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass' => true,
             'Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass' => true,
             'Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass' => true,

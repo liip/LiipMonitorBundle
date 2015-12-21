@@ -14,7 +14,7 @@
             <argument type="service" id="service_container" />
         </service>
         <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%">
-            <argument type="service" id="liip_monitor.runner" />
+            <argument type="service" id="service_container" />
             <argument type="service" id="liip_monitor.helper" />
             <argument>%liip_monitor.view_template%</argument>
         </service>
