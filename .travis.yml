@@ -22,9 +22,9 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=2.3.*
     - php: 5.6
-      env: SYMFONY_VERSION=2.8.*@dev
+      env: SYMFONY_VERSION=2.8.*
     - php: 5.6
-      env: SYMFONY_VERSION=3.0.*@dev
+      env: SYMFONY_VERSION=3.0.*
     - php: 5.3
       env: COMPOSER_FLAGS="--prefer-lowest"
 
