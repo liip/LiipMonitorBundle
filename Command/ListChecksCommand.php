@@ -9,21 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class ListChecksCommand extends ContainerAwareCommand
 {
-    /**
-     * @var string
-     */
-    private $defaultGroup;
-
-    /**
-     * @param string $defaultGroup
-     * @param null   $name
-     */
-    public function __construct($defaultGroup, $name = null)
-    {
-        $this->defaultGroup = $defaultGroup;
-        parent::__construct($name);
-    }
-
     protected function configure()
     {
         $this
@@ -31,13 +16,7 @@ class ListChecksCommand extends ContainerAwareCommand
             ->setDescription('Lists Health Checks')
             ->addOption('all', 'a', InputOption::VALUE_NONE, 'Lists Health Checks of all groups')
             ->addOption('reporters', 'r', InputOption::VALUE_NONE, 'List registered additional reporters')
-            ->addOption(
-                'group',
-                'g',
-                InputOption::VALUE_REQUIRED,
-                'List checks for given group',
-                $this->defaultGroup
-            )
+            ->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'List checks for given group')
             ->addOption('groups', 'G', InputOption::VALUE_NONE, 'List all registered groups')
         ;
     }
@@ -63,6 +42,11 @@ class ListChecksCommand extends ContainerAwareCommand
     protected function listChecks(InputInterface $input, OutputInterface $output)
     {
         $group = $input->getOption('group');
+
+        if (is_null($group)) {
+            $group = $this->getContainer()->getParameter('liip_monitor.default_group');
+        }
+
         $runnerServiceId = 'liip_monitor.runner_'.$group;
 
         if (!$this->getContainer()->has($runnerServiceId)) {

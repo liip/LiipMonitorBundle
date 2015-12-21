@@ -10,21 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class HealthCheckCommand extends ContainerAwareCommand
 {
-    /**
-     * @var string
-     */
-    private $defaultGroup;
-
-    /**
-     * @param string $defaultGroup
-     * @param null   $name
-     */
-    public function __construct($defaultGroup, $name = null)
-    {
-        $this->defaultGroup = $defaultGroup;
-        parent::__construct($name);
-    }
-
     protected function configure()
     {
         $this
@@ -49,13 +34,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                     InputOption::VALUE_NONE,
                     'Suitable for using as a nagios NRPE command.'
                 ),
-                new InputOption(
-                    'group',
-                    'g',
-                    InputOption::VALUE_REQUIRED,
-                    'List checks for given group',
-                    $this->defaultGroup
-                ),
+                new InputOption('group', 'g', InputOption::VALUE_REQUIRED, 'List checks for given group'),
             ));
     }
 
@@ -69,6 +48,11 @@ class HealthCheckCommand extends ContainerAwareCommand
     {
         $checkName = $input->getArgument('checkName');
         $group = $input->getOption('group');
+
+        if (is_null($group)) {
+            $group = $this->getContainer()->getParameter('liip_monitor.default_group');
+        }
+
         $runnerServiceId = 'liip_monitor.runner_'.$group;
 
         if (!$this->getContainer()->has($runnerServiceId)) {
