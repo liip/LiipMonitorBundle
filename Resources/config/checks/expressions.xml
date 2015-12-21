@@ -10,7 +10,7 @@
 
     <services>
         <service id="liip_monitor.check.expressions" public="false" class="%liip_monitor.check.expressions.class%">
-            <argument>__liip_monitor.check.expressions__</argument>
+            <argument>%%liip_monitor.check.expressions%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
     </services>

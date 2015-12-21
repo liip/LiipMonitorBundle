@@ -70,7 +70,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
                 $tmpDefinition->addTag($tag, array('group' => $group, 'alias' => $checkName));
 
                 foreach ($tmpDefinition->getArguments() as $argumentIndex => $argument) {
-                    if (is_string($argument) && preg_match('/^__(.*)__$/', $argument, $matches)) {
+                    if (is_string($argument) && preg_match('/^%%(.*)%%$/', $argument, $matches)) {
                         $newArgument = $container->getParameter($matches[1].'.'.$group);
                         $tmpDefinition->replaceArgument($argumentIndex, $newArgument);
                     }

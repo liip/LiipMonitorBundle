@@ -11,9 +11,9 @@
 
     <services>
         <service id="liip_monitor.check.file_json" public="false" class="%liip_monitor.check.file_json.class%">
-            <argument>__liip_monitor.check.file_json__</argument>
+            <argument>%%liip_monitor.check.file_json%%</argument>
             <call method="setLabel">
-                <argument>__liip_monitor.check.file_json.label__</argument>
+                <argument>%%liip_monitor.check.file_json.label%%</argument>
             </call>
             <tag name="liip_monitor.check" alias="file_json" />
         </service>

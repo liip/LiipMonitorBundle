@@ -10,7 +10,7 @@
 
     <services>
         <service id="liip_monitor.check.rabbit_mq" public="false" class="%liip_monitor.check.rabbit_mq.class%">
-            <argument>__liip_monitor.check.rabbit_mq__</argument>
+            <argument>%%liip_monitor.check.rabbit_mq%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
     </services>

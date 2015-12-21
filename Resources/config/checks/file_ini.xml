@@ -11,9 +11,9 @@
 
     <services>
         <service id="liip_monitor.check.file_ini" public="false" class="%liip_monitor.check.file_ini.class%">
-            <argument>__liip_monitor.check.file_ini__</argument>
+            <argument>%%liip_monitor.check.file_ini%%</argument>
             <call method="setLabel">
-                <argument>__liip_monitor.check.file_ini.label__</argument>
+                <argument>%%liip_monitor.check.file_ini.label%%</argument>
             </call>
             <tag name="liip_monitor.check" alias="file_ini" />
         </service>
