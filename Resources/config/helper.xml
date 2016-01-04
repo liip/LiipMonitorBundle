@@ -7,10 +7,15 @@
     <parameters>
         <parameter key="liip_monitor.helper.raw_console_reporter.class">Liip\MonitorBundle\Helper\RawConsoleReporter</parameter>
         <parameter key="liip_monitor.helper.console_reporter.class">Liip\MonitorBundle\Helper\ConsoleReporter</parameter>
+        <parameter key="liip_monitor.helper.runner_manager.class">Liip\MonitorBundle\Helper\RunnerManager</parameter>
     </parameters>
 
     <services>
         <service id="liip_monitor.helper.raw_console_reporter" class="%liip_monitor.helper.raw_console_reporter.class%" />
         <service id="liip_monitor.helper.console_reporter" class="%liip_monitor.helper.console_reporter.class%" />
+
+        <service id="liip_monitor.helper.runner_manager" class="%liip_monitor.helper.runner_manager.class%">
+                <argument type="service" id="service_container" />
+        </service>
     </services>
 </container>

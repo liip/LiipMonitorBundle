@@ -10,7 +10,7 @@
 
     <services>
         <service id="liip_monitor.check.guzzle_http_service" public="false" class="%liip_monitor.check.guzzle_http_service.class%">
-            <argument>%liip_monitor.check.guzzle_http_service%</argument>
+            <argument>%%liip_monitor.check.guzzle_http_service%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
     </services>

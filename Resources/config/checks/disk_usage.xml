@@ -10,9 +10,9 @@
 
     <services>
         <service id="liip_monitor.check.disk_usage" public="false" class="%liip_monitor.check.disk_usage.class%">
-            <argument>%liip_monitor.check.disk_usage.warning%</argument>
-            <argument>%liip_monitor.check.disk_usage.critical%</argument>
-            <argument>%liip_monitor.check.disk_usage.path%</argument>
+            <argument>%%liip_monitor.check.disk_usage.warning%%</argument>
+            <argument>%%liip_monitor.check.disk_usage.critical%%</argument>
+            <argument>%%liip_monitor.check.disk_usage.path%%</argument>
             <tag name="liip_monitor.check" alias="disk_usage" />
         </service>
     </services>
