@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\Command;
 
+use Liip\MonitorBundle\Helper\RunnerManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,6 +35,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                     InputOption::VALUE_NONE,
                     'Suitable for using as a nagios NRPE command.'
                 ),
+                new InputOption('group', 'g', InputOption::VALUE_REQUIRED, 'List checks for given group'),
             ));
     }
 
@@ -46,7 +48,17 @@ class HealthCheckCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $checkName = $input->getArgument('checkName');
-        $runner = $this->getContainer()->get('liip_monitor.runner');
+        $group = $input->getOption('group');
+
+        /** @var RunnerManager $runnerManager */
+        $runnerManager = $this->getContainer()->get('liip_monitor.helper.runner_manager');
+        $runner = $runnerManager->getRunner($group);
+
+        if (null === $runner) {
+            $output->writeln('<error>No such group.</error>');
+
+            return 1;
+        }
 
         if ($input->getOption('nagios')) {
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');

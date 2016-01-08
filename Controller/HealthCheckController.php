@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Controller;
 
 use Liip\MonitorBundle\Helper\ArrayReporter;
+use Liip\MonitorBundle\Helper\RunnerManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,17 +12,18 @@ use Liip\MonitorBundle\Helper\PathHelper;
 
 class HealthCheckController
 {
-    protected $runner;
+    protected $runnerManager;
     protected $pathHelper;
     protected $template;
 
     /**
-     * @param Runner     $runner
-     * @param PathHelper $pathHelper
+     * @param RunnerManager $runnerManager
+     * @param PathHelper    $pathHelper
+     * @param               $template
      */
-    public function __construct(Runner $runner, PathHelper $pathHelper, $template)
+    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template)
     {
-        $this->runner = $runner;
+        $this->runnerManager = $runnerManager;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
     }
@@ -33,9 +35,11 @@ class HealthCheckController
      */
     public function indexAction(Request $request)
     {
+        $group = $this->getGroup($request);
+
         $urls = $this->pathHelper->getRoutesJs(array(
-            'liip_monitor_run_all_checks' => array(),
-            'liip_monitor_run_single_check' => array('checkId' => 'replaceme'),
+            'liip_monitor_run_all_checks' => array('group' => $group),
+            'liip_monitor_run_single_check' => array('checkId' => 'replaceme', 'group' => $group),
         ));
 
         $css = $this->pathHelper->getStyleTags(array(
@@ -61,15 +65,43 @@ class HealthCheckController
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $ret = array();
 
-        foreach ($this->runner->getChecks() as $alias => $check) {
+        $runner = $this->getRunner($request);
+
+        foreach ($runner->getChecks() as $alias => $check) {
             $ret[] = $alias;
         }
 
         return new JsonResponse($ret);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function listAllAction()
+    {
+        $allChecks = array();
+
+        foreach ($this->runnerManager->getRunners() as $group => $runner) {
+            foreach ($runner->getChecks() as $alias => $check) {
+                $allChecks[$group][] = $alias;
+            }
+        }
+
+        return new JsonResponse($allChecks);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function listGroupsAction()
+    {
+        $groups = $this->runnerManager->getGroups();
+
+        return new JsonResponse($groups);
     }
 
     /**
@@ -146,10 +178,43 @@ class HealthCheckController
         }
 
         $reporter = new ArrayReporter();
-        $this->runner->addReporter($reporter);
-        $this->runner->useAdditionalReporters($reporters);
-        $this->runner->run($checkId);
+
+        $runner = $this->getRunner($request);
+
+        $runner->addReporter($reporter);
+        $runner->useAdditionalReporters($reporters);
+        $runner->run($checkId);
 
         return $reporter;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Runner
+     *
+     * @throws \Exception
+     */
+    private function getRunner(Request $request)
+    {
+        $group = $this->getGroup($request);
+
+        $runner = $this->runnerManager->getRunner($group);
+
+        if ($runner) {
+            return $runner;
+        }
+
+        throw new \RuntimeException(sprintf('Unknown check group "%s"', $group));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getGroup(Request $request)
+    {
+        return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
     }
 }
