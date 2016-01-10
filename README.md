@@ -234,8 +234,8 @@ Both CLI commands have a `--group=...` option. If it is not given, the default g
 
     ./app/console monitor:health --group=app_server
 
-Additionally, the `monitor:list` command has two more options, `--groups` and `--all`. The former to list all
-registered groups, the latter to list the health checks of all groups.
+Both commands, `monitor:list` and `monitor:health`, have an option `--all` to list or run the checks of all registered
+groups. Additionally, the `monitor:list` has an option `--groups` to list all registered groups.
 
 ## Full Default Config
 
