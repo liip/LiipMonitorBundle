@@ -16,27 +16,26 @@ class HealthCheckCommand extends ContainerAwareCommand
         $this
             ->setName('monitor:health')
             ->setDescription('Runs Health Checks')
-            ->setDefinition(array(
-                new InputArgument(
-                    'checkName',
-                    InputArgument::OPTIONAL,
-                    'The name of the service to be used to perform the health check.'
-                ),
-                new InputOption(
-                    'reporter',
-                    null,
-                    InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                    'Additional reporters to run.',
-                    array()
-                ),
-                new InputOption(
-                    'nagios',
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Suitable for using as a nagios NRPE command.'
-                ),
-                new InputOption('group', 'g', InputOption::VALUE_REQUIRED, 'List checks for given group'),
-            ));
+            ->addArgument(
+                'checkName',
+                InputArgument::OPTIONAL,
+                'The name of the service to be used to perform the health check.'
+            )
+            ->addOption(
+                'reporter',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Additional reporters to run.'
+            )
+            ->addOption('nagios', null, InputOption::VALUE_NONE, 'Suitable for using as a nagios NRPE command.')
+            ->addOption(
+                'group',
+                'g',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Run Health Checks for given group'
+            )
+            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Run Health Checks of all groups')
+        ;
     }
 
     /**
@@ -47,44 +46,62 @@ class HealthCheckCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $failureCount = 0;
+
+        $groups = $input->getOption('group') ?: array(null);
+        $allGroups = $input->getOption('all');
         $checkName = $input->getArgument('checkName');
-        $group = $input->getOption('group');
+        $nagios = $input->getOption('nagios');
+        $additionalReporters = $input->getOption('reporter');
 
-        /** @var RunnerManager $runnerManager */
-        $runnerManager = $this->getContainer()->get('liip_monitor.helper.runner_manager');
-        $runner = $runnerManager->getRunner($group);
-
-        if (null === $runner) {
-            $output->writeln('<error>No such group.</error>');
-
-            return 1;
-        }
-
-        if ($input->getOption('nagios')) {
+        if ($nagios) {
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
         } else {
             $reporter = $this->getContainer()->get('liip_monitor.helper.console_reporter');
         }
 
-        $runner->addReporter($reporter);
-        $runner->useAdditionalReporters($input->getOption('reporter'));
+        /** @var RunnerManager $runnerManager */
+        $runnerManager = $this->getContainer()->get('liip_monitor.helper.runner_manager');
 
-        if (0 === count($runner->getChecks())) {
-            $output->writeln('<error>No checks configured.</error>');
+        if ($allGroups) {
+            $groups = $runnerManager->getGroups();
         }
 
-        /** @var \ZendDiagnostics\Result\Collection $results */
-        $results = $runner->run($checkName);
-        if ($input->getOption('nagios')) {
-            if ($results->getUnknownCount()) {
-                return 3;
-            } elseif ($results->getFailureCount()) {
-                return 2;
-            } elseif ($results->getWarningCount()) {
+        foreach ($groups as $group) {
+            if (count($groups) > 1 || $allGroups) {
+                $output->writeln(sprintf('<fg=yellow;options=bold>%s</>', $group));
+            }
+
+            $runner = $runnerManager->getRunner($group);
+
+            if (null === $runner) {
+                $output->writeln('<error>No such group.</error>');
+
                 return 1;
             }
+
+            $runner->addReporter($reporter);
+            $runner->useAdditionalReporters($additionalReporters);
+
+            if (0 === count($runner->getChecks())) {
+                $output->writeln('<error>No checks configured.</error>');
+            }
+
+            $results = $runner->run($checkName);
+
+            if ($nagios) {
+                if ($results->getUnknownCount()) {
+                    return 3;
+                } elseif ($results->getFailureCount()) {
+                    return 2;
+                } elseif ($results->getWarningCount()) {
+                    return 1;
+                }
+            }
+
+            $failureCount += $results->getFailureCount();
         }
 
-        return $results->getFailureCount() ? 1 : 0;
+        return $failureCount > 0 ? 1 : 0;
     }
 }
