@@ -12,9 +12,8 @@ class PathHelper
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $symfony_version)
     {
-        $symfony_version = \Symfony\Component\HttpKernel\Kernel::VERSION;
         if ($container->has('templating.helper.assets') && version_compare($symfony_version, '3.0.0') === -1) {
             $this->assetsHelper = $container->get('templating.helper.assets');
         } else {
