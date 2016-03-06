@@ -103,12 +103,17 @@ class PathHelperTest extends \PHPUnit_Framework_TestCase
 
     private function getAssetHelperMock()
     {
-        $helper = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper')
-                       ->disableOriginalConstructor()
-                       ->getMock();
+        if (class_exists('Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper')) {
+            $helper = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper')
+                ->disableOriginalConstructor()
+                ->getMock();
+        } else {
+            $helper = $this->getMockBuilder('Symfony\Component\Templating\Helper\AssetsHelper')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
 
         $helper
-            ->expects($this->any())
             ->method('getUrl')
             ->will($this->returnCallback(function ($arg) { return 'url_'.$arg; }));
 
