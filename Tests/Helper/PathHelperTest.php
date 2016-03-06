@@ -28,15 +28,17 @@ class PathHelperTest extends \PHPUnit_Framework_TestCase
 
     private function getContainerSf3Mock()
     {
+        $routerMock = $this->getRouterMock();
+        $assetHelperMock = $this->getAssetHelperMock();
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($param) {
+            ->will($this->returnCallback(function ($param) use ($routerMock, $assetHelperMock) {
                 if ($param == 'router') {
-                    return $this->getRouterMock();
+                    return $routerMock;
                 } elseif ($param == 'assets.packages') {
-                    return $this->getAssetHelperMock();
+                    return $assetHelperMock;
                 }
                 throw new \Exception();
             }));
@@ -52,15 +54,17 @@ class PathHelperTest extends \PHPUnit_Framework_TestCase
 
     private function getContainerSf2Mock()
     {
+        $routerMock = $this->getRouterMock();
+        $assetHelperMock = $this->getAssetHelperMock();
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($param) {
+            ->will($this->returnCallback(function ($param) use ($routerMock, $assetHelperMock) {
                 if ($param == 'router') {
-                    return $this->getRouterMock();
+                    return $routerMock;
                 } elseif ($param == 'templating.helper.assets') {
-                    return $this->getAssetHelperMock();
+                    return $assetHelperMock;
                 }
                 throw new \Exception();
             }));
