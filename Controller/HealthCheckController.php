@@ -4,6 +4,8 @@ namespace Liip\MonitorBundle\Controller;
 
 use Liip\MonitorBundle\Helper\ArrayReporter;
 use Liip\MonitorBundle\Helper\RunnerManager;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,15 +19,25 @@ class HealthCheckController
     protected $template;
 
     /**
-     * @param RunnerManager $runnerManager
-     * @param PathHelper    $pathHelper
-     * @param               $template
+     * @var Psr\Log\LoggerInterface
      */
-    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template)
+    protected $log;
+
+    /**
+     * @param RunnerManager        $runnerManager
+     * @param PathHelper           $pathHelper
+     * @param string               $template
+     * @param LoggerInterface|null $log
+     */
+    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, LoggerInterface $log = null)
     {
         $this->runnerManager = $runnerManager;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
+        if ($log === null) {
+            $log = new NullLogger();
+        }
+        $this->log = $log;
     }
 
     /**
@@ -59,6 +71,7 @@ class HealthCheckController
         include $this->template;
         $content = ob_get_clean();
 
+        $this->log->debug('HealthCheckController | index');
         return new Response($content, 200, array('Content-Type' => 'text/html'));
     }
 
@@ -185,7 +198,32 @@ class HealthCheckController
         $runner->useAdditionalReporters($reporters);
         $runner->run($checkId);
 
+        $this->logTestStatus($reporter->getGlobalStatus() === ArrayReporter::STATUS_OK, $reporter);
+
         return $reporter;
+    }
+
+    private function statusIsNotOK(array $resultItem)
+    {
+        return $resultItem['status'] !== 0;
+    }
+
+    /**
+     * Send results to the Log.
+     *
+     * @param bool          $isOK     Did all the checks all returned OK?
+     * @param ArrayReporter $reporter Details of the tests
+     */
+    private function logTestStatus($isOK, ArrayReporter $reporter)
+    {
+        if ($isOK) {
+            $this->log->debug('HealthCheckController | runTests, OK');
+            return;
+        }
+
+        $failures = array_filter($reporter->getResults(), array($this, 'statusIsNotOK'));
+        $jsonStr = json_encode($failures);
+        $this->log->alert('HealthCheckController | runTests, FAILURE | '.$jsonStr);
     }
 
     /**

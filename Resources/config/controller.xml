@@ -17,6 +17,7 @@
             <argument type="service" id="liip_monitor.helper.runner_manager" />
             <argument type="service" id="liip_monitor.helper" />
             <argument>%liip_monitor.view_template%</argument>
+            <argument type="service" id="logger" on-invalid="ignore" />
         </service>
     </services>
 </container>
