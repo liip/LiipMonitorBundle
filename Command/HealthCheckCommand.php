@@ -58,6 +58,9 @@ class HealthCheckCommand extends ContainerAwareCommand
             $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
         } else {
             $reporter = $this->getContainer()->get('liip_monitor.helper.console_reporter');
+            if (method_exists($reporter, 'suppressOKs')) {
+                $reporter->suppressOKs($output->getVerbosity() <= OutputInterface::VERBOSITY_QUIET);
+            }
         }
 
         /** @var RunnerManager $runnerManager */

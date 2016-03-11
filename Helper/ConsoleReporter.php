@@ -23,6 +23,13 @@ class ConsoleReporter implements ReporterInterface
     protected $output;
 
     /**
+     * Should we hide the output when it is OK?
+     *
+     * @var boolean
+     */
+    protected $suppressOKs = false;
+
+    /**
      * @param OutputInterface $output
      */
     public function __construct(OutputInterface $output = null)
@@ -33,6 +40,11 @@ class ConsoleReporter implements ReporterInterface
         $this->output = $output;
     }
 
+    public function suppressOKs($suppressOKs)
+    {
+        $this->suppressOKs = $suppressOKs;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -40,6 +52,10 @@ class ConsoleReporter implements ReporterInterface
     {
         switch (true) {
             case $result instanceof SuccessInterface:
+                if ($this->suppressOKs) {
+                    return;
+                }
+
                 $this->output->write('<info>OK</info>');
                 break;
 
