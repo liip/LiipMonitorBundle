@@ -25,7 +25,7 @@ class ConsoleReporter implements ReporterInterface
     /**
      * Should we hide the output when it is OK?
      *
-     * @var boolean
+     * @var bool
      */
     protected $suppressOKs = false;
 
