@@ -5,7 +5,6 @@ namespace Liip\MonitorBundle\Controller;
 use Liip\MonitorBundle\Helper\ArrayReporter;
 use Liip\MonitorBundle\Helper\RunnerManager;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,19 +23,16 @@ class HealthCheckController
     protected $log;
 
     /**
-     * @param RunnerManager        $runnerManager
-     * @param PathHelper           $pathHelper
-     * @param string               $template
-     * @param LoggerInterface|null $log
+     * @param RunnerManager   $runnerManager
+     * @param PathHelper      $pathHelper
+     * @param string          $template
+     * @param LoggerInterface $log
      */
-    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, LoggerInterface $log = null)
+    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, LoggerInterface $log)
     {
         $this->runnerManager = $runnerManager;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
-        if ($log === null) {
-            $log = new NullLogger();
-        }
         $this->log = $log;
     }
 
@@ -72,6 +68,7 @@ class HealthCheckController
         $content = ob_get_clean();
 
         $this->log->debug('HealthCheckController | index');
+
         return new Response($content, 200, array('Content-Type' => 'text/html'));
     }
 
@@ -218,6 +215,7 @@ class HealthCheckController
     {
         if ($isOK) {
             $this->log->debug('HealthCheckController | runTests, OK');
+
             return;
         }
 
