@@ -331,6 +331,7 @@ liip_monitor:
                     name:
                         host:                 localhost
                         port:                 6379
+                        password:             null
 
                 # Attempt connection to given HTTP host and (optionally) check status code and page content
                 http_service:

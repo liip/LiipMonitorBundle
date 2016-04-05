@@ -175,6 +175,7 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('host')->defaultValue('localhost')->end()
                                 ->integerNode('port')->defaultValue(6379)->end()
+                                ->scalarNode('password')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()
