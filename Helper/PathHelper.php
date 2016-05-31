@@ -26,8 +26,18 @@ class PathHelper
     public function generateRoutes(array $routes)
     {
         $ret = array();
+
+        if (!method_exists($this->routerHelper, 'path')) {
+            // symfony 2.7 and lower don't have the path method, BC layer
+            foreach ($routes as $route => $params) {
+                $ret[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->generate($route, $params));
+            }
+
+            return $ret;
+        }
+
         foreach ($routes as $route => $params) {
-            $ret[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->generate($route, $params));
+            $ret[] = sprintf('api.%s = "%s";', $route, $this->routerHelper->path($route, $params));
         }
 
         return $ret;
