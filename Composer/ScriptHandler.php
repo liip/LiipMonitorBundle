@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Composer;
 
-use Composer\Script\CommandEvent;
+use Composer\Script\Event;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseHandler;
 
 /**
@@ -11,7 +11,7 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseHandler;
  */
 class ScriptHandler extends BaseHandler
 {
-    public static function checkHealth(CommandEvent $event)
+    public static function checkHealth(Event $event)
     {
         $options = self::getOptions($event);
 
