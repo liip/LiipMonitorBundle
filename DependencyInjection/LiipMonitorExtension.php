@@ -102,6 +102,7 @@ class LiipMonitorExtension extends Extension
             case 'file_xml':
             case 'file_yaml':
             case 'expressions':
+            case 'pdo_connections':
                 $container->setParameter($prefix.'.'.$group, $values);
                 continue;
 
@@ -112,6 +113,7 @@ class LiipMonitorExtension extends Extension
                 if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
                     throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
                 }
+                continue;
         }
 
         if (is_array($values)) {
