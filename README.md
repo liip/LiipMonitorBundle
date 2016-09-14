@@ -395,6 +395,16 @@ liip_monitor:
 
                 # Find and validate YAML files
                 file_yaml:            [] # Example: ['path/to/my.yml']
+                
+                # PDO connections to check for connection
+                pdo_connections:
+
+                    # Prototype
+                    name:
+                        dsn:                  null
+                        username:             null
+                        password:             null
+                        timeout:              1
 
                 # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
                 expressions:

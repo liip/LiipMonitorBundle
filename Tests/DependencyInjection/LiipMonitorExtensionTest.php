@@ -190,6 +190,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             array('file_xml', array('foo.xml'), 'ZendDiagnostics\Check\XmlFile'),
             array('file_yaml', array('foo.yaml'), 'ZendDiagnostics\Check\YamlFile'),
             array('expressions', array('foo' => array('label' => 'foo', 'critical_expression' => 'true')), 'Liip\MonitorBundle\Check\Expression', 'expression_foo'),
+            array('pdo_connections', array('foo' => array('dsn' => 'my-dsn')), 'ZendDiagnostics\Check\PDOCheck', 'pdo_foo'),
         );
     }
 
