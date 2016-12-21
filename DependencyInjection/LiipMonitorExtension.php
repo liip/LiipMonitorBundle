@@ -114,6 +114,22 @@ class LiipMonitorExtension extends Extension
                 }
                 continue;
 
+            case 'doctrine_migrations':
+                if (!class_exists('ZendDiagnostics\Check\DoctrineMigration')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.0.6" of "ZendDiagnostics"');
+                }
+
+                if (!class_exists('Doctrine\Bundle\MigrationsBundle\Command\DoctrineCommand')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.0.0" of "DoctrineMigrationsBundle"');
+                }
+
+                if (!class_exists('Doctrine\DBAL\Migrations\Configuration\Configuration')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.1.0" of "Doctrine Migrations Library"');
+                }
+
+                $container->setParameter($prefix.'.'.$group, $values);
+                continue;
+
             case 'pdo_connections':
                 if (!class_exists('ZendDiagnostics\Check\PDOCheck')) {
                     throw new \InvalidArgumentException('Please require at least "v1.0.5" of "ZendDiagnostics"');
