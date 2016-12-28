@@ -2,10 +2,11 @@
 
 namespace Liip\MonitorBundle\Check;
 
+use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use ZendDiagnostics\Check\CheckCollectionInterface;
 use ZendDiagnostics\Check\CheckInterface;
-use Doctrine\Common\Persistence\ConnectionRegistry;
+use ZendDiagnostics\Check\DoctrineMigration as ZendDoctrineMigration;
 
 /**
  * Class DoctrineMigrationsCollection
@@ -20,13 +21,6 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
     private $container;
 
     /**
-     * Doctrine connection registry
-     *
-     * @var ConnectionRegistry
-     */
-    private $connectionRegistry;
-
-    /**
      * Available checks
      *
      * @var CheckInterface[]
@@ -34,27 +28,24 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
     private $checks;
 
     /**
-     * Migrations configuration
+     * Migrations configuration service ids
      *
-     * @var array
+     * @var string[]
      */
     private $migrations;
 
     /**
      * DoctrineMigrationsCollection constructor.
      *
-     * @param ContainerInterface $container          DI container
-     * @param ConnectionRegistry $connectionRegistry Connections registry
-     * @param array[]            $migrations         Migrations configuration
+     * @param ContainerInterface $container  DI container
+     * @param Configuration[]    $migrations Migrations configuration service ids
      */
     public function __construct(
         ContainerInterface $container,
-        ConnectionRegistry $connectionRegistry,
         array $migrations
     ) {
-        $this->container          = $container;
-        $this->connectionRegistry = $connectionRegistry;
-        $this->migrations         = $migrations;
+        $this->container  = $container;
+        $this->migrations = $migrations;
     }
 
     /**
@@ -65,19 +56,10 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
         if ($this->checks === null) {
             $this->checks = [];
             foreach ($this->migrations as $key => $migration) {
-                if (isset($this->checks[$migration['configuration_file']])) {
-                    continue;
-                }
-
-                $check = new DoctrineMigration(
-                    $this->container,
-                    $this->connectionRegistry,
-                    $migration[ 'connection' ],
-                    $migration[ 'configuration_file' ]
-                );
+                $check = new ZendDoctrineMigration($this->container->get($migration));
                 $check->setLabel(sprintf('Doctrine migrations "%s"', $key));
 
-                $this->checks[$migration['configuration_file']] = $check;
+                $this->checks[$key] = $check;
             }
         }
 
