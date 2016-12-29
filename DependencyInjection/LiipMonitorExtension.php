@@ -167,17 +167,6 @@ class LiipMonitorExtension extends Extension
             return;
         }
 
-        // -------
-        // This part must be in sync with Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
-        $map = array(
-            'xml'   => '\XmlConfiguration',
-            'yaml'  => '\YamlConfiguration',
-            'yml'   => '\YamlConfiguration',
-            'php'   => '\ArrayConfiguration',
-            'json'  => '\JsonConfiguration'
-        );
-        // --------
-
         foreach ($params['groups'] as $groupName => $groupChecks) {
             if (!isset($groupChecks['doctrine_migrations'])) {
                 continue;
@@ -185,62 +174,8 @@ class LiipMonitorExtension extends Extension
 
             $services = [];
             foreach ($groupChecks['doctrine_migrations'] as $key => $config) {
-                $filename = $container->getParameterBag()->resolveValue($config['configuration_file']);
-                $info     = pathinfo($filename);
-                // check we can support this file type
-                if (empty($map[$info['extension']])) {
-                    throw new \InvalidArgumentException('Given config file type is not supported');
-                }
-
-                $class  = 'Doctrine\DBAL\Migrations\Configuration';
-                $class .= $map[$info['extension']];
-                // -------
-
-                /** @var AbstractFileConfiguration $configuration */
-                $connection    = new Connection([], new Driver());
-                $configuration = new $class($connection); // needed for correct migration loading
-                $configuration->load($filename);
-
                 $serviceConfiguration =
-                    new DefinitionDecorator('liip_monitor.check.doctrine_migrations.abstract_configuration');
-                $serviceConfiguration->replaceArgument(
-                    0,
-                    new Reference(sprintf('doctrine.dbal.%s_connection', $config['connection']))
-                );
-
-                if ($configuration->getMigrationsNamespace()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsNamespace', [$configuration->getMigrationsNamespace()]);
-                }
-
-                if ($configuration->getMigrationsTableName()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsTableName', [$configuration->getMigrationsTableName()]);
-                }
-
-                if ($configuration->getMigrationsColumnName()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsColumnName', [$configuration->getMigrationsColumnName()]);
-                }
-
-                if ($configuration->getName()) {
-                    $serviceConfiguration->addMethodCall('setName', [$configuration->getName()]);
-                }
-
-                if ($configuration->getMigrationsDirectory()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsDirectory', [$configuration->getMigrationsDirectory()]);
-                }
-
-                /** @var AbstractFileConfiguration $diff */
-                $versions = $this->getPredefinedMigrations($configuration, $connection);
-                if ($versions) {
-                    $serviceConfiguration->addMethodCall('registerMigrations', [$versions]);
-                }
-
-                $serviceConfiguration->addMethodCall('configure', []);
-
-                if ($configuration->areMigrationsOrganizedByYear()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [true]);
-                } elseif ($configuration->areMigrationsOrganizedByYearAndMonth()) {
-                    $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [true]);
-                }
+                    $this->createMigrationConfigurationService($container, $config['configuration_file'], $config[ 'connection' ]);
 
                 $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
                 $container->setDefinition($serviceId, $serviceConfiguration);
@@ -277,5 +212,131 @@ class LiipMonitorExtension extends Extension
         }
 
         return $result;
+    }
+
+    /**
+     * Creates migration configuration service definition
+     *
+     * @param ContainerBuilder $container      DI Container
+     * @param string           $filename       File name with migration configuration
+     * @param string           $connectionName Connection name for container service
+     *
+     * @return DefinitionDecorator
+     */
+    private function createMigrationConfigurationService(ContainerBuilder $container, $filename, $connectionName)
+    {
+        /** @var AbstractFileConfiguration $configuration */
+        $connection    = new Connection([], new Driver()); // needed for correct migration loading
+        $configuration = $this->createTemporaryConfiguration($container, $connection, $filename);
+
+        $serviceConfiguration =
+            new DefinitionDecorator('liip_monitor.check.doctrine_migrations.abstract_configuration');
+        $serviceConfiguration->replaceArgument(
+            0,
+            new Reference(sprintf('doctrine.dbal.%s_connection', $connectionName))
+        );
+
+        if ($configuration->getMigrationsNamespace()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsNamespace',
+                [ $configuration->getMigrationsNamespace() ]
+            );
+        }
+
+        if ($configuration->getMigrationsTableName()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsTableName',
+                [ $configuration->getMigrationsTableName() ]
+            );
+        }
+
+        if ($configuration->getMigrationsColumnName()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsColumnName',
+                [ $configuration->getMigrationsColumnName() ]
+            );
+        }
+
+        if ($configuration->getName()) {
+            $serviceConfiguration->addMethodCall('setName', [ $configuration->getName() ]);
+        }
+
+        if ($configuration->getMigrationsDirectory()) {
+            $directory        = $configuration->getMigrationsDirectory();
+            $pathPlaceholders = array('kernel.root_dir', 'kernel.cache_dir', 'kernel.logs_dir');
+            foreach ($pathPlaceholders as $parameter) {
+                $kernelDir = realpath($container->getParameter($parameter));
+                if (strpos(realpath($directory), $kernelDir) === 0) {
+                    $directory = str_replace($kernelDir, "%{$parameter}%", $directory);
+                    break;
+                }
+            }
+
+
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsDirectory',
+                [ $directory ]
+            );
+        }
+
+        /** @var AbstractFileConfiguration $diff */
+        $versions = $this->getPredefinedMigrations($configuration, $connection);
+        if ($versions) {
+            $serviceConfiguration->addMethodCall('registerMigrations', [ $versions ]);
+        }
+
+        $serviceConfiguration->addMethodCall('configure', []);
+
+        if ($configuration->areMigrationsOrganizedByYear()) {
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [ true ]);
+
+            return $serviceConfiguration;
+        } elseif ($configuration->areMigrationsOrganizedByYearAndMonth()) {
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [ true ]);
+
+            return $serviceConfiguration;
+        }
+
+        return $serviceConfiguration;
+    }
+
+    /**
+     * Creates in-memory migration configuration for setting up container service
+     *
+     * @param ContainerBuilder $container  The container
+     * @param Connection       $connection Fake connection
+     * @param string           $filename   Migrations configuration file
+     *
+     * @return AbstractFileConfiguration
+     */
+    private function createTemporaryConfiguration(ContainerBuilder $container, Connection $connection, $filename)
+    {
+        // -------
+        // This part must be in sync with Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
+        $map = [
+            'xml'  => '\XmlConfiguration',
+            'yaml' => '\YamlConfiguration',
+            'yml'  => '\YamlConfiguration',
+            'php'  => '\ArrayConfiguration',
+            'json' => '\JsonConfiguration',
+        ];
+        // --------
+
+        $filename = $container->getParameterBag()->resolveValue($filename);
+        $info     = pathinfo($filename);
+        // check we can support this file type
+        if (empty($map[ $info[ 'extension' ] ])) {
+            throw new \InvalidArgumentException('Given config file type is not supported');
+        }
+
+        $class = 'Doctrine\DBAL\Migrations\Configuration';
+        $class .= $map[ $info[ 'extension' ] ];
+        // -------
+
+        /** @var AbstractFileConfiguration $configuration */
+        $configuration = new $class($connection);
+        $configuration->load($filename);
+
+        return $configuration;
     }
 }
