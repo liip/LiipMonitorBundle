@@ -336,6 +336,7 @@ class LiipMonitorExtension extends Extension
         /** @var AbstractFileConfiguration $configuration */
         $configuration = new $class($connection);
         $configuration->load($filename);
+        $configuration->validate();
 
         return $configuration;
     }
