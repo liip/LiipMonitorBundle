@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="liip_monitor.check.doctrine_migrations"
+                 public="false"
+                 class="Liip\MonitorBundle\Check\DoctrineMigrationsCollection">
+            <argument type="service" id="service_container" />
+            <argument>%%liip_monitor.check.doctrine_migrations%%</argument>
+
+            <tag name="liip_monitor.check_collection" />
+        </service>
+
+        <service id="liip_monitor.check.doctrine_migrations.abstract_configuration"
+                 class="Liip\MonitorBundle\DoctrineMigrations\Configuration"
+                 abstract="true">
+            <argument type="service" /> <!-- Connection -->
+
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+    </services>
+</container>

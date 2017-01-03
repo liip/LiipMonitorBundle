@@ -158,6 +158,32 @@ class Configuration implements ConfigurationInterface
                         ->info('Connection name or an array of connection names')
                         ->example('[default, crm]')
                     ->end()
+                    ->arrayNode('doctrine_migrations')
+                        ->useAttributeAsKey('name')
+                        ->info('Check if doctrine migrations are applied')
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('configuration_file')
+                                    ->isRequired()
+                                    ->cannotBeEmpty()
+                                    ->info('Absolute path to doctrine migrations configuration')
+                                ->end()
+                                ->scalarNode('connection')
+                                    ->isRequired()
+                                    ->cannotBeEmpty()
+                                    ->info('Connection name from doctrine DBAL configuration')
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->example(
+                            [
+                                'application_migrations' => [
+                                    'configuration_file' => '%kernel.root_dir%/Resources/config/migrations.yml',
+                                    'connection'         => 'default'
+                                ]
+                            ]
+                        )
+                    ->end()
                     ->arrayNode('memcache')
                         ->info('Check if MemCache extension is loaded and given server is reachable')
                         ->useAttributeAsKey('name')

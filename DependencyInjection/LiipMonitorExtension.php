@@ -2,10 +2,16 @@
 
 namespace Liip\MonitorBundle\DependencyInjection;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\PDOSqlite\Driver;
+use Doctrine\DBAL\Migrations\Configuration\AbstractFileConfiguration;
+use Doctrine\DBAL\Migrations\Configuration\Configuration as MigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class LiipMonitorExtension extends Extension
 {
@@ -70,6 +76,7 @@ class LiipMonitorExtension extends Extension
         }
 
         $container->setParameter(sprintf('%s.checks', $this->getAlias()), $containerParams);
+        $this->configureDoctrineMigrationsCheck($container, $containerParams);
     }
 
     /**
@@ -114,6 +121,22 @@ class LiipMonitorExtension extends Extension
                 }
                 continue;
 
+            case 'doctrine_migrations':
+                if (!class_exists('ZendDiagnostics\Check\DoctrineMigration')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.0.6" of "ZendDiagnostics"');
+                }
+
+                if (!class_exists('Doctrine\Bundle\MigrationsBundle\Command\DoctrineCommand')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.0.0" of "DoctrineMigrationsBundle"');
+                }
+
+                if (!class_exists('Doctrine\DBAL\Migrations\Configuration\Configuration')) {
+                    throw new \InvalidArgumentException('Please require at least "v1.1.0" of "Doctrine Migrations Library"');
+                }
+
+                $container->setParameter($prefix.'.'.$group, $values);
+                continue;
+
             case 'pdo_connections':
                 if (!class_exists('ZendDiagnostics\Check\PDOCheck')) {
                     throw new \InvalidArgumentException('Please require at least "v1.0.5" of "ZendDiagnostics"');
@@ -128,5 +151,193 @@ class LiipMonitorExtension extends Extension
                 $container->setParameter($prefix.'.'.$key.'.'.$group, $value);
             }
         }
+    }
+
+    /**
+     * Set up doctrine migration configuration services
+     *
+     * @param ContainerBuilder $container The container
+     * @param array            $params    Container params
+     *
+     * @return void
+     */
+    private function configureDoctrineMigrationsCheck(ContainerBuilder $container, array $params)
+    {
+        if (!$container->hasDefinition('liip_monitor.check.doctrine_migrations') || !isset($params['groups'])) {
+            return;
+        }
+
+        foreach ($params['groups'] as $groupName => $groupChecks) {
+            if (!isset($groupChecks['doctrine_migrations'])) {
+                continue;
+            }
+
+            $services = [];
+            foreach ($groupChecks['doctrine_migrations'] as $key => $config) {
+                $serviceConfiguration =
+                    $this->createMigrationConfigurationService($container, $config['configuration_file'], $config[ 'connection' ]);
+
+                $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
+                $container->setDefinition($serviceId, $serviceConfiguration);
+
+                $services[$key] = $serviceId;
+            }
+
+            $parameter = sprintf('%s.check.%s.%s', $this->getAlias(), 'doctrine_migrations', $groupName);
+            $container->setParameter($parameter, $services);
+        }
+    }
+
+    /**
+     * Return key-value array with migration version as key and class as a value defined in config file
+     *
+     * @param AbstractFileConfiguration $config Current configuration
+     * @param Connection                $connection Fake connections
+     *
+     * @return array[]
+     */
+    private function getPredefinedMigrations(AbstractFileConfiguration $config, Connection $connection)
+    {
+        $result = array();
+
+        $diff = new MigrationConfiguration($connection);
+        $diff->setMigrationsNamespace($config->getMigrationsNamespace());
+        $diff->setMigrationsDirectory($config->getMigrationsDirectory());
+        foreach ($config->getMigrations() as $version) {
+            $result[$version->getVersion()] = get_class($version->getMigration());
+        }
+
+        foreach ($diff->getAvailableVersions() as $version) {
+            unset($result[$version]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Creates migration configuration service definition
+     *
+     * @param ContainerBuilder $container      DI Container
+     * @param string           $filename       File name with migration configuration
+     * @param string           $connectionName Connection name for container service
+     *
+     * @return DefinitionDecorator
+     */
+    private function createMigrationConfigurationService(ContainerBuilder $container, $filename, $connectionName)
+    {
+        /** @var AbstractFileConfiguration $configuration */
+        $connection    = new Connection([], new Driver()); // needed for correct migration loading
+        $configuration = $this->createTemporaryConfiguration($container, $connection, $filename);
+
+        $serviceConfiguration =
+            new DefinitionDecorator('liip_monitor.check.doctrine_migrations.abstract_configuration');
+        $serviceConfiguration->replaceArgument(
+            0,
+            new Reference(sprintf('doctrine.dbal.%s_connection', $connectionName))
+        );
+
+        if ($configuration->getMigrationsNamespace()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsNamespace',
+                [ $configuration->getMigrationsNamespace() ]
+            );
+        }
+
+        if ($configuration->getMigrationsTableName()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsTableName',
+                [ $configuration->getMigrationsTableName() ]
+            );
+        }
+
+        if ($configuration->getMigrationsColumnName()) {
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsColumnName',
+                [ $configuration->getMigrationsColumnName() ]
+            );
+        }
+
+        if ($configuration->getName()) {
+            $serviceConfiguration->addMethodCall('setName', [ $configuration->getName() ]);
+        }
+
+        if ($configuration->getMigrationsDirectory()) {
+            $directory        = $configuration->getMigrationsDirectory();
+            $pathPlaceholders = array('kernel.root_dir', 'kernel.cache_dir', 'kernel.logs_dir');
+            foreach ($pathPlaceholders as $parameter) {
+                $kernelDir = realpath($container->getParameter($parameter));
+                if (strpos(realpath($directory), $kernelDir) === 0) {
+                    $directory = str_replace($kernelDir, "%{$parameter}%", $directory);
+                    break;
+                }
+            }
+
+
+            $serviceConfiguration->addMethodCall(
+                'setMigrationsDirectory',
+                [ $directory ]
+            );
+        }
+
+        /** @var AbstractFileConfiguration $diff */
+        $versions = $this->getPredefinedMigrations($configuration, $connection);
+        if ($versions) {
+            $serviceConfiguration->addMethodCall('registerMigrations', [ $versions ]);
+        }
+
+        $serviceConfiguration->addMethodCall('configure', []);
+
+        if ($configuration->areMigrationsOrganizedByYear()) {
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [ true ]);
+
+            return $serviceConfiguration;
+        } elseif ($configuration->areMigrationsOrganizedByYearAndMonth()) {
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [ true ]);
+
+            return $serviceConfiguration;
+        }
+
+        return $serviceConfiguration;
+    }
+
+    /**
+     * Creates in-memory migration configuration for setting up container service
+     *
+     * @param ContainerBuilder $container  The container
+     * @param Connection       $connection Fake connection
+     * @param string           $filename   Migrations configuration file
+     *
+     * @return AbstractFileConfiguration
+     */
+    private function createTemporaryConfiguration(ContainerBuilder $container, Connection $connection, $filename)
+    {
+        // -------
+        // This part must be in sync with Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
+        $map = [
+            'xml'  => '\XmlConfiguration',
+            'yaml' => '\YamlConfiguration',
+            'yml'  => '\YamlConfiguration',
+            'php'  => '\ArrayConfiguration',
+            'json' => '\JsonConfiguration',
+        ];
+        // --------
+
+        $filename = $container->getParameterBag()->resolveValue($filename);
+        $info     = pathinfo($filename);
+        // check we can support this file type
+        if (empty($map[ $info[ 'extension' ] ])) {
+            throw new \InvalidArgumentException('Given config file type is not supported');
+        }
+
+        $class = 'Doctrine\DBAL\Migrations\Configuration';
+        $class .= $map[ $info[ 'extension' ] ];
+        // -------
+
+        /** @var AbstractFileConfiguration $configuration */
+        $configuration = new $class($connection);
+        $configuration->load($filename);
+        $configuration->validate();
+
+        return $configuration;
     }
 }
