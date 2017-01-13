@@ -20,7 +20,8 @@ class DoctrineDbal extends AbstractCheck
     public function check()
     {
         $connection = $this->manager->getConnection($this->connectionName);
-        $connection->fetchColumn('SELECT 1');
+        $query = $connection->getDriver()->getDatabasePlatform()->getDummySelectSQL();
+        $connection->fetchColumn($query);
 
         return new Success();
     }
