@@ -7,11 +7,13 @@
     <parameters>
         <parameter key="liip_monitor.health_controller.class">Liip\MonitorBundle\Controller\HealthCheckController</parameter>
         <parameter key="liip_monitor.helper.class">Liip\MonitorBundle\Helper\PathHelper</parameter>
+        <parameter key="liip_monitor.symfony_version" type="constant">\Symfony\Component\HttpKernel\Kernel::VERSION</parameter>
     </parameters>
 
     <services>
         <service id="liip_monitor.helper" class="%liip_monitor.helper.class%">
             <argument type="service" id="service_container" />
+            <argument>%liip_monitor.symfony_version%</argument>
         </service>
         <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%">
             <argument type="service" id="liip_monitor.helper.runner_manager" />

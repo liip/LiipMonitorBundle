@@ -12,10 +12,14 @@ class PathHelper
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $symfony_version)
     {
-        $this->assetsHelper = $container->get('templating.helper.assets');
-        $this->routerHelper = $container->get('templating.helper.router');
+        if ($container->has('templating.helper.assets') && version_compare($symfony_version, '3.0.0') === -1) {
+            $this->assetsHelper = $container->get('templating.helper.assets');
+        } else {
+            $this->assetsHelper = $container->get('assets.packages');
+        }
+        $this->routerHelper = $container->get('router');
     }
 
     /**
