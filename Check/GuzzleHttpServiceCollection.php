@@ -14,6 +14,10 @@ class GuzzleHttpServiceCollection implements CheckCollectionInterface
 
     public function __construct(array $configs)
     {
+        if (!class_exists('Guzzle\Http\Client')) {
+            throw new \Exception('You need to include Guzzle in order to use the guzzle_http_service check');
+        }
+
         foreach ($configs as $name => $config) {
             $check = new GuzzleHttpService(
                 $config['url'],
