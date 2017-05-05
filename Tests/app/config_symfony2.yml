@@ -1,0 +1,11 @@
+# symfony 2 config (requires assets_base_urls for testing)
+framework:
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+    secret:        test
+    templating:
+        engines: ['twig']
+        assets_base_urls: { http: ["http://testurl"], ssl: ["http://testurl"] }
+    test: ~
+    profiler:
+        collect: false

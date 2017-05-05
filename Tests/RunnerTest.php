@@ -46,6 +46,6 @@ class RunnerTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockReporter()
     {
-        return $this->getMock('ZendDiagnostics\Runner\Reporter\ReporterInterface');
+        return $this->getMockBuilder('ZendDiagnostics\Runner\Reporter\ReporterInterface')->getMock();
     }
 }

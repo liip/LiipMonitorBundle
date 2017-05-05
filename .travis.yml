@@ -30,7 +30,7 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=3.2
     - php: 5.4
-      env: COMPOSER_FLAGS="--prefer-lowest"
+      env: SYMFONY_VERSION=2.3;COMPOSER_FLAGS="--prefer-lowest"
 
 before_install:
   - if [[ $TRAVIS_PHP_VERSION != '7.0' && $TRAVIS_PHP_VERSION != '7.1' && $TRAVIS_PHP_VERSION != 'hhvm' ]]; then phpenv config-rm xdebug.ini; fi
@@ -39,7 +39,7 @@ before_install:
 
 install: composer update --prefer-source $COMPOSER_FLAGS
 
-script: phpunit --coverage-text
+script: vendor/bin/phpunit --coverage-text
 
 notifications:
   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ

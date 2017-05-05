@@ -44,7 +44,7 @@ class RunnerManagerTest extends \PHPUnit_Framework_TestCase
             ->with('liip_monitor.runner_'.($group ?: 'default'))
             ->willReturn(true);
 
-        $expectedResult = $this->getMock('Liip\MonitorBundle\Runner');
+        $expectedResult = $this->getMockBuilder('Liip\MonitorBundle\Runner')->getMock();
 
         $this->container
             ->expects($this->any())
@@ -78,8 +78,9 @@ class RunnerManagerTest extends \PHPUnit_Framework_TestCase
             ->with('liip_monitor.runners')
             ->willReturn(array('liip_monitor.runner_group_1', 'liip_monitor.runner_group_2'));
 
-        $runner1 = $this->getMock('Liip\MonitorBundle\Runner');
-        $runner2 = $this->getMock('Liip\MonitorBundle\Runner');
+        $runnerMockBuilder = $this->getMockBuilder('Liip\MonitorBundle\Runner');
+        $runner1 = $runnerMockBuilder->getMock();
+        $runner2 = $runnerMockBuilder->getMock();
         $this->container
             ->expects($this->exactly(2))
             ->method('get')
@@ -132,7 +133,7 @@ class RunnerManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
 
         $this->runnerManager = new RunnerManager($this->container);
     }
