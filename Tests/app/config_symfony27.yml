@@ -1,0 +1,10 @@
+# symfony 2.7 config (no longer allows assets_base_urls)
+framework:
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+    secret:        test
+    templating:
+        engines: ['twig']
+    test: ~
+    profiler:
+        collect: false

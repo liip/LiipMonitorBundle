@@ -8,6 +8,10 @@
         </testsuite>
     </testsuites>
 
+    <php>
+        <server name="KERNEL_DIR" value="Tests/app" />
+    </php>
+
     <filter>
         <whitelist>
             <directory>./</directory>

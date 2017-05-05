@@ -34,7 +34,13 @@
         "symfony/expression-language": "~2.3|~3.0",
         "swiftmailer/swiftmailer": "~5.4",
         "doctrine/migrations": "~1.0",
-        "doctrine/doctrine-migrations-bundle": "~1.0"
+        "doctrine/doctrine-migrations-bundle": "~1.0",
+        "symfony/twig-bundle": "^2.0|^3.0",
+        "symfony/browser-kit": "^2.0|^3.0",
+        "symfony/asset": "^2.0|^3.0",
+        "symfony/templating": "^2.0|^3.0",
+        "phpunit/phpunit": "^4.8|^5.0",
+        "symfony/finder": "^2.0|^3.0"
     },
     "suggest": {
         "sensio/distribution-bundle": "To be able to use the composer ScriptHandler",

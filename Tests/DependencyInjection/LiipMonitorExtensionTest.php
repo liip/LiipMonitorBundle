@@ -201,7 +201,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     protected function compile()
     {
-        $this->container->set('doctrine', $this->getMock('Doctrine\Common\Persistence\ConnectionRegistry'));
+        $doctrineMock = $this->getMockBuilder('Doctrine\Common\Persistence\ConnectionRegistry')->getMock();
+        $this->container->set('doctrine', $doctrineMock);
         $this->container->addCompilerPass(new AddGroupsCompilerPass());
         $this->container->addCompilerPass(new GroupRunnersCompilerPass());
         $this->container->addCompilerPass(new CheckTagCompilerPass());
