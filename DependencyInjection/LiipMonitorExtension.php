@@ -98,6 +98,7 @@ class LiipMonitorExtension extends Extension
             case 'writable_directory':
             case 'process_running':
             case 'doctrine_dbal':
+            case 'doctrine_mongodb':
             case 'http_service':
             case 'guzzle_http_service':
             case 'memcache':

@@ -315,6 +315,9 @@ liip_monitor:
 
                 # Connection name or an array of connection names
                 doctrine_dbal:        null # Example: [default, crm]
+                
+                # Connection name or an array of connection names
+                doctrine_mongodb:        null # Example: [default, crm]
 
                 # Check if MemCache extension is loaded and given server is reachable
                 memcache:
