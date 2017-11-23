@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Tests;
 
 use Liip\MonitorBundle\LiipMonitorBundle;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 
 /**
  * Liip\MonitorBundle\Tests\LiipMonitorBundleTest.
@@ -42,8 +43,18 @@ class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
+        $definition = null;
+
+        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'registerForAutoconfiguration')) {
+            $this->container->method('registerForAutoconfiguration')->willReturn($definition = new ChildDefinition(''));
+        }
+
         $this->bundle->build($this->container);
         $this->assertEmpty($compilerPasses);
+
+        if ($definition) {
+            $this->assertTrue($definition->hasTag('liip_monitor.check'));
+        }
     }
 
     /**
