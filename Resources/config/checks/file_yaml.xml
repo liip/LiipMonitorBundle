@@ -13,7 +13,7 @@
         <service id="liip_monitor.check.file_yaml" public="false" class="%liip_monitor.check.file_yaml.class%">
             <argument>%%liip_monitor.check.file_yaml%%</argument>
             <call method="setLabel">
-                <argument>%%liip_monitor.check.file_yaml.label%%</argument>
+                <argument>%liip_monitor.check.file_yaml.label%</argument>
             </call>
             <tag name="liip_monitor.check" alias="file_yaml" />
         </service>
