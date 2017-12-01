@@ -1,4 +1,7 @@
-# symfony 2.7 config (no longer allows assets_base_urls)
+imports:
+    - { resource: services.yml }
+
+# symfony 3 config (requires assets defined)
 framework:
     router:
         resource: "%kernel.root_dir%/routing.yml"
@@ -6,5 +9,6 @@ framework:
     templating:
         engines: ['twig']
     test: ~
+    assets: ~
     profiler:
         collect: false
