@@ -1,3 +1,6 @@
+imports:
+    - { resource: services.yml }
+
 # symfony 3 config (requires assets defined)
 framework:
     router:

@@ -2,25 +2,15 @@
 
 namespace Liip\MonitorBundle\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class PathHelper
 {
     protected $assetsHelper;
     protected $routerHelper;
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct($assetsHelper, $routerHelper)
     {
-        // symfony3 does not define templating.helper.assets unless php templating is included
-        $this->assetsHelper = $container->has('templating.helper.assets') ?
-            $container->get('templating.helper.assets') : $container->get('assets.packages');
-
-        // symfony3 does not define templating.helper.router unless php templating is included
-        $this->routerHelper = $container->has('templating.helper.router') ?
-            $container->get('templating.helper.router') : $container->get('router');
+        $this->assetsHelper = $assetsHelper;
+        $this->routerHelper = $routerHelper;
     }
 
     /**
