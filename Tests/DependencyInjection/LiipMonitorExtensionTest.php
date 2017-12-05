@@ -208,6 +208,9 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->container->addCompilerPass(new CheckTagCompilerPass());
         $this->container->addCompilerPass(new CheckCollectionTagCompilerPass());
 
+        $runner = $this->container->getDefinition('liip_monitor.runner');
+        $runner->setPublic(true);
+
         parent::compile();
     }
 }
