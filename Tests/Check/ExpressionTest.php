@@ -7,7 +7,7 @@ use Liip\MonitorBundle\Check\Expression;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class ExpressionTest extends \PHPUnit_Framework_TestCase
+class ExpressionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider checkResultProvider

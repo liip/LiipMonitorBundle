@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 /**
  * Liip\MonitorBundle\Tests\LiipMonitorBundleTest.
  */
-class LiipMonitorBundleTest extends \PHPUnit_Framework_TestCase
+class LiipMonitorBundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

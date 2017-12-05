@@ -4,7 +4,7 @@ namespace Liip\MonitorBundle\Tests\Helper;
 
 use Liip\MonitorBundle\Helper\RunnerManager;
 
-class RunnerManagerTest extends \PHPUnit_Framework_TestCase
+class RunnerManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

@@ -22,7 +22,7 @@ class PathHelperTest extends WebTestCase
 
         $container = $client->getKernel()->getContainer();
 
-        $pathHelper = $container->get('path_helper');
+        $pathHelper = $container->get('liip_monitor.helper');
 
         // test route is defined in Tests/app/routing.yml
         $routes = $pathHelper->generateRoutes(['test_route' => []]);
