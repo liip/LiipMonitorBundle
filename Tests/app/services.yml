@@ -2,3 +2,6 @@ services:
     path_helper:
         alias: 'liip_monitor.helper'
         public: true
+    runner:
+        alias: 'liip_monitor.runner'
+        public: true

@@ -31,7 +31,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->load(array('checks' => array($name => $config)));
         $this->compile();
 
-        $runner = $this->container->get('liip_monitor.runner');
+        $runner = $this->container->get('runner');
 
         $this->assertCount($checkCount, $runner->getChecks());
         $this->assertInstanceOf($checkClass, $runner->getCheck($checkAlias));
@@ -42,7 +42,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->load();
         $this->compile();
 
-        $this->assertCount(0, $this->container->get('liip_monitor.runner')->getChecks());
+        $this->assertCount(0, $this->container->get('runner')->getChecks());
     }
 
     public function testDefaultGroupParameterHasNoChecks()
