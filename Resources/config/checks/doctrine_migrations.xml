@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="liip_monitor.check.doctrine_migrations"
-                 public="false"
+                 public="true"
                  class="Liip\MonitorBundle\Check\DoctrineMigrationsCollection">
             <argument type="service" id="service_container" />
             <argument>%%liip_monitor.check.doctrine_migrations%%</argument>

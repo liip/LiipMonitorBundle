@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.php_version" public="false" class="%liip_monitor.check.php_version.class%">
+        <service id="liip_monitor.check.php_version" public="true" class="%liip_monitor.check.php_version.class%">
             <argument>%%liip_monitor.check.php_version%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

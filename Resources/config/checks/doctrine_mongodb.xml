@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.doctrine_mongodb" public="false" class="%liip_monitor.check.doctrine_mongodb.class%">
+        <service id="liip_monitor.check.doctrine_mongodb" public="true" class="%liip_monitor.check.doctrine_mongodb.class%">
             <argument type="service" id="doctrine_mongodb" />
             <argument>%%liip_monitor.check.doctrine_mongodb%%</argument>
             <tag name="liip_monitor.check_collection" />

@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.symfony_version" public="false" class="%liip_monitor.check.symfony_version.class%">
+        <service id="liip_monitor.check.symfony_version" public="true" class="%liip_monitor.check.symfony_version.class%">
             <tag name="liip_monitor.check" alias="symfony_version" />
         </service>
     </services>

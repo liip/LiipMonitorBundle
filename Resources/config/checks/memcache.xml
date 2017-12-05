@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.memcache" public="false" class="%liip_monitor.check.memcache.class%">
+        <service id="liip_monitor.check.memcache" public="true" class="%liip_monitor.check.memcache.class%">
             <argument>%%liip_monitor.check.memcache%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

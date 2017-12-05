@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%">
+        <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%" public="true">
             <argument type="service" id="liip_monitor.helper.runner_manager" />
             <argument type="service" id="liip_monitor.helper" />
             <argument>%liip_monitor.view_template%</argument>

@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.security_advisory" public="false" class="%liip_monitor.check.security_advisory.class%">
+        <service id="liip_monitor.check.security_advisory" public="true" class="%liip_monitor.check.security_advisory.class%">
             <argument>%%liip_monitor.check.security_advisory.lock_file%%</argument>
             <tag name="liip_monitor.check" alias="security_advisory" />
         </service>
