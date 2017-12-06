@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.custom_error_pages" public="false" class="%liip_monitor.check.custom_error_pages.class%">
+        <service id="liip_monitor.check.custom_error_pages" public="true" class="%liip_monitor.check.custom_error_pages.class%">
             <argument>%%liip_monitor.check.custom_error_pages.error_codes%%</argument>
             <argument>%%liip_monitor.check.custom_error_pages.path%%</argument>
             <argument>%%liip_monitor.check.custom_error_pages.controller%%</argument>

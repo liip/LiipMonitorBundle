@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.doctrine_dbal" public="false" class="%liip_monitor.check.doctrine_dbal.class%">
+        <service id="liip_monitor.check.doctrine_dbal" public="true" class="%liip_monitor.check.doctrine_dbal.class%">
             <argument type="service" id="doctrine" />
             <argument>%%liip_monitor.check.doctrine_dbal%%</argument>
             <tag name="liip_monitor.check_collection" />

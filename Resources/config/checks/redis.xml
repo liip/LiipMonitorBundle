@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.redis" public="false" class="%liip_monitor.check.redis.class%">
+        <service id="liip_monitor.check.redis" public="true" class="%liip_monitor.check.redis.class%">
             <argument>%%liip_monitor.check.redis%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

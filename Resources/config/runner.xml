@@ -9,6 +9,6 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.runner" class="%liip_monitor.runner.class%" />
+        <service id="liip_monitor.runner" class="%liip_monitor.runner.class%" public="true" />
     </services>
 </container>

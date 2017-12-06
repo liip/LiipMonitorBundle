@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.writable_directory" public="false" class="%liip_monitor.check.writable_directory.class%">
+        <service id="liip_monitor.check.writable_directory" public="true" class="%liip_monitor.check.writable_directory.class%">
             <argument>%%liip_monitor.check.writable_directory%%</argument>
             <tag name="liip_monitor.check" alias="writable_directory" />
         </service>

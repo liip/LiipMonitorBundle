@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.expressions" public="false" class="%liip_monitor.check.expressions.class%">
+        <service id="liip_monitor.check.expressions" public="true" class="%liip_monitor.check.expressions.class%">
             <argument>%%liip_monitor.check.expressions%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

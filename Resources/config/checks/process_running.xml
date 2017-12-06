@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.process_running" public="false" class="%liip_monitor.check.process_running.class%">
+        <service id="liip_monitor.check.process_running" public="true" class="%liip_monitor.check.process_running.class%">
             <argument>%%liip_monitor.check.process_running%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

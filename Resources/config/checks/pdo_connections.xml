@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.pdo_connections" public="false" class="%liip_monitor.check.pdo_connections.class%">
+        <service id="liip_monitor.check.pdo_connections" public="true" class="%liip_monitor.check.pdo_connections.class%">
             <argument>%%liip_monitor.check.pdo_connections%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

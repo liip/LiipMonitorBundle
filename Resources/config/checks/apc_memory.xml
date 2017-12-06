@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.apc_memory" public="false" class="%liip_monitor.check.apc_memory.class%">
+        <service id="liip_monitor.check.apc_memory" public="true" class="%liip_monitor.check.apc_memory.class%">
             <argument>%%liip_monitor.check.apc_memory.warning%%</argument>
             <argument>%%liip_monitor.check.apc_memory.critical%%</argument>
             <tag name="liip_monitor.check" alias="apc_memory" />

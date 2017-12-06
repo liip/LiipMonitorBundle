@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.symfony_requirements" public="false" class="%liip_monitor.check.symfony_requirements.class%">
+        <service id="liip_monitor.check.symfony_requirements" public="true" class="%liip_monitor.check.symfony_requirements.class%">
             <argument>%%liip_monitor.check.symfony_requirements.file%%</argument>
             <tag name="liip_monitor.check" alias="symfony_requirements" />
         </service>

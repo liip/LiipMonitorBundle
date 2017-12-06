@@ -8,7 +8,7 @@ use ZendDiagnostics\Runner\Reporter\ReporterInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class RunnerTest extends \PHPUnit_Framework_TestCase
+class RunnerTest extends \PHPUnit\Framework\TestCase
 {
     public function testAdditionalReporters()
     {

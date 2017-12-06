@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.php_flags" public="false" class="%liip_monitor.check.php_flags.class%">
+        <service id="liip_monitor.check.php_flags" public="true" class="%liip_monitor.check.php_flags.class%">
             <argument>%%liip_monitor.check.php_flags%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>

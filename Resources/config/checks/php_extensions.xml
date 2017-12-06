@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.php_extensions" public="false" class="%liip_monitor.check.php_extensions.class%">
+        <service id="liip_monitor.check.php_extensions" public="true" class="%liip_monitor.check.php_extensions.class%">
             <argument>%%liip_monitor.check.php_extensions%%</argument>
             <tag name="liip_monitor.check" alias="php_extensions" />
         </service>

@@ -42,6 +42,9 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         }
 
         $container->setAlias('liip_monitor.runner', 'liip_monitor.runner_'.$defaultGroup);
+        $runner = $container->getAlias('liip_monitor.runner');
+        $runner->setPublic(true);
+
         $container->setParameter('liip_monitor.runners', $runners);
     }
 

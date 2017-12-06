@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.disk_usage" public="false" class="%liip_monitor.check.disk_usage.class%">
+        <service id="liip_monitor.check.disk_usage" public="true" class="%liip_monitor.check.disk_usage.class%">
             <argument>%%liip_monitor.check.disk_usage.warning%%</argument>
             <argument>%%liip_monitor.check.disk_usage.critical%%</argument>
             <argument>%%liip_monitor.check.disk_usage.path%%</argument>

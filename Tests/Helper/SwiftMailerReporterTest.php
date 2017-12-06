@@ -15,7 +15,7 @@ use ZendDiagnosticsTest\TestAsset\Result\Unknown;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class SwiftMailerReporterTest extends \PHPUnit_Framework_TestCase
+class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider sendNoEmailProvider

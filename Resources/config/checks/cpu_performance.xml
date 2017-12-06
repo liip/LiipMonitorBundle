@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.cpu_performance" public="false" class="%liip_monitor.check.cpu_performance.class%">
+        <service id="liip_monitor.check.cpu_performance" public="true" class="%liip_monitor.check.cpu_performance.class%">
             <argument>%%liip_monitor.check.cpu_performance%%</argument>
             <tag name="liip_monitor.check" alias="cpu_performance" />
         </service>

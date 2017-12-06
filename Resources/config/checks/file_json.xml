@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.file_json" public="false" class="%liip_monitor.check.file_json.class%">
+        <service id="liip_monitor.check.file_json" public="true" class="%liip_monitor.check.file_json.class%">
             <argument>%%liip_monitor.check.file_json%%</argument>
             <call method="setLabel">
                 <argument>%liip_monitor.check.file_json.label%</argument>
