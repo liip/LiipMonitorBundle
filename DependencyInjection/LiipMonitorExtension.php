@@ -54,7 +54,7 @@ class LiipMonitorExtension extends Extension
         // liip_monitor_helper is not always required
         if ($container->has('assets.packages')) {
             $helper = new Definition(PathHelper::class);
-            $helper->setArguments(['asset.packages', 'router']);
+            $helper->setArguments([new Reference('asset.packages'), new Reference('router')]);
             $helper->setPublic(true);
             $container->set('liip_monitor.helper', $helper);
         }
