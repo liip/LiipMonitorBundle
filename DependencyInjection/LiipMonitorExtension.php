@@ -6,8 +6,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver;
 use Doctrine\DBAL\Migrations\Configuration\AbstractFileConfiguration;
 use Doctrine\DBAL\Migrations\Configuration\Configuration as MigrationConfiguration;
+use Liip\MonitorBundle\Helper\PathHelper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -49,14 +51,22 @@ class LiipMonitorExtension extends Extension
 
         $container->setParameter(sprintf('%s.default_group', $this->getAlias()), $config['default_group']);
 
+        // liip_monitor_helper is not always required
+        if ($container->has('assets.packages')) {
+            $helper = new Definition(PathHelper::class);
+            $helper->setArguments(['asset.packages', 'router']);
+            $helper->setPublic(true);
+            $container->set('liip_monitor.helper', $helper);
+        }
+
         // symfony3 does not define templating.helper.assets unless php templating is included
-        if ($container->has('templating.helper.assets')) {
+        if ($container->has('templating.helper.assets') && $container->has('liip_monitor.helper')) {
             $pathHelper = $container->getDefinition('liip_monitor.helper');
             $pathHelper->replaceArgument(0, 'templating.helper.assets');
         }
 
         // symfony3 does not define templating.helper.router unless php templating is included
-        if ($container->has('templating.helper.router')) {
+        if ($container->has('templating.helper.router') && $container->has('liip_monitor.helper')) {
             $pathHelper = $container->getDefinition('liip_monitor.helper');
             $pathHelper->replaceArgument(1, 'templating.helper.router');
         }
