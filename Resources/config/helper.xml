@@ -8,14 +8,9 @@
         <parameter key="liip_monitor.helper.raw_console_reporter.class">Liip\MonitorBundle\Helper\RawConsoleReporter</parameter>
         <parameter key="liip_monitor.helper.console_reporter.class">Liip\MonitorBundle\Helper\ConsoleReporter</parameter>
         <parameter key="liip_monitor.helper.runner_manager.class">Liip\MonitorBundle\Helper\RunnerManager</parameter>
-        <parameter key="liip_monitor.helper.class">Liip\MonitorBundle\Helper\PathHelper</parameter>
     </parameters>
 
     <services>
-        <service id="liip_monitor.helper" class="%liip_monitor.helper.class%" public="true">
-            <argument type="service" id="assets.packages" />
-            <argument type="service" id="router" />
-        </service>
         <service id="liip_monitor.helper.raw_console_reporter" class="%liip_monitor.helper.raw_console_reporter.class%" public="true" />
         <service id="liip_monitor.helper.console_reporter" class="%liip_monitor.helper.console_reporter.class%" public="true" />
 
