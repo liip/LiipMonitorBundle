@@ -4,12 +4,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="liip_monitor.check.readable_directory.class">ZendDiagnostics\Check\DirReadable</parameter>
-    </parameters>
-
     <services>
-        <service id="liip_monitor.check.readable_directory" public="true" class="%liip_monitor.check.readable_directory.class%">
+        <service id="liip_monitor.check.readable_directory" public="true" class="ZendDiagnostics\Check\DirReadable">
             <argument>%%liip_monitor.check.readable_directory%%</argument>
             <tag name="liip_monitor.check" alias="readable_directory" />
         </service>

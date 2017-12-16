@@ -4,12 +4,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="liip_monitor.health_controller.class">Liip\MonitorBundle\Controller\HealthCheckController</parameter>
-    </parameters>
-
     <services>
-        <service id="liip_monitor.health_controller" class="%liip_monitor.health_controller.class%" public="true">
+        <service id="liip_monitor.health_controller" class="Liip\MonitorBundle\Controller\HealthCheckController" public="true">
             <argument type="service" id="liip_monitor.helper.runner_manager" />
             <argument type="service" id="liip_monitor.helper" />
             <argument>%liip_monitor.view_template%</argument>

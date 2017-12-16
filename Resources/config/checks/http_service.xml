@@ -4,12 +4,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="liip_monitor.check.http_service.class">Liip\MonitorBundle\Check\HttpServiceCollection</parameter>
-    </parameters>
-
     <services>
-        <service id="liip_monitor.check.http_service" public="true" class="%liip_monitor.check.http_service.class%">
+        <service id="liip_monitor.check.http_service" public="true" class="Liip\MonitorBundle\Check\HttpServiceCollection">
             <argument>%%liip_monitor.check.http_service%%</argument>
             <tag name="liip_monitor.check_collection" />
         </service>
