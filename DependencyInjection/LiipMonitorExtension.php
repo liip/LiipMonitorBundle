@@ -7,6 +7,7 @@ use Doctrine\DBAL\Driver\PDOSqlite\Driver;
 use Doctrine\DBAL\Migrations\Configuration\AbstractFileConfiguration;
 use Doctrine\DBAL\Migrations\Configuration\Configuration as MigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
@@ -234,7 +235,7 @@ class LiipMonitorExtension extends Extension
      * @param string           $filename       File name with migration configuration
      * @param string           $connectionName Connection name for container service
      *
-     * @return DefinitionDecorator
+     * @return DefinitionDecorator|ChildDefinition
      */
     private function createMigrationConfigurationService(ContainerBuilder $container, $filename, $connectionName)
     {
@@ -242,8 +243,12 @@ class LiipMonitorExtension extends Extension
         $connection    = new Connection([], new Driver()); // needed for correct migration loading
         $configuration = $this->createTemporaryConfiguration($container, $connection, $filename);
 
-        $serviceConfiguration =
-            new DefinitionDecorator('liip_monitor.check.doctrine_migrations.abstract_configuration');
+        $configurationServiceName = 'liip_monitor.check.doctrine_migrations.abstract_configuration';
+        $serviceConfiguration = class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
+            ? new ChildDefinition($configurationServiceName)
+            : new DefinitionDecorator($configurationServiceName)
+        ;
+
         $serviceConfiguration->replaceArgument(
             0,
             new Reference(sprintf('doctrine.dbal.%s_connection', $connectionName))
