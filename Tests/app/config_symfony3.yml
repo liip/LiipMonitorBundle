@@ -9,3 +9,6 @@ framework:
     assets: ~
     profiler:
         collect: false
+
+liip_monitor:
+    enable_controller: true

@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass;
+use Liip\MonitorBundle\DependencyInjection\Compiler\CheckAssetsEnabledPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
@@ -19,6 +20,7 @@ class LiipMonitorBundle extends Bundle
                 ->addTag('liip_monitor.check');
         }
 
+        $container->addCompilerPass(new CheckAssetsEnabledPass());
         $container->addCompilerPass(new AddGroupsCompilerPass());
         $container->addCompilerPass(new GroupRunnersCompilerPass());
         $container->addCompilerPass(new CheckTagCompilerPass());
