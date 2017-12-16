@@ -26,6 +26,7 @@ class LiipMonitorExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('runner.xml');
         $loader->load('helper.xml');
+        $loader->load('commands.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

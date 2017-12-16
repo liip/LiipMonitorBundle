@@ -2,19 +2,33 @@
 
 namespace Liip\MonitorBundle\Command;
 
+use Liip\MonitorBundle\Helper\ConsoleReporter;
+use Liip\MonitorBundle\Helper\RawConsoleReporter;
 use Liip\MonitorBundle\Helper\RunnerManager;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class HealthCheckCommand extends ContainerAwareCommand
+class HealthCheckCommand extends Command
 {
+    private $rawReporter;
+    private $reporter;
+    private $runnerManager;
+
+    public function __construct(ConsoleReporter $reporter, RawConsoleReporter $rawReporter, RunnerManager $runnerManager, $name = null)
+    {
+        $this->rawReporter = $rawReporter;
+        $this->reporter = $reporter;
+        $this->runnerManager = $runnerManager;
+
+        parent::__construct($name);
+    }
+
     protected function configure()
     {
         $this
-            ->setName('monitor:health')
             ->setDescription('Runs Health Checks')
             ->addArgument(
                 'checkName',
@@ -55,16 +69,13 @@ class HealthCheckCommand extends ContainerAwareCommand
         $additionalReporters = $input->getOption('reporter');
 
         if ($nagios) {
-            $reporter = $this->getContainer()->get('liip_monitor.helper.raw_console_reporter');
+            $reporter = $this->rawReporter;
         } else {
-            $reporter = $this->getContainer()->get('liip_monitor.helper.console_reporter');
+            $reporter = $this->reporter;
         }
 
-        /** @var RunnerManager $runnerManager */
-        $runnerManager = $this->getContainer()->get('liip_monitor.helper.runner_manager');
-
         if ($allGroups) {
-            $groups = $runnerManager->getGroups();
+            $groups = $this->runnerManager->getGroups();
         }
 
         foreach ($groups as $group) {
@@ -72,7 +83,7 @@ class HealthCheckCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<fg=yellow;options=bold>%s</>', $group));
             }
 
-            $runner = $runnerManager->getRunner($group);
+            $runner = $this->runnerManager->getRunner($group);
 
             if (null === $runner) {
                 $output->writeln('<error>No such group.</error>');
@@ -92,9 +103,11 @@ class HealthCheckCommand extends ContainerAwareCommand
             if ($nagios) {
                 if ($results->getUnknownCount()) {
                     return 3;
-                } elseif ($results->getFailureCount()) {
+                }
+                if ($results->getFailureCount()) {
                     return 2;
-                } elseif ($results->getWarningCount()) {
+                }
+                if ($results->getWarningCount()) {
                     return 1;
                 }
             }
