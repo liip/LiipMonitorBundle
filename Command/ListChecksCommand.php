@@ -4,15 +4,24 @@ namespace Liip\MonitorBundle\Command;
 
 use Liip\MonitorBundle\Helper\RunnerManager;
 use Liip\MonitorBundle\Runner;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class ListChecksCommand extends ContainerAwareCommand
+class ListChecksCommand extends Command
 {
-    /** @var RunnerManager */
     private $runnerManager;
+    private $runner;
+
+    public function __construct(RunnerManager $runnerManager, Runner $runner, $name = null)
+    {
+        $this->runnerManager = $runnerManager;
+        $this->runner = $runner;
+
+        parent::__construct($name);
+    }
 
     protected function configure()
     {
@@ -28,8 +37,6 @@ class ListChecksCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->runnerManager = $this->getContainer()->get('liip_monitor.helper.runner_manager');
-
         switch (true) {
             case $input->getOption('reporters'):
                 $this->listReporters($output);
@@ -78,7 +85,7 @@ class ListChecksCommand extends ContainerAwareCommand
      */
     protected function listReporters(OutputInterface $output)
     {
-        $reporters = $this->getContainer()->get('liip_monitor.runner')->getAdditionalReporters();
+        $reporters = $this->runner->getAdditionalReporters();
         if (0 === count($reporters)) {
             $output->writeln('<error>No additional reporters configured.</error>');
         }
