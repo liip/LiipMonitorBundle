@@ -42,7 +42,7 @@ class LiipMonitorExtension extends Extension
         }
 
         if ($config['mailer']['enabled']) {
-            $loader->load('helper/swift_mailer.xml');
+            $loader->load('swift_mailer.xml');
 
             foreach ($config['mailer'] as $key => $value) {
                 $container->setParameter(sprintf('%s.mailer.%s', $this->getAlias(), $key), $value);

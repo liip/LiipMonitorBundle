@@ -4,12 +4,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="liip_monitor.check.custom_error_pages.class">Liip\MonitorBundle\Check\CustomErrorPages</parameter>
-    </parameters>
-
     <services>
-        <service id="liip_monitor.check.custom_error_pages" public="true" class="%liip_monitor.check.custom_error_pages.class%">
+        <service id="liip_monitor.check.custom_error_pages" public="true" class="Liip\MonitorBundle\Check\CustomErrorPages">
             <argument>%%liip_monitor.check.custom_error_pages.error_codes%%</argument>
             <argument>%%liip_monitor.check.custom_error_pages.path%%</argument>
             <argument>%%liip_monitor.check.custom_error_pages.controller%%</argument>

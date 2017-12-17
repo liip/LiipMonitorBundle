@@ -5,12 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="liip_monitor.check.file_ini.class">ZendDiagnostics\Check\IniFile</parameter>
         <parameter key="liip_monitor.check.file_ini.label">File (INI)</parameter>
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.file_ini" public="true" class="%liip_monitor.check.file_ini.class%">
+        <service id="liip_monitor.check.file_ini" public="true" class="ZendDiagnostics\Check\IniFile">
             <argument>%%liip_monitor.check.file_ini%%</argument>
             <call method="setLabel">
                 <argument>%liip_monitor.check.file_ini.label%</argument>
