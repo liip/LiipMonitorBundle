@@ -1,4 +1,4 @@
-# symfony 3 config (requires assets defined)
+# symfony 4 config (requires assets defined)
 framework:
     router:
         resource: "%kernel.root_dir%/routing.yml"
@@ -9,3 +9,6 @@ framework:
     assets: ~
     profiler:
         collect: false
+
+liip_monitor:
+    enable_controller: true
