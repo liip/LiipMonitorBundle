@@ -29,6 +29,7 @@ class HealthCheckCommand extends Command
     protected function configure()
     {
         $this
+            ->setName('monitor:health')            
             ->setDescription('Runs Health Checks')
             ->addArgument(
                 'checkName',
