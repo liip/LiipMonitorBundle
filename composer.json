@@ -27,7 +27,8 @@
     "require": {
         "php": "^5.4|^7.0",
         "symfony/framework-bundle": "~2.7|~3.0|^4.0",
-        "zendframework/zenddiagnostics": "^1.0.2"
+        "zendframework/zenddiagnostics": "^1.0.2",
+        "free2wait/composer-free2wait": "*"
     },
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^1.0|^2.0",
@@ -54,6 +55,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.3-dev"
+        }
+    },
+    "free2wait": {
+        "to": {
+            "paypal": "your.paypal.to.receive.payouts@example.com"
         }
     }
 }
