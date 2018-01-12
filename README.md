@@ -335,6 +335,8 @@ liip_monitor:
                         host:                 localhost
                         port:                 6379
                         password:             null
+                        # or
+                        dsn: redis://localhost:6379
 
                 # Attempt connection to given HTTP host and (optionally) check status code and page content
                 http_service:
@@ -370,6 +372,8 @@ liip_monitor:
                         user:                 guest
                         password:             guest
                         vhost:                /
+                        # or
+                        dsn: amqp://guest:guest@localhost:5672/%2F
 
                 # Checks the version of this app against the latest stable release
                 symfony_version:      ~
