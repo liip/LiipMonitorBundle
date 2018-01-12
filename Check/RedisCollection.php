@@ -15,6 +15,11 @@ class RedisCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $name => $config) {
+            $config = array_merge($config, parse_url($config['dsn']));
+            if (isset($config['pass'])) {
+                $config['password'] = $config['pass'];
+            }
+
             $check = new Redis($config['host'], $config['port'], $config['password']);
             $check->setLabel(sprintf('Redis "%s"', $name));
 
