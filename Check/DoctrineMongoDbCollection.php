@@ -22,7 +22,7 @@ class DoctrineMongoDbCollection implements CheckCollectionInterface
             $check = new DoctrineMongoDb($manager, $connection);
             $check->setLabel(sprintf('Doctrine Mongo Db "%s" connection', $connection));
 
-            $this->checks[sprintf('doctrine_dbal_%s_connection', $connection)] = $check;
+            $this->checks[sprintf('doctrine_mongodb_%s_connection', $connection)] = $check;
         }
     }
 
