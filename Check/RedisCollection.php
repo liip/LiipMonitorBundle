@@ -15,7 +15,10 @@ class RedisCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $name => $config) {
-            $config = array_merge($config, parse_url($config['dsn']));
+            if (isset($config['dsn'])) {
+                $config = array_merge($config, parse_url($config['dsn']));
+            }
+
             if (isset($config['pass'])) {
                 $config['password'] = $config['pass'];
             }
