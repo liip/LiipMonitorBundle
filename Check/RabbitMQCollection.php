@@ -15,14 +15,18 @@ class RabbitMQCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $name => $config) {
-            $config = array_merge($config, parse_url($config['dsn']));
-
-            if (isset($config['pass'])) {
-                $config['password'] = $config['pass'];
-            }
-
-            if (isset($config['path'])) {
-                $config['vhost'] = urldecode(substr($config['path'], 1));
+            if (isset($config['dsn'])) {
+                $config = array_merge($config, parse_url($config['dsn']));
+                if (isset($config['pass'])) {
+                    $config['password'] = $config['pass'];
+                    // Cleanup
+                    unset($config['pass']);
+                }
+                if (isset($config['path'])) {
+                    $config['vhost'] = urldecode(substr($config['path'], 1));
+                    // Cleanup
+                    unset($config['path']);
+                }
             }
 
             $check = new RabbitMQ($config['host'], $config['port'], $config['user'], $config['password'], $config['vhost']);
