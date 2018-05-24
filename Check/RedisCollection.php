@@ -17,10 +17,11 @@ class RedisCollection implements CheckCollectionInterface
         foreach ($configs as $name => $config) {
             if (isset($config['dsn'])) {
                 $config = array_merge($config, parse_url($config['dsn']));
-            }
-
-            if (isset($config['pass'])) {
-                $config['password'] = $config['pass'];
+                if (isset($config['pass'])) {
+                    $config['password'] = $config['pass'];
+                    // Cleanup
+                    unset($config['pass']);
+                }
             }
 
             $check = new Redis($config['host'], $config['port'], $config['password']);
