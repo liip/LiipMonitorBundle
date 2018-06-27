@@ -4,13 +4,13 @@ namespace Liip\MonitorBundle\Tests\Helper;
 
 use Liip\MonitorBundle\Helper\SwiftMailerReporter;
 use Prophecy\Argument;
+use ZendDiagnostics\Result\AbstractResult;
 use ZendDiagnostics\Result\Collection;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\ResultInterface;
 use ZendDiagnostics\Result\Skip;
 use ZendDiagnostics\Result\Success;
 use ZendDiagnostics\Result\Warning;
-use ZendDiagnosticsTest\TestAsset\Result\Unknown;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -65,4 +65,8 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
             array(new Warning(), false),
         );
     }
+}
+
+class Unknown extends AbstractResult
+{
 }
