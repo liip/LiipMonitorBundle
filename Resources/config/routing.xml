@@ -4,27 +4,27 @@
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <route id="liip_monitor_health_interface" path="/">
-        <default key="_controller">liip_monitor.health_controller::indexAction</default>
+        <default key="_controller">liip_monitor.health_controller:indexAction</default>
     </route>
     <route id="liip_monitor_list_checks" path="/checks">
-        <default key="_controller">liip_monitor.health_controller::listAction</default>
+        <default key="_controller">liip_monitor.health_controller:listAction</default>
     </route>
     <route id="liip_monitor_list_all_checks" path="/all_checks">
-        <default key="_controller">liip_monitor.health_controller::listAllAction</default>
+        <default key="_controller">liip_monitor.health_controller:listAllAction</default>
     </route>
     <route id="liip_monitor_list_groups" path="/groups">
-        <default key="_controller">liip_monitor.health_controller::listGroupsAction</default>
+        <default key="_controller">liip_monitor.health_controller:listGroupsAction</default>
     </route>
     <route id="liip_monitor_run_all_checks_http_status" path="/http_status_checks">
-        <default key="_controller">liip_monitor.health_controller::runAllChecksHttpStatusAction</default>
+        <default key="_controller">liip_monitor.health_controller:runAllChecksHttpStatusAction</default>
     </route>
     <route id="liip_monitor_run_single_check_http_status" path="/http_status_check/{checkId}">
-        <default key="_controller">liip_monitor.health_controller::runSingleCheckHttpStatusAction</default>
+        <default key="_controller">liip_monitor.health_controller:runSingleCheckHttpStatusAction</default>
     </route>
     <route id="liip_monitor_run_all_checks" path="/run">
-        <default key="_controller">liip_monitor.health_controller::runAllChecksAction</default>
+        <default key="_controller">liip_monitor.health_controller:runAllChecksAction</default>
     </route>
     <route id="liip_monitor_run_single_check" path="/run/{checkId}">
-        <default key="_controller">liip_monitor.health_controller::runSingleCheckAction</default>
+        <default key="_controller">liip_monitor.health_controller:runSingleCheckAction</default>
     </route>
 </routes>
