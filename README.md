@@ -57,14 +57,9 @@ If you want to enable the REST API provided by the bundle then add the following
 
 ```yml
 _monitor:
-    resource: "@LiipMonitorBundle/Resources/config/routing.php"
+    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
     prefix: /monitor/health
 ```
-
-**Note**: Previous versions of this bundle used `@LiipMonitorBundle/Resources/config/routing.xml`. This
-uses a routing configuration notation that has been deprecated in Symfony 4.1. This configuration file has
-been kept for BC. If you are getting deprecation notices in 4.1, switch to `routing.php` which handles
-both notations.
 
 Then, enable the controller in your configuration:
 
