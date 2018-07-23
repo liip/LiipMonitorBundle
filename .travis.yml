@@ -3,7 +3,6 @@ sudo: required
 dist: trusty
 group: edge
 php:
-  - 5.6
   - 7.0
   - 7.1
   - 7.2
@@ -13,25 +12,18 @@ cache:
     - $HOME/.composer/cache/files
 
 env:
-  - SYMFONY_VERSION=2.7.*
+  - SYMFONY_VERSION=3.1.*
 
 matrix:
   include:
-    - php: 5.6
-      env: SYMFONY_VERSION=2.8.*
-    - php: 5.6
-      env: SYMFONY_VERSION=3.3.*
-    - php: 5.6
-      env: SYMFONY_VERSION=3.4.*
     - php: 7.1
       env: SYMFONY_VERSION=4.0.*
     - php: 7.2
-      env: SYMFONY_VERSION=4.0.*
-    - php: 5.6
-      env: SYMFONY_VERSION=2.7.*;COMPOSER_FLAGS="--prefer-lowest"
+      env: SYMFONY_VERSION=4.1.*
+    - php: 7.0
+      env: SYMFONY_VERSION=3.1.*;COMPOSER_FLAGS="--prefer-lowest"
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION != '7.0' && $TRAVIS_PHP_VERSION != '7.1' && $TRAVIS_PHP_VERSION != '7.2' ]]; then phpenv config-rm xdebug.ini; fi
   - echo "memory_limit = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi
 
