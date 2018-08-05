@@ -5,17 +5,35 @@ namespace Liip\MonitorBundle\DependencyInjection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver;
 use Doctrine\DBAL\Migrations\Configuration\AbstractFileConfiguration;
-use Doctrine\DBAL\Migrations\Configuration\Configuration as MigrationConfiguration;
+use Doctrine\DBAL\Migrations\Configuration\Configuration as DoctrineMigrationConfiguration;
+use Doctrine\DBAL\Migrations\MigrationException;
+use Liip\MonitorBundle\DoctrineMigrations\Configuration as LiipMigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class LiipMonitorExtension extends Extension
+class LiipMonitorExtension extends Extension implements CompilerPassInterface
 {
+    /**
+     * Tuple (migrationsConfiguration, tempConfiguration) for doctrine migrations check
+     *
+     * @var array
+     */
+    private $migrationConfigurationsServices = [];
+
+    /**
+     * Connection object needed for correct migration loading
+     *
+     * @var Connection
+     */
+    private $fakeConnection;
+
     /**
      * Loads the services based on your application configuration.
      *
@@ -24,6 +42,7 @@ class LiipMonitorExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $this->fakeConnection = new Connection([], new Driver());
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('runner.xml');
         $loader->load('helper.xml');
@@ -94,6 +113,22 @@ class LiipMonitorExtension extends Extension
     }
 
     /**
+     * @inheritDoc
+     */
+    public function process(ContainerBuilder $container)
+    {
+        foreach ($this->migrationConfigurationsServices as $services) {
+            list($configurationService, $configuration) = $services;
+            /** @var Definition $configurationService */
+            /** @var DoctrineMigrationConfiguration $configuration */
+            $versions = $this->getPredefinedMigrations($container, $configuration, $this->fakeConnection);
+            if ($versions) {
+                $configurationService->addMethodCall('registerMigrations', [ $versions ]);
+            }
+        }
+    }
+
+    /**
      * @param ContainerBuilder $container
      * @param string           $checkName
      * @param string           $group
@@ -142,10 +177,6 @@ class LiipMonitorExtension extends Extension
                     throw new \InvalidArgumentException('Please require at least "v1.0.6" of "ZendDiagnostics"');
                 }
 
-                if (!class_exists('Doctrine\Bundle\MigrationsBundle\Command\DoctrineCommand')) {
-                    throw new \InvalidArgumentException('Please require at least "v1.0.0" of "DoctrineMigrationsBundle"');
-                }
-
                 if (!class_exists('Doctrine\DBAL\Migrations\Configuration\Configuration')) {
                     throw new \InvalidArgumentException('Please require at least "v1.1.0" of "Doctrine Migrations Library"');
                 }
@@ -190,13 +221,26 @@ class LiipMonitorExtension extends Extension
 
             $services = [];
             foreach ($groupChecks['doctrine_migrations'] as $key => $config) {
-                $serviceConfiguration =
-                    $this->createMigrationConfigurationService($container, $config['configuration_file'], $config[ 'connection' ]);
+                try {
+                    $serviceConfiguration =
+                        $this->createMigrationConfigurationService($container, $config[ 'connection' ], $config['configuration_file'] ?? null);
 
-                $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
-                $container->setDefinition($serviceId, $serviceConfiguration);
+                    $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
+                    $container->setDefinition($serviceId, $serviceConfiguration);
 
-                $services[$key] = $serviceId;
+                    $services[$key] = $serviceId;
+                } catch (MigrationException $e) {
+                    throw new MigrationException(
+                        sprintf(
+                            'Invalid doctrine migration check under "%s.%s": %s',
+                            $groupName,
+                            $key,
+                            $e->getMessage()
+                        ),
+                        $e->getCode(),
+                        $e
+                    );
+                }
             }
 
             $parameter = sprintf('%s.check.%s.%s', $this->getAlias(), 'doctrine_migrations', $groupName);
@@ -207,18 +251,22 @@ class LiipMonitorExtension extends Extension
     /**
      * Return key-value array with migration version as key and class as a value defined in config file
      *
-     * @param AbstractFileConfiguration $config Current configuration
-     * @param Connection                $connection Fake connections
+     * @param ContainerBuilder               $container  The container
+     * @param DoctrineMigrationConfiguration $config     Current configuration
+     * @param Connection                     $connection Fake connections
      *
      * @return array[]
      */
-    private function getPredefinedMigrations(AbstractFileConfiguration $config, Connection $connection)
+    private function getPredefinedMigrations(ContainerBuilder $container, DoctrineMigrationConfiguration $config, Connection $connection)
     {
         $result = array();
 
-        $diff = new MigrationConfiguration($connection);
+        $diff = new LiipMigrationConfiguration($connection);
         $diff->setMigrationsNamespace($config->getMigrationsNamespace());
         $diff->setMigrationsDirectory($config->getMigrationsDirectory());
+        $diff->setContainer($container);
+        $diff->configure();
+
         foreach ($config->getMigrations() as $version) {
             $result[$version->getVersion()] = get_class($version->getMigration());
         }
@@ -234,22 +282,22 @@ class LiipMonitorExtension extends Extension
      * Creates migration configuration service definition
      *
      * @param ContainerBuilder $container      DI Container
-     * @param string           $filename       File name with migration configuration
      * @param string           $connectionName Connection name for container service
+     * @param string           $filename       File name with migration configuration
      *
      * @return DefinitionDecorator|ChildDefinition
      */
-    private function createMigrationConfigurationService(ContainerBuilder $container, $filename, $connectionName)
+    private function createMigrationConfigurationService(ContainerBuilder $container, string $connectionName, string $filename = null)
     {
-        /** @var AbstractFileConfiguration $configuration */
-        $connection    = new Connection([], new Driver()); // needed for correct migration loading
-        $configuration = $this->createTemporaryConfiguration($container, $connection, $filename);
+        $configuration = $this->createTemporaryConfiguration($container, $this->fakeConnection, $filename);
 
         $configurationServiceName = 'liip_monitor.check.doctrine_migrations.abstract_configuration';
         $serviceConfiguration = class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
             ? new ChildDefinition($configurationServiceName)
             : new DefinitionDecorator($configurationServiceName)
         ;
+
+        $this->migrationConfigurationsServices[] = [$serviceConfiguration, $configuration];
 
         $serviceConfiguration->replaceArgument(
             0,
@@ -292,17 +340,10 @@ class LiipMonitorExtension extends Extension
                 }
             }
 
-
             $serviceConfiguration->addMethodCall(
                 'setMigrationsDirectory',
                 [ $directory ]
             );
-        }
-
-        /** @var AbstractFileConfiguration $diff */
-        $versions = $this->getPredefinedMigrations($configuration, $connection);
-        if ($versions) {
-            $serviceConfiguration->addMethodCall('registerMigrations', [ $versions ]);
         }
 
         $serviceConfiguration->addMethodCall('configure', []);
@@ -327,10 +368,18 @@ class LiipMonitorExtension extends Extension
      * @param Connection       $connection Fake connection
      * @param string           $filename   Migrations configuration file
      *
-     * @return AbstractFileConfiguration
+     * @return DoctrineMigrationConfiguration
      */
-    private function createTemporaryConfiguration(ContainerBuilder $container, Connection $connection, $filename)
-    {
+    private function createTemporaryConfiguration(
+        ContainerBuilder $container,
+        Connection $connection,
+        string $filename = null
+    ): DoctrineMigrationConfiguration {
+        if ($filename === null) {
+            // this is configured from migrations bundle
+            return new DoctrineMigrationConfiguration($connection);
+        }
+
         // -------
         // This part must be in sync with Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
         $map = [
