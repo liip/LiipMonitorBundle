@@ -165,12 +165,10 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->arrayNode('doctrine_migrations')
                         ->useAttributeAsKey('name')
-                        ->info('Check if doctrine migrations are applied')
+                        ->info('Checks to see if migrations from specified configuration file are applied')
                         ->prototype('array')
                             ->children()
                                 ->scalarNode('configuration_file')
-                                    ->isRequired()
-                                    ->cannotBeEmpty()
                                     ->info('Absolute path to doctrine migrations configuration')
                                 ->end()
                                 ->scalarNode('connection')
@@ -179,13 +177,36 @@ class Configuration implements ConfigurationInterface
                                     ->info('Connection name from doctrine DBAL configuration')
                                 ->end()
                             ->end()
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) {
+                                    if (is_string($value)) {
+                                        $value = [ 'connection' => $value ];
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                            ->validate()
+                                ->always(function ($value) {
+                                    if (is_array($value) && !isset($value['configuration_file']) && !class_exists('Doctrine\\Bundle\\MigrationsBundle\\Command\\DoctrineCommand')) {
+                                        throw new \InvalidArgumentException('You should explicitly define "configuration_file" parameter or install doctrine/doctrine-migrations-bundle to use empty parameter.');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
                         ->end()
                         ->example(
                             [
                                 'application_migrations' => [
                                     'configuration_file' => '%kernel.root_dir%/Resources/config/migrations.yml',
                                     'connection'         => 'default'
-                                ]
+                                ],
+                                'migrations_with_doctrine_bundle' => [
+                                    'connection' => 'default'
+                                ],
+                                'migrations_with_doctrine_bundle_v2' => 'default',
                             ]
                         )
                     ->end()

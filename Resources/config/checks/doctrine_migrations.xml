@@ -15,6 +15,7 @@
 
         <service id="liip_monitor.check.doctrine_migrations.abstract_configuration"
                  class="Liip\MonitorBundle\DoctrineMigrations\Configuration"
+                 public="true"
                  abstract="true">
             <argument /> <!-- Connection -->
 

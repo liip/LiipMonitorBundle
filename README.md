@@ -316,6 +316,23 @@ liip_monitor:
                 # Connection name or an array of connection names
                 doctrine_dbal:        null # Example: [default, crm]
                 
+                # Checks to see if migrations from specified configuration file are applied
+                doctrine_migrations:
+                    # Examples:
+                    application_migrations: 
+                        configuration_file:  %kernel.root_dir%/Resources/config/migrations.yml
+                        connection:          default
+                    migrations_with_doctrine_bundle: 
+                        connection:          default
+                    migrations_with_doctrine_bundle_v2: default
+                    
+                    # Prototype
+                    name:
+                        # Absolute path to doctrine migrations configuration
+                        configuration_file:   ~
+                        # Connection name from doctrine DBAL configuration
+                        connection:           ~ # Required
+                
                 # Connection name or an array of connection names
                 doctrine_mongodb:        null # Example: [default, crm]
 

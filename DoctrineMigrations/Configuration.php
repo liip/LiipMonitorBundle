@@ -12,6 +12,13 @@ use Doctrine\Bundle\MigrationsBundle\Command\DoctrineCommand;
 class Configuration extends BaseConfiguration
 {
     /**
+     * Flag whether doctrine migrations bundle is installed
+     *
+     * @var bool
+     */
+    private static $haveMigrationBundle;
+
+    /**
      * Service container
      *
      * @var ContainerInterface
@@ -37,6 +44,14 @@ class Configuration extends BaseConfiguration
      */
     public function configure()
     {
+        if (self::$haveMigrationBundle === null) {
+            self::$haveMigrationBundle = class_exists(DoctrineCommand::class);
+        }
+
+        if (!self::$haveMigrationBundle) {
+            return;
+        }
+
         DoctrineCommand::configureMigrations($this->container, $this);
     }
 }
