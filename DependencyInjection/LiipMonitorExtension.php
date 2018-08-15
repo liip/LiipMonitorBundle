@@ -33,6 +33,13 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      * @var Connection
      */
     private $fakeConnection;
+    
+    public function __construct()
+    {
+        if (class_exists(Connection::class)) {
+            $this->fakeConnection = new Connection([], new Driver());
+        }
+    }
 
     /**
      * Loads the services based on your application configuration.
@@ -42,7 +49,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $this->fakeConnection = new Connection([], new Driver());
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('runner.xml');
         $loader->load('helper.xml');
