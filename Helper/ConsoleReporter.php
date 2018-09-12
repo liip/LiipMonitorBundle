@@ -57,7 +57,8 @@ class ConsoleReporter implements ReporterInterface
 
         $this->output->write(sprintf(' %s', $check->getLabel()));
 
-        if ($message = $result->getMessage()) {
+        $message = $result->getMessage();
+        if (null !== $message) {
             $this->output->write(sprintf(': %s', $message));
         }
 
