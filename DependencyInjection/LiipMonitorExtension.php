@@ -167,16 +167,16 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             case 'file_yaml':
             case 'expressions':
                 $container->setParameter($prefix.'.'.$group, $values);
-                continue;
+                break;
 
             case 'symfony_version':
-                continue;
+                break;
 
             case 'opcache_memory':
                 if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
                     throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
                 }
-                continue;
+                break;
 
             case 'doctrine_migrations':
                 if (!class_exists('ZendDiagnostics\Check\DoctrineMigration')) {
@@ -188,14 +188,14 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
                 }
 
                 $container->setParameter($prefix.'.'.$group, $values);
-                continue;
+                break;
 
             case 'pdo_connections':
                 if (!class_exists('ZendDiagnostics\Check\PDOCheck')) {
                     throw new \InvalidArgumentException('Please require at least "v1.0.5" of "ZendDiagnostics"');
                 }
                 $container->setParameter($prefix.'.'.$group, $values);
-                continue;
+                break;
 
         }
 
