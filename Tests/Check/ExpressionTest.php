@@ -26,7 +26,7 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
     public function checkResultProvider()
     {
         return array(
-            array('true', 'true', null, null, 'ZendDiagnostics\Result\Success', null),
+            array('true', 'true', null, null, 'ZendDiagnostics\Result\Success', ''),
             array('false', 'true', 'warning', 'fail', 'ZendDiagnostics\Result\Warning', 'warning'),
             array('true', 'false', 'warning', 'fail', 'ZendDiagnostics\Result\Failure', 'fail'),
             array('false', 'false', 'warning', 'fail', 'ZendDiagnostics\Result\Failure', 'fail'),
