@@ -20,7 +20,7 @@ class DoctrineMongoDb extends AbstractCheck
     public function check()
     {
         $connection = $this->manager->getConnection();
-        $connection->connect();
+        $connection->isConnected();
 
         return new Success();
     }
