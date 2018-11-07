@@ -84,6 +84,9 @@ liip_monitor:
 
 ## Adding Health Checks ##
 
+See [Writing Custom Checks](https://docs.zendframework.com/zend-diagnostics/custom-checks/) for instructions
+on creating a custom check.
+
 Once you implemented the class then it's time to register the check service with our service container:
 
 ```yml
@@ -102,6 +105,9 @@ can reside either in your bundles or in your app specific code. The location doe
 as long as the service is properly tagged. The ``alias`` is optional and will then simply
 define the ``id`` used when running health checks individually, otherwise the full service
 id must be used in this case.
+
+If your app's service definition is using `autoconfigure` to discover services then classes 
+which implement `ZendDiagnostics\Check\CheckInterface` will be tagged automatically.
 
 ## Available Built-in Health Checks ##
 
@@ -224,6 +230,17 @@ services:
         tags:
             - { name: liip_monitor.check, alias: php_extensions, group: cron }
             - { name: liip_monitor.check, alias: php_extensions, group: app_server }
+```
+
+`autoconfigure` will place checks into the default group. You must add `autoconfigure: false` to the service
+definition to change the group:
+
+```yml
+services:
+    Acme\HelloBundle\Check\PhpExtensionsCheck:
+        autoconfigure: false
+        tags:
+            - { name: liip_monitor.check, group: app_server }
 ```
 
 ### Specify group for CLI commands
