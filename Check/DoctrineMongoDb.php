@@ -20,8 +20,15 @@ class DoctrineMongoDb extends AbstractCheck
     public function check()
     {
         $connection = $this->manager->getConnection();
-        $connection->isConnected();
+         if ($connection->isConnected()) {
+             return new Success();
+         }
 
-        return new Success();
+        return new Failure(
+            sprintf(
+                'Connection "%s" is unavailable.',
+                $this->connectionName
+            )
+        );
     }
 }
