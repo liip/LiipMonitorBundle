@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use MongoDB\Driver\Command;
 use ZendDiagnostics\Check\AbstractCheck;
 use ZendDiagnostics\Result\Success;
 
@@ -19,10 +20,19 @@ class DoctrineMongoDb extends AbstractCheck
 
     public function check()
     {
-        $connection = $this->manager->getConnection();
-        $connection->connect();
-        
-        if ($connection->isConnected()) {
+        $connection = $this->manager->getConnection($this->connectionName);
+
+        if (\method_exists($connection, 'connect')) {
+            // Using "mongo" PHP extension
+            $connection->connect();
+
+            if ($connection->isConnected()) {
+                return new Success();
+            }
+        } else {
+            // Using "mongodb" PHP extension
+            $connection->getManager()->executeCommand('test', new Command(['ping' => 1]));
+
             return new Success();
         }
 
