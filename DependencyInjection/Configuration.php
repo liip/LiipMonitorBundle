@@ -22,8 +22,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('liip_monitor', 'array');
+        $treeBuilder = new TreeBuilder('liip_monitor');
+        
+        // Keep compatibility with symfony/config < 4.2
+        if (\method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $rootNode = $treeBuilder->root('liip_monitor');
+        }
 
         $rootNode
             ->beforeNormalization()
