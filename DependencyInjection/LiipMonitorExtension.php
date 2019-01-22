@@ -4,9 +4,9 @@ namespace Liip\MonitorBundle\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver;
-use Doctrine\DBAL\Migrations\Configuration\AbstractFileConfiguration;
-use Doctrine\DBAL\Migrations\Configuration\Configuration as DoctrineMigrationConfiguration;
-use Doctrine\DBAL\Migrations\MigrationException;
+use Doctrine\Migrations\Configuration\AbstractFileConfiguration;
+use Doctrine\Migrations\Configuration\Configuration as DoctrineMigrationConfiguration;
+use Doctrine\Migrations\MigrationException;
 use Liip\MonitorBundle\DoctrineMigrations\Configuration as LiipMigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -183,8 +183,8 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
                     throw new \InvalidArgumentException('Please require at least "v1.0.6" of "ZendDiagnostics"');
                 }
 
-                if (!class_exists('Doctrine\DBAL\Migrations\Configuration\Configuration')) {
-                    throw new \InvalidArgumentException('Please require at least "v1.1.0" of "Doctrine Migrations Library"');
+                if (!class_exists('Doctrine\Migrations\Configuration\Configuration')) {
+                    throw new \InvalidArgumentException('Please require at least "v2.0.0" of "Doctrine Migrations Library"');
                 }
 
                 $container->setParameter($prefix.'.'.$group, $values);
@@ -387,7 +387,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         }
 
         // -------
-        // This part must be in sync with Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
+        // This part must be in sync with Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
         $map = [
             'xml'  => '\XmlConfiguration',
             'yaml' => '\YamlConfiguration',
@@ -404,7 +404,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             throw new \InvalidArgumentException('Given config file type is not supported');
         }
 
-        $class = 'Doctrine\DBAL\Migrations\Configuration';
+        $class = 'Doctrine\Migrations\Configuration';
         $class .= $map[ $info[ 'extension' ] ];
         // -------
 

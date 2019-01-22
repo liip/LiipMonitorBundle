@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use Doctrine\DBAL\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Configuration\Configuration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use ZendDiagnostics\Check\CheckCollectionInterface;
 use ZendDiagnostics\Check\CheckInterface;
