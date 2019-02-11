@@ -75,9 +75,14 @@ class Configuration implements ConfigurationInterface
 
     private function createGroupsNode()
     {
-        $builder = new TreeBuilder();
+        $builder = new TreeBuilder('groups');
 
-        $node = $builder->root('groups', 'array');
+        // Keep compatibility with symfony/config < 4.2
+        if (\method_exists($builder, 'getRootNode')) {
+            $node = $builder->getRootNode();
+        } else {
+            $node = $builder->root('groups');
+        }
         $node
             ->requiresAtLeastOneElement()
             ->info('Grouping checks')
