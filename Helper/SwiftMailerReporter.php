@@ -104,7 +104,7 @@ class SwiftMailerReporter implements ReporterInterface
             }
         }
 
-        $message = Swift_Message::newInstance()
+        $message = (new Swift_Message())
             ->setSubject($this->subject)
             ->setFrom($this->sender)
             ->setTo($this->recipient)
