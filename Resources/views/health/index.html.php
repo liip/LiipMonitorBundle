@@ -112,6 +112,19 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 ]</pre>
         </dd>
 
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'list/reporters') ?>"><?php echo $request->getPathInfo().'list/reporters' ?></a></dt>
+        <dd>
+            Returns a list of additional reporters available as a JSON array.
+            <pre>
+$ curl -XGET -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'list/reporters') ?>
+
+[
+    "newrelic_reporter",
+    "file_reporter",
+    "another_awesome_reporter"
+]</pre>
+        </dd>
+
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>"><?php echo $request->getPathInfo().'http_status_checks' ?></a></dt>
         <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise).
 <pre>
@@ -148,13 +161,14 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run') ?>
 
 {
-"checks":
-    [
-        {"checkName": "Jackrabbit Health Check", "message": "OK", "status":true, "service_id": "monitor.check.jackrabbit"},
-        {"checkName": "Redis Health Check", "message": "OK", "status":true, "service_id": "monitor.check.redis"},
-        {"checkName": "Memcache Health Check", "message": "KO - No configuration set for session.save_path", "status":false, "service_id": "monitor.check.memcache"},
-        {"checkName": "PHP Extensions Health Check", "message": "OK", "status":true, "service_id": "monitor.check.php_extensions"}
-    ]
+    "checks":
+        [
+            {"checkName": "Jackrabbit Health Check", "message": "OK", "status":true, "service_id": "monitor.check.jackrabbit"},
+            {"checkName": "Redis Health Check", "message": "OK", "status":true, "service_id": "monitor.check.redis"},
+            {"checkName": "Memcache Health Check", "message": "KO - No configuration set for session.save_path", "status":false, "service_id": "monitor.check.memcache"},
+            {"checkName": "PHP Extensions Health Check", "message": "OK", "status":true, "service_id": "monitor.check.php_extensions"}
+        ],
+    "globalStatus": "OK|KO"
 }</pre>
         </dd>
 
