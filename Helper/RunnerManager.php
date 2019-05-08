@@ -89,4 +89,19 @@ class RunnerManager
 
         return $this->container->has($runnerServiceId) ? $runnerServiceId : null;
     }
+
+    /**
+     * @return array
+     */
+    public function getReporters()
+    {
+        $runners = $this->getRunners();
+        $reporters = [];
+
+        foreach ($runners as $runner) {
+            $reporters += array_keys($runner->getReporters() + $runner->getAdditionalReporters());
+        }
+
+        return $reporters;
+    }
 }

@@ -217,4 +217,15 @@ class HealthCheckController
     {
         return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
     }
+
+    /**
+     * @param string  $checkId
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listReportersAction(Request $request)
+    {
+        return new JsonResponse($this->runnerManager->getReporters());
+    }
 }
