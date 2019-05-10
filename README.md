@@ -276,7 +276,7 @@ liip_monitor:
             name:
 
                 # Validate that a named extension or a collection of extensions is available
-                php_extensions:       [] # Example: session.use_only_cookies: false
+                php_extensions:       [] # Example: apc, xdebug
 
                 # Pairs of a PHP setting and an expected value
                 php_flags:            # Example: session.use_only_cookies: false
