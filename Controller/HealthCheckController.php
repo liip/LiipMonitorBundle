@@ -29,7 +29,7 @@ class HealthCheckController
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      *
      * @return Response
      */
