@@ -29,9 +29,9 @@ class HealthCheckController
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -63,7 +63,7 @@ class HealthCheckController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request)
     {
@@ -107,7 +107,7 @@ class HealthCheckController
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function runAllChecksAction(Request $request)
     {
@@ -122,7 +122,7 @@ class HealthCheckController
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function runAllChecksHttpStatusAction(Request $request)
     {
@@ -138,7 +138,7 @@ class HealthCheckController
      * @param string  $checkId
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function runSingleCheckHttpStatusAction($checkId, Request $request)
     {
@@ -154,7 +154,7 @@ class HealthCheckController
      * @param string  $checkId
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function runSingleCheckAction($checkId, Request $request)
     {
@@ -216,5 +216,13 @@ class HealthCheckController
     private function getGroup(Request $request)
     {
         return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
+    }
+
+    /**
+     * @return Response
+     */
+    public function listReportersAction()
+    {
+        return new JsonResponse($this->runnerManager->getReporters());
     }
 }
