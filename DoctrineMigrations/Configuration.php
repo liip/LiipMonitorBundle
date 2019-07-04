@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\DoctrineMigrations;
 
-use Doctrine\DBAL\Migrations\Configuration\Configuration as BaseConfiguration;
+use Doctrine\Migrations\Configuration\Configuration as BaseConfiguration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Bundle\MigrationsBundle\Command\DoctrineCommand;
 
