@@ -33,7 +33,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      * @var Connection
      */
     private $fakeConnection;
-    
+
     public function __construct()
     {
         if (class_exists(Connection::class)) {
@@ -268,8 +268,15 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         $result = array();
 
         $diff = new LiipMigrationConfiguration($connection);
-        $diff->setMigrationsNamespace($config->getMigrationsNamespace());
-        $diff->setMigrationsDirectory($config->getMigrationsDirectory());
+
+        if ($namespace = $config->getMigrationsNamespace()) {
+            $diff->setMigrationsNamespace($config->getMigrationsNamespace());
+        }
+
+        if ($dir = $config->getMigrationsDirectory()) {
+            $diff->setMigrationsDirectory($dir);
+        }
+
         $diff->setContainer($container);
         $diff->configure();
 
