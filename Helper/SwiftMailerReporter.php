@@ -16,22 +16,22 @@ use ZendDiagnostics\Runner\Reporter\ReporterInterface;
 class SwiftMailerReporter implements ReporterInterface
 {
     private $mailer;
-    private $recipient;
+    private $recipients;
     private $subject;
     private $sender;
     private $sendOnWarning;
 
     /**
      * @param Swift_Mailer $mailer
-     * @param string       $recipient
+     * @param string|array $recipients
      * @param string       $sender
      * @param string       $subject
      * @param bool         $sendOnWarning
      */
-    public function __construct(Swift_Mailer $mailer, $recipient, $sender, $subject, $sendOnWarning = true)
+    public function __construct(Swift_Mailer $mailer, $recipients, $sender, $subject, $sendOnWarning = true)
     {
         $this->mailer = $mailer;
-        $this->recipient = $recipient;
+        $this->recipients = $recipients;
         $this->sender = $sender;
         $this->subject = $subject;
         $this->sendOnWarning = $sendOnWarning;
@@ -107,7 +107,7 @@ class SwiftMailerReporter implements ReporterInterface
         $message = (new Swift_Message())
             ->setSubject($this->subject)
             ->setFrom($this->sender)
-            ->setTo($this->recipient)
+            ->setTo($this->recipients)
             ->setBody($body);
 
         $this->mailer->send($message);
