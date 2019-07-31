@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('liip_monitor');
-        
+
         // Keep compatibility with symfony/config < 4.2
         if (\method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->getRootNode();
@@ -51,6 +51,10 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('enable_controller')->defaultFalse()->end()
                 ->scalarNode('view_template')->defaultNull()->end()
+                ->integerNode('failure_status_code')
+                    ->min(100)->max(598)
+                    ->defaultValue(502)
+                ->end()
                 ->arrayNode('mailer')
                     ->canBeEnabled()
                     ->children()

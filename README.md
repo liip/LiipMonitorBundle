@@ -260,6 +260,7 @@ groups. Additionally, the `monitor:list` has an option `--groups` to list all re
 liip_monitor:
     enable_controller:    false
     view_template:        null
+    failure_status_code:  502
     mailer:
         enabled:              false
         recipient:            ~ # Required
