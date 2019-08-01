@@ -126,7 +126,7 @@ $ curl -XGET -H "Accept: application/json" <?php echo $request->getUriForPath($r
         </dd>
 
         <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>"><?php echo $request->getPathInfo().'http_status_checks' ?></a></dt>
-        <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise).
+        <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise). The failure status code is configurable as <code>failure_status_code</code>.
 <pre>
 $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>
 
@@ -141,7 +141,7 @@ HTTP/1.1 502 Bad Gateway
         </dd>
 
         <dt><?php echo $request->getPathInfo().'http_status_check/check_id' ?></dt>
-        <dd>Performs the health check specified by <code>check_id</code> and returns the result within the HTTP Status Code (200 if checks are OK, 502 otherwise).
+        <dd>Performs the health check specified by <code>check_id</code> and returns the result within the HTTP Status Code (200 if checks are OK, 502 otherwise). The failure status code is configurable as <code>failure_status_code</code>.
 <pre>
 $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis') ?>
 

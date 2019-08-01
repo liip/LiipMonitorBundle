@@ -63,6 +63,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
         if ($config['enable_controller']) {
             $container->setParameter(sprintf('%s.view_template', $this->getAlias()), $config['view_template']);
+            $container->setParameter(sprintf('%s.failure_status_code', $this->getAlias()), $config['failure_status_code']);
             $loader->load('controller.xml');
         }
 
