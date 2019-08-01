@@ -15,7 +15,7 @@ class HealthCheckController
     protected $runnerManager;
     protected $pathHelper;
     protected $template;
-    protected $failureStatusCode;
+    protected $failureStatusCode = 502;
 
     /**
      * @param RunnerManager $runnerManager
