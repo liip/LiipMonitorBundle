@@ -59,7 +59,7 @@ class Configuration implements ConfigurationInterface
                     ->canBeEnabled()
                     ->children()
                         ->arrayNode('recipient')
-                            ->isRequired()->cannotBeEmpty()
+                            ->isRequired()->requiresAtLeastOneElement()
                             ->prototype('scalar')->end()
                             ->beforeNormalization()
                                 ->ifString()
