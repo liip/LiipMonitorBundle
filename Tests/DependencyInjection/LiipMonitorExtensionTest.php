@@ -9,6 +9,8 @@ use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -96,11 +98,16 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
 
-    public function testMailer()
+    public function testSwiftMailer()
     {
+        $this->container->setDefinition('mailer', new Definition(\Swift_Mailer::class));
+
         $this->load();
 
-        $this->assertEquals(false, $this->container->has('liip_monitor.reporter.swift_mailer'));
+        $this->assertFalse(
+            $this->container->has('liip_monitor.reporter.swift_mailer'),
+            'Check that the mailer service is only loaded if required.'
+        );
 
         $this->load(
             array(
@@ -114,6 +121,48 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasService('liip_monitor.reporter.swift_mailer');
+    }
+
+    public function testSymfonyMailer()
+    {
+        $this->container->setDefinition('mailer', new Definition(MailerInterface::class));
+
+        $this->load();
+
+        $this->assertFalse(
+            $this->container->has('liip_monitor.reporter.symfony_mailer'),
+            'Check that the mailer service is only loaded if required.'
+        );
+
+        $this->load(
+            array(
+                'mailer' => array(
+                    'recipient' => 'foo@example.com',
+                    'sender' => 'bar@example.com',
+                    'subject' => 'Health Check',
+                    'send_on_warning' => true,
+                ),
+            )
+        );
+
+        $this->assertContainerBuilderHasService('liip_monitor.reporter.symfony_mailer');
+    }
+
+    public function testMailerWithoutPackage()
+    {
+        $this->expectExceptionMessage('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->load(
+            array(
+                'mailer' => array(
+                    'recipient' => 'foo@example.com',
+                    'sender' => 'bar@example.com',
+                    'subject' => 'Health Check',
+                    'send_on_warning' => true,
+                ),
+            )
+        );
     }
 
     /**

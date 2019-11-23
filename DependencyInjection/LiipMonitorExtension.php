@@ -9,14 +9,18 @@ use Doctrine\Migrations\Configuration\Configuration as DoctrineMigrationConfigur
 use Doctrine\Migrations\MigrationException;
 use Liip\MonitorBundle\DoctrineMigrations\Configuration as LiipMigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 
 class LiipMonitorExtension extends Extension implements CompilerPassInterface
 {
@@ -67,13 +71,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             $loader->load('controller.xml');
         }
 
-        if ($config['mailer']['enabled']) {
-            $loader->load('swift_mailer.xml');
-
-            foreach ($config['mailer'] as $key => $value) {
-                $container->setParameter(sprintf('%s.mailer.%s', $this->getAlias(), $key), $value);
-            }
-        }
+        $this->configureMailer($container, $loader, $config);
 
         $container->setParameter(sprintf('%s.default_group', $this->getAlias()), $config['default_group']);
 
@@ -252,6 +250,26 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
             $parameter = sprintf('%s.check.%s.%s', $this->getAlias(), 'doctrine_migrations', $groupName);
             $container->setParameter($parameter, $services);
+        }
+    }
+
+    private function configureMailer(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
+        if (false === $config['mailer']['enabled']) {
+            return;
+        }
+
+        try {
+            $mailerDefinition = $container->findDefinition('mailer');
+        } catch (ServiceNotFoundException $e) {
+            throw new \InvalidArgumentException('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
+        }
+
+        $filename = \Swift_Mailer::class !== $mailerDefinition->getClass() ? 'symfony_mailer.xml' : 'swift_mailer.xml';
+        $loader->load($filename);
+
+        foreach ($config['mailer'] as $key => $value) {
+            $container->setParameter(sprintf('%s.mailer.%s', $this->getAlias(), $key), $value);
         }
     }
 
