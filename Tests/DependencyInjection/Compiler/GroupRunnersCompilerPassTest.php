@@ -37,7 +37,7 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('liip_monitor.runner_baz');
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new GroupRunnersCompilerPass());
     }

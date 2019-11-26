@@ -56,7 +56,7 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderNotHasService('liip_monitor.check.check_collection1');
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AddGroupsCompilerPass());
     }

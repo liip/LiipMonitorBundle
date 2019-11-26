@@ -61,7 +61,7 @@ class LiipMonitorBundleTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
             ->disableOriginalConstructor()

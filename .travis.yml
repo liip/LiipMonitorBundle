@@ -1,37 +1,48 @@
 language: php
-sudo: required
-dist: trusty
-group: edge
+sudo: false
+dist: xenial
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 php:
   - 7.1
   - 7.2
   - 7.3
 
-cache:
-  directories:
-    - $HOME/.composer/cache/files
-
 env:
-  - SYMFONY_VERSION=3.4.*
-
-matrix:
-  include:
-    - php: 7.1
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.2
-      env: SYMFONY_VERSION=4.1.*
-    - php: 7.3
-      env: SYMFONY_VERSION=4.2.*
-    - php: 7.1
-      env: COMPOSER_FLAGS="--prefer-lowest"
+  global:
+    - COMPOSER_MEMORY_LIMIT=-1
 
 before_install:
-  - echo "memory_limit = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi
+  - composer self-update
+  - composer global require --no-progress --no-scripts --no-plugins symfony/flex dev-master
 
-install: travis_wait composer update --prefer-source $COMPOSER_FLAGS
+install:
+  - travis_retry composer update -n --prefer-dist --prefer-stable
 
-script: vendor/bin/phpunit --coverage-text
+script:
+  - ./vendor/bin/phpunit -v
+
+jobs:
+  include:
+    # Tests the lowest set of dependencies
+    - php: 7.1
+      install:
+        - travis_retry composer update -n --prefer-lowest --prefer-stable --prefer-dist
+
+    # Test against latest Symfony 4.3 stable
+    - php: 7.3
+      env: SYMFONY_REQUIRE="4.3.*"
+
+    # Test against latest Symfony 4.4 stable
+    - php: 7.3
+      env: SYMFONY_REQUIRE="4.4.*"
+
+    # Test against latest Symfony 5.0 stable
+    - php: 7.3
+      env: SYMFONY_REQUIRE="5.0.*"
 
 notifications:
   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ

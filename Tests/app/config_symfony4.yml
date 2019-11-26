@@ -1,7 +1,7 @@
 # symfony 4 config (requires assets defined)
 framework:
     router:
-        resource: "%kernel.root_dir%/routing.yml"
+        resource: "%kernel.project_dir%/routing.yml"
     secret:        test
     templating:
         engines: ['twig']

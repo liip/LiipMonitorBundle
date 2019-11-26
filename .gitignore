@@ -1,4 +1,5 @@
 /Tests/app/cache
 /Tests/app/logs
+/Tests/app/var
 /vendor
 composer.lock
