@@ -92,7 +92,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->runnerManager->getRunners();
 
-        $this->assertInternalType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertCount(2, $result);
         $this->assertArrayHasKey('group_1', $result);
         $this->assertArrayHasKey('group_2', $result);
@@ -110,7 +110,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->runnerManager->getGroups();
 
-        $this->assertInternalType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertCount(2, $result);
         $this->assertContains('group_1', $result);
         $this->assertContains('group_2', $result);
@@ -131,7 +131,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
 

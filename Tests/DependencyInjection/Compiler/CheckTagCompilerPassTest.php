@@ -38,7 +38,7 @@ class CheckTagCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new GroupRunnersCompilerPass());
         $container->addCompilerPass(new CheckTagCompilerPass());

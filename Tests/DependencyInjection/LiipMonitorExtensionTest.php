@@ -8,12 +8,25 @@ use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $doctrineMock = $this->getMockBuilder('Doctrine\Common\Persistence\ConnectionRegistry')->getMock();
+        $this->container->set('doctrine', $doctrineMock);
+        $this->container->addCompilerPass(new AddGroupsCompilerPass());
+        $this->container->addCompilerPass(new GroupRunnersCompilerPass());
+        $this->container->addCompilerPass(new CheckTagCompilerPass());
+        $this->container->addCompilerPass(new CheckCollectionTagCompilerPass());
+    }
+
     /**
      * @dataProvider checkProvider
      */
@@ -105,10 +118,11 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     /**
      * @dataProvider mailerConfigProvider
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testInvalidMailerConfig($config)
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->load($config);
     }
 
@@ -136,10 +150,11 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     /**
      * @dataProvider invalidCheckProvider
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testInvalidExpressionConfig(array $config)
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->load(array('checks' => array('expressions' => $config)));
         $this->compile();
     }
@@ -194,20 +209,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(new LiipMonitorExtension());
-    }
-
-    protected function compile()
-    {
-        $doctrineMock = $this->getMockBuilder('Doctrine\Common\Persistence\ConnectionRegistry')->getMock();
-        $this->container->set('doctrine', $doctrineMock);
-        $this->container->addCompilerPass(new AddGroupsCompilerPass());
-        $this->container->addCompilerPass(new GroupRunnersCompilerPass());
-        $this->container->addCompilerPass(new CheckTagCompilerPass());
-        $this->container->addCompilerPass(new CheckCollectionTagCompilerPass());
-
-        parent::compile();
     }
 }
