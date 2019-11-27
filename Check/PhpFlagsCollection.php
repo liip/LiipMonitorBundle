@@ -10,11 +10,8 @@ class PhpFlagsCollection implements CheckCollectionInterface
     /**
      * @var array
      */
-    private $checks = array();
+    private $checks = [];
 
-    /**
-     * @param array $configs
-     */
     public function __construct(array $configs)
     {
         foreach ($configs as $setting => $value) {

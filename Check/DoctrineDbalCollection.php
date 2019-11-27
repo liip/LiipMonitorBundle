@@ -10,12 +10,12 @@ use ZendDiagnostics\Check\CheckCollectionInterface;
  */
 class DoctrineDbalCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct(ConnectionRegistry $manager, $connections)
     {
         if (!is_array($connections)) {
-            $connections = array($connections);
+            $connections = [$connections];
         }
 
         foreach ($connections as $connection) {

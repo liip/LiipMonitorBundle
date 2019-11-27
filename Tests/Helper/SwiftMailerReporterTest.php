@@ -49,21 +49,21 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
 
     public function sendEmailProvider()
     {
-        return array(
-            array(new Failure(), true),
-            array(new Warning(), true),
-            array(new Unknown(), true),
-            array(new Failure(), false),
-        );
+        return [
+            [new Failure(), true],
+            [new Warning(), true],
+            [new Unknown(), true],
+            [new Failure(), false],
+        ];
     }
 
     public function sendNoEmailProvider()
     {
-        return array(
-            array(new Success(), true),
-            array(new Skip(), true),
-            array(new Warning(), false),
-        );
+        return [
+            [new Success(), true],
+            [new Skip(), true],
+            [new Warning(), false],
+        ];
     }
 }
 

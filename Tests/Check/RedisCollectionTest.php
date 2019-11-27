@@ -19,14 +19,14 @@ final class RedisCollectionTest extends TestCase
     public function handleDsnWithAuth(string $dsn)
     {
         $config = [
-          'dsn'      => $dsn,
-          'host'     => 'localhost',
-          'port'     => 6379,
+          'dsn' => $dsn,
+          'host' => 'localhost',
+          'port' => 6379,
           'password' => null,
         ];
 
         $collection = new RedisCollection(['default' => $config]);
-        $checks     = $collection->getChecks();
+        $checks = $collection->getChecks();
 
         /** @var \ZendDiagnostics\Check\Redis $check */
         $check = $checks['redis_default'];
@@ -34,10 +34,6 @@ final class RedisCollectionTest extends TestCase
         $this->assertAuthPropertyValue($check, self::AUTH);
     }
 
-    /**
-     * @param \ZendDiagnostics\Check\Redis $check
-     * @param string                       $auth
-     */
     private function assertAuthPropertyValue(Redis $check, string $auth)
     {
         try {
@@ -45,7 +41,6 @@ final class RedisCollectionTest extends TestCase
             $authProp = $refClass->getProperty('auth');
             $authProp->setAccessible(true);
             self::assertSame($auth, $authProp->getValue($check));
-
         } catch (ReflectionException $e) {
             self::fail($e->getMessage());
         }
@@ -55,7 +50,7 @@ final class RedisCollectionTest extends TestCase
     {
         return [
           'incompatible with parse_url' => [sprintf('redis://%s@127.0.0.1:6379', static::AUTH)],
-          'compatible with parse_url'   => [sprintf('redis://irrelevant-user:%s@127.0.0.1:6379', static::AUTH)],
+          'compatible with parse_url' => [sprintf('redis://irrelevant-user:%s@127.0.0.1:6379', static::AUTH)],
         ];
     }
 }

@@ -3,12 +3,12 @@
 namespace Liip\MonitorBundle\Helper;
 
 use ZendDiagnostics\Check\CheckInterface;
+use ZendDiagnostics\Result\Collection as ResultsCollection;
 use ZendDiagnostics\Result\ResultInterface;
 use ZendDiagnostics\Result\SkipInterface;
 use ZendDiagnostics\Result\SuccessInterface;
 use ZendDiagnostics\Result\WarningInterface;
 use ZendDiagnostics\Runner\Reporter\ReporterInterface;
-use ZendDiagnostics\Result\Collection as ResultsCollection;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -19,7 +19,7 @@ class ArrayReporter implements ReporterInterface
     const STATUS_KO = 'KO';
 
     private $globalStatus = self::STATUS_OK;
-    private $results = array();
+    private $results = [];
 
     /**
      * @return array
@@ -65,13 +65,13 @@ class ArrayReporter implements ReporterInterface
                 $this->globalStatus = self::STATUS_KO;
         }
 
-        $this->results[] = array(
+        $this->results[] = [
             'checkName' => $check->getLabel(),
             'message' => $result->getMessage(),
             'status' => $status,
             'status_name' => $statusName,
             'service_id' => $checkAlias,
-        );
+        ];
     }
 
     /**

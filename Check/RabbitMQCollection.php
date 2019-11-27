@@ -10,7 +10,7 @@ use ZendDiagnostics\Check\RabbitMQ;
  */
 class RabbitMQCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct(array $configs)
     {

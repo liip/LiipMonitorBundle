@@ -9,7 +9,7 @@ use ZendDiagnostics\Check\CheckCollectionInterface;
  */
 class ExpressionCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct(array $configs)
     {

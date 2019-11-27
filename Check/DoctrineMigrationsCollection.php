@@ -9,26 +9,26 @@ use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Check\DoctrineMigration as ZendDoctrineMigration;
 
 /**
- * Class DoctrineMigrationsCollection
+ * Class DoctrineMigrationsCollection.
  */
 class DoctrineMigrationsCollection implements CheckCollectionInterface
 {
     /**
-     * DI Container
+     * DI Container.
      *
      * @var ContainerInterface
      */
     private $container;
 
     /**
-     * Available checks
+     * Available checks.
      *
      * @var CheckInterface[]
      */
     private $checks;
 
     /**
-     * Migrations configuration service ids
+     * Migrations configuration service ids.
      *
      * @var string[]
      */
@@ -44,7 +44,7 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
         ContainerInterface $container,
         array $migrations
     ) {
-        $this->container  = $container;
+        $this->container = $container;
         $this->migrations = $migrations;
     }
 
@@ -53,7 +53,7 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
      */
     public function getChecks()
     {
-        if ($this->checks === null) {
+        if (null === $this->checks) {
             $this->checks = [];
             foreach ($this->migrations as $key => $migration) {
                 $check = new ZendDoctrineMigration($this->container->get($migration));

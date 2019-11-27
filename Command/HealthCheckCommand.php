@@ -6,10 +6,10 @@ use Liip\MonitorBundle\Helper\ConsoleReporter;
 use Liip\MonitorBundle\Helper\RawConsoleReporter;
 use Liip\MonitorBundle\Helper\RunnerManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class HealthCheckCommand extends Command
 {
@@ -29,7 +29,7 @@ class HealthCheckCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('monitor:health')            
+            ->setName('monitor:health')
             ->setDescription('Runs Health Checks')
             ->addArgument(
                 'checkName',
@@ -54,16 +54,13 @@ class HealthCheckCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $failureCount = 0;
 
-        $groups = $input->getOption('group') ?: array(null);
+        $groups = $input->getOption('group') ?: [null];
         $allGroups = $input->getOption('all');
         $checkName = $input->getArgument('checkName');
         $nagios = $input->getOption('nagios');

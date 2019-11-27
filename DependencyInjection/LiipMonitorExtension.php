@@ -19,20 +19,18 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\MailerInterface;
 
 class LiipMonitorExtension extends Extension implements CompilerPassInterface
 {
     /**
-     * Tuple (migrationsConfiguration, tempConfiguration) for doctrine migrations check
+     * Tuple (migrationsConfiguration, tempConfiguration) for doctrine migrations check.
      *
      * @var array
      */
     private $migrationConfigurationsServices = [];
 
     /**
-     * Connection object needed for correct migration loading
+     * Connection object needed for correct migration loading.
      *
      * @var Connection
      */
@@ -47,9 +45,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
     /**
      * Loads the services based on your application configuration.
-     *
-     * @param array            $configs
-     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -91,8 +86,8 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             return;
         }
 
-        $checksLoaded = array();
-        $containerParams = array();
+        $checksLoaded = [];
+        $containerParams = [];
         foreach ($config['checks']['groups'] as $group => $checks) {
             if (empty($checks)) {
                 continue;
@@ -118,7 +113,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
@@ -128,16 +123,15 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             /** @var DoctrineMigrationConfiguration $configuration */
             $versions = $this->getPredefinedMigrations($container, $configuration, $this->fakeConnection);
             if ($versions) {
-                $configurationService->addMethodCall('registerMigrations', [ $versions ]);
+                $configurationService->addMethodCall('registerMigrations', [$versions]);
             }
         }
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $checkName
-     * @param string           $group
-     * @param array            $values
+     * @param string $checkName
+     * @param string $group
+     * @param array  $values
      */
     private function setParameters(ContainerBuilder $container, $checkName, $group, $values)
     {
@@ -195,7 +189,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
                 }
                 $container->setParameter($prefix.'.'.$group, $values);
                 break;
-
         }
 
         if (is_array($values)) {
@@ -206,7 +199,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     }
 
     /**
-     * Set up doctrine migration configuration services
+     * Set up doctrine migration configuration services.
      *
      * @param ContainerBuilder $container The container
      * @param array            $params    Container params
@@ -228,23 +221,14 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             foreach ($groupChecks['doctrine_migrations'] as $key => $config) {
                 try {
                     $serviceConfiguration =
-                        $this->createMigrationConfigurationService($container, $config[ 'connection' ], $config['configuration_file'] ?? null);
+                        $this->createMigrationConfigurationService($container, $config['connection'], $config['configuration_file'] ?? null);
 
                     $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
                     $container->setDefinition($serviceId, $serviceConfiguration);
 
                     $services[$key] = $serviceId;
                 } catch (MigrationException $e) {
-                    throw new MigrationException(
-                        sprintf(
-                            'Invalid doctrine migration check under "%s.%s": %s',
-                            $groupName,
-                            $key,
-                            $e->getMessage()
-                        ),
-                        $e->getCode(),
-                        $e
-                    );
+                    throw new MigrationException(sprintf('Invalid doctrine migration check under "%s.%s": %s', $groupName, $key, $e->getMessage()), $e->getCode(), $e);
                 }
             }
 
@@ -274,7 +258,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     }
 
     /**
-     * Return key-value array with migration version as key and class as a value defined in config file
+     * Return key-value array with migration version as key and class as a value defined in config file.
      *
      * @param ContainerBuilder               $container  The container
      * @param DoctrineMigrationConfiguration $config     Current configuration
@@ -284,7 +268,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      */
     private function getPredefinedMigrations(ContainerBuilder $container, DoctrineMigrationConfiguration $config, Connection $connection)
     {
-        $result = array();
+        $result = [];
 
         $diff = new LiipMigrationConfiguration($connection);
 
@@ -311,7 +295,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     }
 
     /**
-     * Creates migration configuration service definition
+     * Creates migration configuration service definition.
      *
      * @param ContainerBuilder $container      DI Container
      * @param string           $connectionName Connection name for container service
@@ -339,34 +323,34 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         if ($configuration->getMigrationsNamespace()) {
             $serviceConfiguration->addMethodCall(
                 'setMigrationsNamespace',
-                [ $configuration->getMigrationsNamespace() ]
+                [$configuration->getMigrationsNamespace()]
             );
         }
 
         if ($configuration->getMigrationsTableName()) {
             $serviceConfiguration->addMethodCall(
                 'setMigrationsTableName',
-                [ $configuration->getMigrationsTableName() ]
+                [$configuration->getMigrationsTableName()]
             );
         }
 
         if ($configuration->getMigrationsColumnName()) {
             $serviceConfiguration->addMethodCall(
                 'setMigrationsColumnName',
-                [ $configuration->getMigrationsColumnName() ]
+                [$configuration->getMigrationsColumnName()]
             );
         }
 
         if ($configuration->getName()) {
-            $serviceConfiguration->addMethodCall('setName', [ $configuration->getName() ]);
+            $serviceConfiguration->addMethodCall('setName', [$configuration->getName()]);
         }
 
         if ($configuration->getMigrationsDirectory()) {
-            $directory        = $configuration->getMigrationsDirectory();
-            $pathPlaceholders = array('kernel.root_dir', 'kernel.cache_dir', 'kernel.logs_dir');
+            $directory = $configuration->getMigrationsDirectory();
+            $pathPlaceholders = ['kernel.root_dir', 'kernel.cache_dir', 'kernel.logs_dir'];
             foreach ($pathPlaceholders as $parameter) {
                 $kernelDir = realpath($container->getParameter($parameter));
-                if (strpos(realpath($directory), $kernelDir) === 0) {
+                if (0 === strpos(realpath($directory), $kernelDir)) {
                     $directory = str_replace($kernelDir, "%{$parameter}%", $directory);
                     break;
                 }
@@ -374,18 +358,18 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
             $serviceConfiguration->addMethodCall(
                 'setMigrationsDirectory',
-                [ $directory ]
+                [$directory]
             );
         }
 
         $serviceConfiguration->addMethodCall('configure', []);
 
         if ($configuration->areMigrationsOrganizedByYear()) {
-            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [ true ]);
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [true]);
 
             return $serviceConfiguration;
         } elseif ($configuration->areMigrationsOrganizedByYearAndMonth()) {
-            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [ true ]);
+            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [true]);
 
             return $serviceConfiguration;
         }
@@ -394,20 +378,18 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     }
 
     /**
-     * Creates in-memory migration configuration for setting up container service
+     * Creates in-memory migration configuration for setting up container service.
      *
      * @param ContainerBuilder $container  The container
      * @param Connection       $connection Fake connection
      * @param string           $filename   Migrations configuration file
-     *
-     * @return DoctrineMigrationConfiguration
      */
     private function createTemporaryConfiguration(
         ContainerBuilder $container,
         Connection $connection,
         string $filename = null
     ): DoctrineMigrationConfiguration {
-        if ($filename === null) {
+        if (null === $filename) {
             // this is configured from migrations bundle
             return new DoctrineMigrationConfiguration($connection);
         }
@@ -415,23 +397,23 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         // -------
         // This part must be in sync with Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
         $map = [
-            'xml'  => '\XmlConfiguration',
+            'xml' => '\XmlConfiguration',
             'yaml' => '\YamlConfiguration',
-            'yml'  => '\YamlConfiguration',
-            'php'  => '\ArrayConfiguration',
+            'yml' => '\YamlConfiguration',
+            'php' => '\ArrayConfiguration',
             'json' => '\JsonConfiguration',
         ];
         // --------
 
         $filename = $container->getParameterBag()->resolveValue($filename);
-        $info     = pathinfo($filename);
+        $info = pathinfo($filename);
         // check we can support this file type
-        if (empty($map[ $info[ 'extension' ] ])) {
+        if (empty($map[$info['extension']])) {
             throw new \InvalidArgumentException('Given config file type is not supported');
         }
 
         $class = 'Doctrine\Migrations\Configuration';
-        $class .= $map[ $info[ 'extension' ] ];
+        $class .= $map[$info['extension']];
         // -------
 
         /** @var AbstractFileConfiguration $configuration */

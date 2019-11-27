@@ -8,7 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 class ListChecksCommand extends Command
 {
@@ -68,9 +67,6 @@ class ListChecksCommand extends Command
         $this->doListChecks($output, $runner);
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     protected function listAllChecks(OutputInterface $output)
     {
         foreach ($this->runnerManager->getRunners() as $group => $runner) {
@@ -80,9 +76,6 @@ class ListChecksCommand extends Command
         }
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     protected function listReporters(OutputInterface $output)
     {
         $reporters = $this->runner->getAdditionalReporters();
@@ -95,9 +88,6 @@ class ListChecksCommand extends Command
         }
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     protected function listGroups(OutputInterface $output)
     {
         foreach ($this->runnerManager->getGroups() as $group) {
@@ -105,10 +95,6 @@ class ListChecksCommand extends Command
         }
     }
 
-    /**
-     * @param OutputInterface $output
-     * @param Runner          $runner
-     */
     private function doListChecks(OutputInterface $output, Runner $runner)
     {
         $checks = $runner->getChecks();

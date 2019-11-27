@@ -23,7 +23,7 @@ class AdditionalReporterCompilerPass implements CompilerPassInterface
             foreach ($container->findTaggedServiceIds('liip_monitor.additional_reporter') as $id => $tags) {
                 foreach ($tags as $attributes) {
                     $alias = empty($attributes['alias']) ? $id : $attributes['alias'];
-                    $definition->addMethodCall('addAdditionalReporter', array($alias, new Reference($id)));
+                    $definition->addMethodCall('addAdditionalReporter', [$alias, new Reference($id)]);
                 }
             }
         }

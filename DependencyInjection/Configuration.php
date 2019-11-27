@@ -63,7 +63,7 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return array($v); })
+                                ->then(function ($v) { return [$v]; })
                             ->end()
                         ->end()
                         ->scalarNode('sender')->isRequired()->cannotBeEmpty()->end()
@@ -203,7 +203,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifString()
                                 ->then(function ($value) {
                                     if (is_string($value)) {
-                                        $value = [ 'connection' => $value ];
+                                        $value = ['connection' => $value];
                                     }
 
                                     return $value;
@@ -223,10 +223,10 @@ class Configuration implements ConfigurationInterface
                             [
                                 'application_migrations' => [
                                     'configuration_file' => '%kernel.root_dir%/Resources/config/migrations.yml',
-                                    'connection'         => 'default'
+                                    'connection' => 'default',
                                 ],
                                 'migrations_with_doctrine_bundle' => [
-                                    'connection' => 'default'
+                                    'connection' => 'default',
                                 ],
                                 'migrations_with_doctrine_bundle_v2' => 'default',
                             ]
@@ -257,7 +257,7 @@ class Configuration implements ConfigurationInterface
                         ->useAttributeAsKey('name')
                         ->beforeNormalization()
                             ->ifString()
-                            ->then(function($v) { return array('dsn' => $v); })
+                            ->then(function ($v) { return ['dsn' => $v]; })
                         ->end()
                         ->prototype('array')
                             ->children()
@@ -287,8 +287,8 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->children()
                                 ->scalarNode('url')->defaultValue('localhost')->end()
-                                ->variableNode('headers')->defaultValue(array())->end()
-                                ->variableNode('options')->defaultValue(array())->end()
+                                ->variableNode('headers')->defaultValue([])->end()
+                                ->variableNode('options')->defaultValue([])->end()
                                 ->integerNode('status_code')->defaultValue(200)->end()
                                 ->scalarNode('content')->defaultNull()->end()
                                 ->scalarNode('method')->defaultValue('GET')->end()
@@ -301,7 +301,7 @@ class Configuration implements ConfigurationInterface
                         ->useAttributeAsKey('name')
                         ->beforeNormalization()
                             ->ifString()
-                            ->then(function($v) { return array('dsn' => $v); })
+                            ->then(function ($v) { return ['dsn' => $v]; })
                         ->end()
                         ->prototype('array')
                             ->children()
@@ -375,15 +375,15 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('expressions')
                         ->useAttributeAsKey('alias')
                         ->info('Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)')
-                        ->example(array(
-                            'opcache' => array(
+                        ->example([
+                            'opcache' => [
                                 'label' => 'OPcache',
                                 'warning_expression' => "ini('opcache.revalidate_freq') > 0",
                                 'critical_expression' => "ini('opcache.enable')",
                                 'warning_message' => 'OPcache not optimized for production',
                                 'critical_message' => 'OPcache not enabled',
-                            ),
-                        ))
+                            ],
+                        ])
                         ->prototype('array')
                             ->addDefaultsIfNotSet()
                             ->validate()

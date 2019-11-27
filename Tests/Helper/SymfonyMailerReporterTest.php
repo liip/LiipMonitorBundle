@@ -41,7 +41,7 @@ class SymfonyMailerReporterTest extends TestCase
         $checks = new Collection();
         $checks[$check->reveal()] = new Failure('Something goes wrong');
 
-        $this->mailer->send(Argument::that(function(Email $message) use ($recipients, $sender, $subject): bool {
+        $this->mailer->send(Argument::that(function (Email $message) use ($recipients, $sender, $subject): bool {
             $this->assertEquals(Address::createArray($recipients), $message->getTo(), 'Check if Recipient is sent correctly.');
             $this->assertEquals([Address::create($sender)], $message->getFrom(), 'Check that the from header is set correctly.');
             $this->assertSame($subject, $message->getSubject(), 'Check that the subject has been set.');
@@ -60,8 +60,8 @@ class SymfonyMailerReporterTest extends TestCase
             [
                 ['foo@bar.tld'],
                 'test@foobar.tld',
-                'Something went wrogin'
-            ]
+                'Something went wrogin',
+            ],
         ];
     }
 }

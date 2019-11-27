@@ -10,18 +10,15 @@ class RunnerManager
     /** @var ContainerInterface */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param null|string $group
+     * @param string|null $group
      *
-     * @return null|Runner
+     * @return Runner|null
      */
     public function getRunner($group)
     {
@@ -37,7 +34,7 @@ class RunnerManager
     {
         $runnerServiceIds = $this->container->getParameter('liip_monitor.runners');
 
-        $runners = array();
+        $runners = [];
 
         foreach ($runnerServiceIds as $serviceId) {
             if (preg_match('/liip_monitor.runner_(.+)/', $serviceId, $matches)) {
@@ -55,7 +52,7 @@ class RunnerManager
     {
         $runnerServiceIds = $this->container->getParameter('liip_monitor.runners');
 
-        $groups = array();
+        $groups = [];
 
         foreach ($runnerServiceIds as $serviceId) {
             if (preg_match('/liip_monitor.runner_(.+)/', $serviceId, $matches)) {
@@ -75,9 +72,9 @@ class RunnerManager
     }
 
     /**
-     * @param null|string $group
+     * @param string|null $group
      *
-     * @return null|string
+     * @return string|null
      */
     private function getRunnerServiceId($group)
     {

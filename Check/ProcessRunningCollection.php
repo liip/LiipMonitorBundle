@@ -10,12 +10,12 @@ use ZendDiagnostics\Check\ProcessRunning;
  */
 class ProcessRunningCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct($processes)
     {
         if (!is_array($processes)) {
-            $processes = array($processes);
+            $processes = [$processes];
         }
 
         foreach ($processes as $process) {

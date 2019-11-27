@@ -8,9 +8,6 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 class CheckAssetsEnabledPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         if ($container->has('liip_monitor.health_controller') && !$container->has('assets.packages')) {

@@ -58,7 +58,7 @@ class CustomErrorPages implements CheckInterface
         // we suppose pages has been customized if the exception controller is not the default one,
         // so we don't look for template file in this case.
         if ($values['exception_controller']->getDefaultValue() == $this->exceptionController) {
-            $missingTemplate = array();
+            $missingTemplate = [];
 
             foreach ($this->errorCodes as $errorCode) {
                 $template = sprintf('%s/Resources/TwigBundle/views/Exception/error%d.html.twig', $this->kernelRootDir, $errorCode);

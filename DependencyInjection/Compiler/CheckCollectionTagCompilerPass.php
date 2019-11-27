@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class CheckCollectionTagCompilerPass implements CompilerPassInterface
@@ -21,7 +21,7 @@ class CheckCollectionTagCompilerPass implements CompilerPassInterface
                 $group = empty($attributes['group']) ? $defaultGroup : $attributes['group'];
 
                 $runnerDefinition = $container->getDefinition('liip_monitor.runner_'.$group);
-                $runnerDefinition->addMethodCall('addChecks', array(new Reference($id)));
+                $runnerDefinition->addMethodCall('addChecks', [new Reference($id)]);
             }
         }
     }

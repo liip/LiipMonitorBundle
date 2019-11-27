@@ -3,12 +3,12 @@
 namespace Liip\MonitorBundle\Controller;
 
 use Liip\MonitorBundle\Helper\ArrayReporter;
+use Liip\MonitorBundle\Helper\PathHelper;
 use Liip\MonitorBundle\Helper\RunnerManager;
+use Liip\MonitorBundle\Runner;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Liip\MonitorBundle\Runner;
-use Liip\MonitorBundle\Helper\PathHelper;
 
 class HealthCheckController
 {
@@ -18,10 +18,8 @@ class HealthCheckController
     protected $failureStatusCode;
 
     /**
-     * @param RunnerManager $runnerManager
-     * @param PathHelper    $pathHelper
-     * @param               $template
-     * @param               $failureStatusCode
+     * @param $template
+     * @param $failureStatusCode
      */
     public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, $failureStatusCode)
     {
@@ -32,29 +30,27 @@ class HealthCheckController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function indexAction(Request $request)
     {
         $group = $this->getGroup($request);
 
-        $urls = $this->pathHelper->getRoutesJs(array(
-            'liip_monitor_run_all_checks' => array('group' => $group),
-            'liip_monitor_run_single_check' => array('checkId' => 'replaceme', 'group' => $group),
-        ));
+        $urls = $this->pathHelper->getRoutesJs([
+            'liip_monitor_run_all_checks' => ['group' => $group],
+            'liip_monitor_run_single_check' => ['checkId' => 'replaceme', 'group' => $group],
+        ]);
 
-        $css = $this->pathHelper->getStyleTags(array(
+        $css = $this->pathHelper->getStyleTags([
             'bundles/liipmonitor/css/bootstrap/css/bootstrap.min.css',
             'bundles/liipmonitor/css/style.css',
-        ));
+        ]);
 
-        $javascript = $this->pathHelper->getScriptTags(array(
+        $javascript = $this->pathHelper->getScriptTags([
             'bundles/liipmonitor/javascript/jquery-1.7.1.min.js',
             'bundles/liipmonitor/javascript/ember-0.9.5.min.js',
             'bundles/liipmonitor/javascript/app.js',
-        ));
+        ]);
 
         // this is a hack to make the bundle template agnostic.
         // URL generation for Assets and Routes is still handled by the framework.
@@ -62,7 +58,7 @@ class HealthCheckController
         include $this->template;
         $content = ob_get_clean();
 
-        return new Response($content, 200, array('Content-Type' => 'text/html'));
+        return new Response($content, 200, ['Content-Type' => 'text/html']);
     }
 
     /**
@@ -70,7 +66,7 @@ class HealthCheckController
      */
     public function listAction(Request $request)
     {
-        $ret = array();
+        $ret = [];
 
         $runner = $this->getRunner($request);
 
@@ -86,7 +82,7 @@ class HealthCheckController
      */
     public function listAllAction()
     {
-        $allChecks = array();
+        $allChecks = [];
 
         foreach ($this->runnerManager->getRunners() as $group => $runner) {
             foreach ($runner->getChecks() as $alias => $check) {
@@ -108,23 +104,19 @@ class HealthCheckController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function runAllChecksAction(Request $request)
     {
         $report = $this->runTests($request);
 
-        return new JsonResponse(array(
+        return new JsonResponse([
             'checks' => $report->getResults(),
             'globalStatus' => $report->getGlobalStatus(),
-        ));
+        ]);
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function runAllChecksHttpStatusAction(Request $request)
@@ -133,13 +125,12 @@ class HealthCheckController
 
         return new Response(
             '',
-            ($report->getGlobalStatus() === ArrayReporter::STATUS_OK ? 200 : $this->failureStatusCode)
+            (ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode)
         );
     }
 
     /**
-     * @param string  $checkId
-     * @param Request $request
+     * @param string $checkId
      *
      * @return Response
      */
@@ -149,13 +140,12 @@ class HealthCheckController
 
         return new Response(
             '',
-            ($report->getGlobalStatus() === ArrayReporter::STATUS_OK ? 200 : $this->failureStatusCode)
+            (ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode)
         );
     }
 
     /**
-     * @param string  $checkId
-     * @param Request $request
+     * @param string $checkId
      *
      * @return Response
      */
@@ -167,17 +157,16 @@ class HealthCheckController
     }
 
     /**
-     * @param Request     $request
      * @param string|null $checkId
      *
      * @return ArrayReporter
      */
     protected function runTests(Request $request, $checkId = null)
     {
-        $reporters = $request->query->get('reporters', array());
+        $reporters = $request->query->get('reporters', []);
 
         if (!is_array($reporters)) {
-            $reporters = array($reporters);
+            $reporters = [$reporters];
         }
 
         $reporter = new ArrayReporter();
@@ -192,8 +181,6 @@ class HealthCheckController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Runner
      *
      * @throws \Exception
@@ -212,8 +199,6 @@ class HealthCheckController
     }
 
     /**
-     * @param Request $request
-     *
      * @return string
      */
     private function getGroup(Request $request)

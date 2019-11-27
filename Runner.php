@@ -10,20 +10,16 @@ use ZendDiagnostics\Runner\Runner as BaseRunner;
  */
 class Runner extends BaseRunner
 {
-    private $additionalReporters = array();
+    private $additionalReporters = [];
 
     /**
-     * @param string            $alias
-     * @param ReporterInterface $reporter
+     * @param string $alias
      */
     public function addAdditionalReporter($alias, ReporterInterface $reporter)
     {
         $this->additionalReporters[$alias] = $reporter;
     }
 
-    /**
-     * @param array $aliases
-     */
     public function useAdditionalReporters(array $aliases)
     {
         foreach ($this->additionalReporters as $alias => $reporter) {

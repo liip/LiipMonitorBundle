@@ -18,11 +18,11 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
 
     public function groupProvider()
     {
-        return array(
-            array(null),
-            array('default'),
-            array('test'),
-        );
+        return [
+            [null],
+            ['default'],
+            ['test'],
+        ];
     }
 
     /**
@@ -76,7 +76,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getParameter')
             ->with('liip_monitor.runners')
-            ->willReturn(array('liip_monitor.runner_group_1', 'liip_monitor.runner_group_2'));
+            ->willReturn(['liip_monitor.runner_group_1', 'liip_monitor.runner_group_2']);
 
         $runnerMockBuilder = $this->getMockBuilder('Liip\MonitorBundle\Runner');
         $runner1 = $runnerMockBuilder->getMock();
@@ -85,8 +85,8 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(
-                array('liip_monitor.runner_group_1'),
-                array('liip_monitor.runner_group_2')
+                ['liip_monitor.runner_group_1'],
+                ['liip_monitor.runner_group_2']
             )
             ->willReturnOnConsecutiveCalls($runner1, $runner2);
 
@@ -106,7 +106,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getParameter')
             ->with('liip_monitor.runners')
-            ->willReturn(array('liip_monitor.runner_group_1', 'liip_monitor.runner_group_2'));
+            ->willReturn(['liip_monitor.runner_group_1', 'liip_monitor.runner_group_2']);
 
         $result = $this->runnerManager->getGroups();
 
