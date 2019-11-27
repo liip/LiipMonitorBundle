@@ -109,12 +109,12 @@ class SymfonyVersion implements CheckInterface
      */
     private function getResponseAndDecode($url)
     {
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'method' => 'GET',
                 'header' => "User-Agent: LiipMonitorBundle\r\n",
-            ),
-        );
+            ],
+        ];
 
         $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
 

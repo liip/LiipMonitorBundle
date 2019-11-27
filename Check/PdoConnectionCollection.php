@@ -7,7 +7,7 @@ use ZendDiagnostics\Check\PDOCheck;
 
 class PdoConnectionCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct(array $connections)
     {

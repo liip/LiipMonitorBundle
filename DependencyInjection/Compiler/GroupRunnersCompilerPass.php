@@ -7,9 +7,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class GroupRunnersCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $noRunner = false === $container->hasDefinition('liip_monitor.runner');
@@ -28,14 +25,14 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $checkCollectionServices = $container->findTaggedServiceIds('liip_monitor.check_collection');
 
         $groups = array_merge(
-            array($defaultGroup),
+            [$defaultGroup],
             $this->getGroups($checkServices),
             $this->getGroups($checkCollectionServices),
             $this->getGroupsFromParameter($container)
         );
         $groups = array_unique($groups);
 
-        $runners = array();
+        $runners = [];
         foreach ($groups as $group) {
             $container->setDefinition('liip_monitor.runner_'.$group, clone $definition);
             $runners[] = 'liip_monitor.runner_'.$group;
@@ -49,13 +46,11 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param array $services
-     *
      * @return array
      */
     private function getGroups(array $services)
     {
-        $groups = array();
+        $groups = [];
         foreach ($services as $serviceId => $tags) {
             foreach ($tags as $attributes) {
                 if (!empty($attributes['group'])) {
@@ -68,13 +63,11 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     *
      * @return array
      */
     private function getGroupsFromParameter(ContainerBuilder $container)
     {
-        $groups = array();
+        $groups = [];
 
         if ($container->hasParameter('liip_monitor.checks')) {
             $checks = $container->getParameter('liip_monitor.checks');

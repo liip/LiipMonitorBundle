@@ -17,10 +17,10 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner_default', $runner);
-        $this->setParameter('liip_monitor.runners', array('liip_monitor.runner_default'));
+        $this->setParameter('liip_monitor.runners', ['liip_monitor.runner_default']);
 
         $reporter = new Definition();
-        $reporter->addTag('liip_monitor.additional_reporter', array('alias' => 'foo'));
+        $reporter->addTag('liip_monitor.additional_reporter', ['alias' => 'foo']);
         $this->setDefinition('foo_reporter', $reporter);
 
         $this->compile();
@@ -28,10 +28,10 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'liip_monitor.runner_default',
             'addAdditionalReporter',
-            array(
+            [
                 'foo',
                 new Reference('foo_reporter'),
-            )
+            ]
         );
     }
 
@@ -39,7 +39,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner_default', $runner);
-        $this->setParameter('liip_monitor.runners', array('liip_monitor.runner_default'));
+        $this->setParameter('liip_monitor.runners', ['liip_monitor.runner_default']);
 
         $reporter = new Definition();
         $reporter->addTag('liip_monitor.additional_reporter');
@@ -50,10 +50,10 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'liip_monitor.runner_default',
             'addAdditionalReporter',
-            array(
+            [
                 'foo_reporter',
                 new Reference('foo_reporter'),
-            )
+            ]
         );
     }
 

@@ -10,7 +10,7 @@ use ZendDiagnostics\Check\Memcached;
  */
 class MemcachedCollection implements CheckCollectionInterface
 {
-    private $checks = array();
+    private $checks = [];
 
     public function __construct(array $configs)
     {

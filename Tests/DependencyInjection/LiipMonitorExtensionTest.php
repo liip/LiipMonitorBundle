@@ -43,7 +43,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             $checkAlias = $name;
         }
 
-        $this->load(array('checks' => array($name => $config)));
+        $this->load(['checks' => [$name => $config]]);
         $this->compile();
 
         $runner = $this->container->get('liip_monitor.runner');
@@ -71,7 +71,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     public function testDefaultGroupParameter()
     {
-        $this->load(array('checks' => array('php_extensions' => array('foo'))));
+        $this->load(['checks' => ['php_extensions' => ['foo']]]);
         $this->compile();
 
         $this->assertTrue($this->container->hasParameter('liip_monitor.default_group'));
@@ -80,7 +80,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     public function testDefaultGroupParameterCustom()
     {
-        $this->load(array('checks' => array('php_extensions' => array('foo')), 'default_group' => 'foo_bar'));
+        $this->load(['checks' => ['php_extensions' => ['foo']], 'default_group' => 'foo_bar']);
         $this->compile();
 
         $this->assertTrue($this->container->hasParameter('liip_monitor.default_group'));
@@ -93,7 +93,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
         $this->assertFalse($this->container->has('liip_monitor.health_controller'));
 
-        $this->load(array('enable_controller' => true));
+        $this->load(['enable_controller' => true]);
 
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
@@ -110,14 +110,14 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->load(
-            array(
-                'mailer' => array(
+            [
+                'mailer' => [
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
                     'send_on_warning' => true,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertContainerBuilderHasService('liip_monitor.reporter.swift_mailer');
@@ -135,14 +135,14 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->load(
-            array(
-                'mailer' => array(
+            [
+                'mailer' => [
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
                     'send_on_warning' => true,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertContainerBuilderHasService('liip_monitor.reporter.symfony_mailer');
@@ -154,14 +154,14 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $this->load(
-            array(
-                'mailer' => array(
+            [
+                'mailer' => [
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
                     'send_on_warning' => true,
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -177,24 +177,24 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
     public function mailerConfigProvider()
     {
-        return array(
-            array(
-                array(
-                    'mailer' => array(
+        return [
+            [
+                [
+                    'mailer' => [
                         'recipient' => 'foo@example.com',
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'mailer' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'mailer' => [
                         'recipient' => 'foo@example.com',
                         'sender' => 'bar@example.com',
                         'subject' => null,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -204,62 +204,62 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->load(array('checks' => array('expressions' => $config)));
+        $this->load(['checks' => ['expressions' => $config]]);
         $this->compile();
     }
 
     public function invalidCheckProvider()
     {
-        return array(
-            array(array('foo')),
-            array(array('foo' => array('critical_expression' => 'true'))),
-            array(array('foo' => array('label' => 'foo'))),
-        );
+        return [
+            [['foo']],
+            [['foo' => ['critical_expression' => 'true']]],
+            [['foo' => ['label' => 'foo']]],
+        ];
     }
 
     public function checkProvider()
     {
-        return array(
-            array('php_extensions', array('foo'), 'ZendDiagnostics\Check\ExtensionLoaded'),
-            array('php_flags', array('foo' => 'true'), 'ZendDiagnostics\Check\PhpFlag', 'php_flag_foo'),
-            array('php_version', array('5.3.3' => '='), 'ZendDiagnostics\Check\PhpVersion', 'php_version_5.3.3'),
-            array('process_running', 'foo', 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'),
-            array('process_running', array('foo'), 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'),
-            array('process_running', array('foo', 'bar'), 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running', 2),
-            array('process_running', array('foo', 'bar'), 'ZendDiagnostics\Check\ProcessRunning', 'process_bar_running', 2),
-            array('readable_directory', array('foo'), 'ZendDiagnostics\Check\DirReadable'),
-            array('writable_directory', array('foo'), 'ZendDiagnostics\Check\DirWritable'),
-            array('class_exists', array('Foo'), 'ZendDiagnostics\Check\ClassExists'),
-            array('cpu_performance', 0.5, 'ZendDiagnostics\Check\CpuPerformance'),
-            array('disk_usage', array('path' => __DIR__), 'ZendDiagnostics\Check\DiskUsage'),
-            array('symfony_requirements', array('file' => __DIR__.'/../../LiipMonitorBundle.php'), 'Liip\MonitorBundle\Check\SymfonyRequirements'),
-            array('opcache_memory', null, 'ZendDiagnostics\Check\OpCacheMemory'),
-            array('apc_memory', null, 'ZendDiagnostics\Check\ApcMemory'),
-            array('apc_fragmentation', null, 'ZendDiagnostics\Check\ApcFragmentation'),
-            array('doctrine_dbal', 'foo', 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'),
-            array('doctrine_dbal', array('foo'), 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'),
-            array('doctrine_dbal', array('foo', 'bar'), 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection', 2),
-            array('doctrine_dbal', array('foo', 'bar'), 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_bar_connection', 2),
-            array('memcache', array('foo' => null), 'ZendDiagnostics\Check\Memcache', 'memcache_foo'),
-            array('redis', array('foo' => null), 'ZendDiagnostics\Check\Redis', 'redis_foo'),
-            array('http_service', array('foo' => null), 'ZendDiagnostics\Check\HttpService', 'http_service_foo'),
-            array('guzzle_http_service', array('foo' => null), 'ZendDiagnostics\Check\GuzzleHttpService', 'guzzle_http_service_foo'),
-            array('rabbit_mq', array('foo' => null), 'ZendDiagnostics\Check\RabbitMQ', 'rabbit_mq_foo'),
-            array('symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'),
-            array('custom_error_pages', array('error_codes' => array(500), 'path' => __DIR__, 'controller' => 'foo'), 'Liip\MonitorBundle\Check\CustomErrorPages'),
-            array('security_advisory', array('lock_file' => __DIR__.'/../../composer.lock'), 'ZendDiagnostics\Check\SecurityAdvisory'),
-            array('stream_wrapper_exists', array('foo'), 'ZendDiagnostics\Check\StreamWrapperExists'),
-            array('file_ini', array('foo.ini'), 'ZendDiagnostics\Check\IniFile'),
-            array('file_json', array('foo.json'), 'ZendDiagnostics\Check\JsonFile'),
-            array('file_xml', array('foo.xml'), 'ZendDiagnostics\Check\XmlFile'),
-            array('file_yaml', array('foo.yaml'), 'ZendDiagnostics\Check\YamlFile'),
-            array('expressions', array('foo' => array('label' => 'foo', 'critical_expression' => 'true')), 'Liip\MonitorBundle\Check\Expression', 'expression_foo'),
-            array('pdo_connections', array('foo' => array('dsn' => 'my-dsn')), 'ZendDiagnostics\Check\PDOCheck', 'pdo_foo'),
-        );
+        return [
+            ['php_extensions', ['foo'], 'ZendDiagnostics\Check\ExtensionLoaded'],
+            ['php_flags', ['foo' => 'true'], 'ZendDiagnostics\Check\PhpFlag', 'php_flag_foo'],
+            ['php_version', ['5.3.3' => '='], 'ZendDiagnostics\Check\PhpVersion', 'php_version_5.3.3'],
+            ['process_running', 'foo', 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'],
+            ['process_running', ['foo'], 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'],
+            ['process_running', ['foo', 'bar'], 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running', 2],
+            ['process_running', ['foo', 'bar'], 'ZendDiagnostics\Check\ProcessRunning', 'process_bar_running', 2],
+            ['readable_directory', ['foo'], 'ZendDiagnostics\Check\DirReadable'],
+            ['writable_directory', ['foo'], 'ZendDiagnostics\Check\DirWritable'],
+            ['class_exists', ['Foo'], 'ZendDiagnostics\Check\ClassExists'],
+            ['cpu_performance', 0.5, 'ZendDiagnostics\Check\CpuPerformance'],
+            ['disk_usage', ['path' => __DIR__], 'ZendDiagnostics\Check\DiskUsage'],
+            ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
+            ['opcache_memory', null, 'ZendDiagnostics\Check\OpCacheMemory'],
+            ['apc_memory', null, 'ZendDiagnostics\Check\ApcMemory'],
+            ['apc_fragmentation', null, 'ZendDiagnostics\Check\ApcFragmentation'],
+            ['doctrine_dbal', 'foo', 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'],
+            ['doctrine_dbal', ['foo'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'],
+            ['doctrine_dbal', ['foo', 'bar'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection', 2],
+            ['doctrine_dbal', ['foo', 'bar'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_bar_connection', 2],
+            ['memcache', ['foo' => null], 'ZendDiagnostics\Check\Memcache', 'memcache_foo'],
+            ['redis', ['foo' => null], 'ZendDiagnostics\Check\Redis', 'redis_foo'],
+            ['http_service', ['foo' => null], 'ZendDiagnostics\Check\HttpService', 'http_service_foo'],
+            ['guzzle_http_service', ['foo' => null], 'ZendDiagnostics\Check\GuzzleHttpService', 'guzzle_http_service_foo'],
+            ['rabbit_mq', ['foo' => null], 'ZendDiagnostics\Check\RabbitMQ', 'rabbit_mq_foo'],
+            ['symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'],
+            ['custom_error_pages', ['error_codes' => [500], 'path' => __DIR__, 'controller' => 'foo'], 'Liip\MonitorBundle\Check\CustomErrorPages'],
+            ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], 'ZendDiagnostics\Check\SecurityAdvisory'],
+            ['stream_wrapper_exists', ['foo'], 'ZendDiagnostics\Check\StreamWrapperExists'],
+            ['file_ini', ['foo.ini'], 'ZendDiagnostics\Check\IniFile'],
+            ['file_json', ['foo.json'], 'ZendDiagnostics\Check\JsonFile'],
+            ['file_xml', ['foo.xml'], 'ZendDiagnostics\Check\XmlFile'],
+            ['file_yaml', ['foo.yaml'], 'ZendDiagnostics\Check\YamlFile'],
+            ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], 'Liip\MonitorBundle\Check\Expression', 'expression_foo'],
+            ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], 'ZendDiagnostics\Check\PDOCheck', 'pdo_foo'],
+        ];
     }
 
     protected function getContainerExtensions(): array
     {
-        return array(new LiipMonitorExtension());
+        return [new LiipMonitorExtension()];
     }
 }

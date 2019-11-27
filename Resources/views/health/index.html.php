@@ -55,15 +55,15 @@
     </p>
     <h3>REST API</h3>
     <dl>
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo()) ?>"><?php echo $request->getPathInfo() ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo()); ?>"><?php echo $request->getPathInfo(); ?></a></dt>
         <dl>
             Returns this HTML view. If the check was performed without errors then the table row will be <strong>green</strong>, else it will be shown as <strong>red</strong>.
         </dl>
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>"><?php echo $request->getPathInfo().'checks' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks'); ?>"><?php echo $request->getPathInfo().'checks'; ?></a></dt>
         <dd>
             Returns a list of available health checks as a JSON array.
             <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'checks') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'checks'); ?>
 
 [
     "monitor.check.jackrabbit",
@@ -73,11 +73,11 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'all_checks') ?>"><?php echo $request->getPathInfo().'all_checks' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'all_checks'); ?>"><?php echo $request->getPathInfo().'all_checks'; ?></a></dt>
         <dd>
             Returns a list of available groups and health checks as a JSON object.
             <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'all_checks') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'all_checks'); ?>
 
 {
     default: [
@@ -99,11 +99,11 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 </pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>"><?php echo $request->getPathInfo().'groups' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'groups'); ?>"><?php echo $request->getPathInfo().'groups'; ?></a></dt>
         <dd>
             Returns a list of available health checks groups as a JSON array.
             <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'groups') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'groups'); ?>
 
 [
     "default",
@@ -112,11 +112,11 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'list/reporters') ?>"><?php echo $request->getPathInfo().'list/reporters' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'list/reporters'); ?>"><?php echo $request->getPathInfo().'list/reporters'; ?></a></dt>
         <dd>
             Returns a list of additional reporters available as a JSON array.
             <pre>
-$ curl -XGET -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'list/reporters') ?>
+$ curl -XGET -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'list/reporters'); ?>
 
 [
     "newrelic_reporter",
@@ -125,40 +125,40 @@ $ curl -XGET -H "Accept: application/json" <?php echo $request->getUriForPath($r
 ]</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>"><?php echo $request->getPathInfo().'http_status_checks' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks'); ?>"><?php echo $request->getPathInfo().'http_status_checks'; ?></a></dt>
         <dd>Performs all health checks and returns the results within the HTTP Status Code (200 if checks are OK, 502 otherwise). The failure status code is configurable as <code>failure_status_code</code>.
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks'); ?>
 
 HTTP/1.1 200 OK
 </pre>
 
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks'); ?>
 
 HTTP/1.1 502 Bad Gateway
 </pre>
         </dd>
 
-        <dt><?php echo $request->getPathInfo().'http_status_check/check_id' ?></dt>
+        <dt><?php echo $request->getPathInfo().'http_status_check/check_id'; ?></dt>
         <dd>Performs the health check specified by <code>check_id</code> and returns the result within the HTTP Status Code (200 if checks are OK, 502 otherwise). The failure status code is configurable as <code>failure_status_code</code>.
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis'); ?>
 
     HTTP/1.1 200 OK
 </pre>
 
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'http_status_check/monitor.check.redis'); ?>
 
     HTTP/1.1 502 Bad Gateway
 </pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run') ?>"><?php echo $request->getPathInfo().'run' ?></a></dt>
+        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run'); ?>"><?php echo $request->getPathInfo().'run'; ?></a></dt>
         <dd>Performs all health checks and returns the results as an array of JSON objects.
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run'); ?>
 
 {
     "checks":
@@ -172,10 +172,10 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 }</pre>
         </dd>
 
-        <dt><?php echo $request->getPathInfo().'run/check_id' ?></dt>
+        <dt><?php echo $request->getPathInfo().'run/check_id'; ?></dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
-$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run/monitor.check.redis') ?>
+$ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($request->getPathInfo().'run/monitor.check.redis'); ?>
 
 {
    "checkName": "Redis Health Check",
@@ -202,11 +202,11 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 
         The following URLs accept an optional query parameter <code>?group=</code> to specify the check group:
         <dl>
-            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks?group='.$group) ?>"><?php echo $request->getPathInfo().'checks?group='.$group ?></a></dt>
-            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks?group='.$group) ?>"><?php echo $request->getPathInfo().'http_status_checks?group='.$group ?></a></dt>
-            <dt><?php echo $request->getPathInfo().'http_status_check/check_id?group='.$group ?></dt>
-            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run?group='.$group) ?>"><?php echo $request->getPathInfo().'run?group='.$group ?></a></dt>
-            <dt><?php echo $request->getPathInfo().'run/check_id?group='.$group ?></dt>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks?group='.$group); ?>"><?php echo $request->getPathInfo().'checks?group='.$group; ?></a></dt>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks?group='.$group); ?>"><?php echo $request->getPathInfo().'http_status_checks?group='.$group; ?></a></dt>
+            <dt><?php echo $request->getPathInfo().'http_status_check/check_id?group='.$group; ?></dt>
+            <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run?group='.$group); ?>"><?php echo $request->getPathInfo().'run?group='.$group; ?></a></dt>
+            <dt><?php echo $request->getPathInfo().'run/check_id?group='.$group; ?></dt>
         </dl>
 
 </div>

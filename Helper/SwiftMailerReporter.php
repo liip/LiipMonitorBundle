@@ -2,7 +2,6 @@
 
 namespace Liip\MonitorBundle\Helper;
 
-use ArrayObject;
 use Swift_Mailer;
 use Swift_Message;
 use ZendDiagnostics\Check\CheckInterface;
@@ -17,7 +16,6 @@ class SwiftMailerReporter extends AbstractMailReporter
     private $mailer;
 
     /**
-     * @param Swift_Mailer $mailer
      * @param string|array $recipients
      * @param string       $sender
      * @param string       $subject

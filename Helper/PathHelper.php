@@ -14,13 +14,11 @@ class PathHelper
     }
 
     /**
-     * @param array $routes
-     *
      * @return array
      */
     public function generateRoutes(array $routes)
     {
-        $ret = array();
+        $ret = [];
 
         if (!method_exists($this->routerHelper, 'path')) {
             // symfony 2.7 and lower don't have the path method, BC layer
@@ -39,8 +37,6 @@ class PathHelper
     }
 
     /**
-     * @param array $routes
-     *
      * @return string
      */
     public function getRoutesJs(array $routes)

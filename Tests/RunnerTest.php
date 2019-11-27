@@ -21,22 +21,22 @@ class RunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(0, $runner->getReporters());
 
-        $runner->useAdditionalReporters(array('baz'));
+        $runner->useAdditionalReporters(['baz']);
 
         $this->assertCount(0, $runner->getReporters());
 
-        $runner->useAdditionalReporters(array('foo'));
+        $runner->useAdditionalReporters(['foo']);
 
         $this->assertCount(1, $runner->getReporters());
 
-        $runner->useAdditionalReporters(array('bar'));
+        $runner->useAdditionalReporters(['bar']);
 
         $this->assertCount(2, $runner->getReporters());
 
         $runner = new Runner();
         $runner->addAdditionalReporter('foo', $this->createMockReporter());
         $runner->addAdditionalReporter('bar', $this->createMockReporter());
-        $runner->useAdditionalReporters(array('bar', 'foo'));
+        $runner->useAdditionalReporters(['bar', 'foo']);
 
         $this->assertCount(2, $runner->getReporters());
     }

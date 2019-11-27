@@ -11,21 +11,21 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $checkConfig = array(
-            'groups' => array(
-                'default' => array(
-                    'check1' => array(),
-                ),
-                'app_server' => array(
-                    'check1' => array(),
-                    'check_collection1' => array(),
-                ),
-            ),
-        );
+        $checkConfig = [
+            'groups' => [
+                'default' => [
+                    'check1' => [],
+                ],
+                'app_server' => [
+                    'check1' => [],
+                    'check_collection1' => [],
+                ],
+            ],
+        ];
         $this->setParameter('liip_monitor.checks', $checkConfig);
 
         $check1 = new Definition();
-        $check1->addTag('liip_monitor.check', array('alias' => 'check1'));
+        $check1->addTag('liip_monitor.check', ['alias' => 'check1']);
         $this->setDefinition('liip_monitor.check.check1', $check1);
 
         $checkCollection1 = new Definition();
@@ -37,19 +37,19 @@ class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'liip_monitor.check.check1.default',
             'liip_monitor.check',
-            array('group' => 'default', 'alias' => 'check1')
+            ['group' => 'default', 'alias' => 'check1']
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'liip_monitor.check.check1.app_server',
             'liip_monitor.check',
-            array('group' => 'app_server', 'alias' => 'check1')
+            ['group' => 'app_server', 'alias' => 'check1']
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'liip_monitor.check.check_collection1.app_server',
             'liip_monitor.check_collection',
-            array('group' => 'app_server', 'alias' => 'check_collection1')
+            ['group' => 'app_server', 'alias' => 'check_collection1']
         );
 
         $this->assertContainerBuilderNotHasService('liip_monitor.check.check1');

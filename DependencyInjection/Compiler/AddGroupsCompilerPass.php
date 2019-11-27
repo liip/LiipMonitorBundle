@@ -9,9 +9,6 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 {
     const SERVICE_ID_PREFIX = 'liip_monitor.check.';
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasParameter('liip_monitor.checks')) {
@@ -27,15 +24,12 @@ class AddGroupsCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $data
-     *
      * @return array
      */
     private function parseGroups(ContainerBuilder $container, array $data)
     {
-        $checks = array();
-        $checkCollections = array();
+        $checks = [];
+        $checkCollections = [];
 
         foreach ($data as $group => $groupChecks) {
             foreach (array_keys($groupChecks) as $checkName) {
@@ -50,7 +44,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
             }
         }
 
-        return array($checks, $checkCollections);
+        return [$checks, $checkCollections];
     }
 
     /**
@@ -60,9 +54,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
      * So the finally generated parameters have to be injected into each check service definition.
      * (see the preg_match part).
      *
-     * @param ContainerBuilder $container
-     * @param array            $checks
-     * @param string           $tag
+     * @param string $tag
      */
     private function addGroupTags(ContainerBuilder $container, array $checks, $tag)
     {
@@ -73,7 +65,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 
             foreach ($groups as $group) {
                 $tmpDefinition = clone $serviceDefinition;
-                $tmpDefinition->addTag($tag, array('group' => $group, 'alias' => $checkName));
+                $tmpDefinition->addTag($tag, ['group' => $group, 'alias' => $checkName]);
 
                 foreach ($tmpDefinition->getArguments() as $argumentIndex => $argument) {
                     if (is_string($argument) && preg_match('/^%%(.*)%%$/', $argument, $matches)) {

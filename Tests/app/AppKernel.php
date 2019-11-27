@@ -1,10 +1,10 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Class AppKernel
+ * Class AppKernel.
  */
 class AppKernel extends Kernel
 {
@@ -21,16 +21,15 @@ class AppKernel extends Kernel
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config_' . $this->environment . '.yml');
+        $loader->load(__DIR__.'/config_'.$this->environment.'.yml');
     }
 
     public function getProjectDir()
     {
         return __DIR__;
     }
-
 }

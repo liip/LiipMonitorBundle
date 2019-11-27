@@ -36,7 +36,6 @@ class SymfonyMailerReporter extends AbstractMailReporter
             }
         }
 
-
         $message = (new Email())
             ->subject($this->subject)
             ->from($this->sender)
