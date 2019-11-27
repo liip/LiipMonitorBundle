@@ -35,14 +35,23 @@ jobs:
     # Test against latest Symfony 4.3 stable
     - php: 7.3
       env: SYMFONY_REQUIRE="4.3.*"
+      install:
+        - composer require --dev symfony/mailer --no-update
+        - travis_retry composer update -n --prefer-dist --prefer-stable
 
     # Test against latest Symfony 4.4 stable
     - php: 7.3
       env: SYMFONY_REQUIRE="4.4.*"
+      install:
+        - composer require --dev symfony/mailer --no-update
+        - travis_retry composer update -n --prefer-dist --prefer-stable
 
     # Test against latest Symfony 5.0 stable
     - php: 7.3
       env: SYMFONY_REQUIRE="5.0.*"
+      install:
+        - composer require --dev symfony/mailer --no-update
+        - travis_retry composer update -n --prefer-dist --prefer-stable
 
 notifications:
   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
