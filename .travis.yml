@@ -16,6 +16,7 @@ env:
     - COMPOSER_MEMORY_LIMIT=-1
 
 before_install:
+  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
   - composer self-update
   - composer global require --no-progress --no-scripts --no-plugins symfony/flex dev-master
 
@@ -58,6 +59,20 @@ jobs:
       php: 7.3
       script:
         - ./vendor/bin/php-cs-fixer fix -v --dry-run
+
+    - stage: Code Coverage
+      php: 7.3
+      install:
+        - composer require --dev "symfony/mailer" --no-update
+        - travis_retry composer update -n --prefer-dist --prefer-stable
+      before_script:
+        - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
+        - if [[ ! $(php -m | grep -si xdebug) ]]; then echo "xdebug required for coverage"; exit 1; fi
+      script:
+        - ./vendor/bin/phpunit -v --coverage-text --coverage-clover=coverage.clover
+      after_script:
+        - wget https://scrutinizer-ci.com/ocular.phar
+        - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 notifications:
   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
