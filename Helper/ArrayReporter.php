@@ -42,36 +42,7 @@ class ArrayReporter implements ReporterInterface
      */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
-        switch (true) {
-            case $result instanceof SuccessInterface:
-                $status = 0;
-                $statusName = 'check_result_ok';
-                break;
-
-            case $result instanceof WarningInterface:
-                $status = 1;
-                $statusName = 'check_result_warning';
-                $this->globalStatus = self::STATUS_KO;
-                break;
-
-            case $result instanceof SkipInterface:
-                $status = 2;
-                $statusName = 'check_result_skip';
-                break;
-
-            default:
-                $status = 3;
-                $statusName = 'check_result_critical';
-                $this->globalStatus = self::STATUS_KO;
-        }
-
-        $this->results[] = [
-            'checkName' => $check->getLabel(),
-            'message' => $result->getMessage(),
-            'status' => $status,
-            'status_name' => $statusName,
-            'service_id' => $checkAlias,
-        ];
+        $this->results[] = $this->prepareResult($check, $result, $checkAlias);
     }
 
     /**
@@ -104,5 +75,42 @@ class ArrayReporter implements ReporterInterface
     public function onFinish(ResultsCollection $results)
     {
         return;
+    }
+
+    /**
+     * @param $checkAlias
+     */
+    public function prepareResult(CheckInterface $check, ResultInterface $result, $checkAlias): array
+    {
+        switch (true) {
+            case $result instanceof SuccessInterface:
+                $status = 0;
+                $statusName = 'check_result_ok';
+                break;
+
+            case $result instanceof WarningInterface:
+                $status = 1;
+                $statusName = 'check_result_warning';
+                $this->globalStatus = self::STATUS_KO;
+                break;
+
+            case $result instanceof SkipInterface:
+                $status = 2;
+                $statusName = 'check_result_skip';
+                break;
+
+            default:
+                $status = 3;
+                $statusName = 'check_result_critical';
+                $this->globalStatus = self::STATUS_KO;
+        }
+
+        return [
+            'checkName' => $check->getLabel(),
+            'message' => $result->getMessage(),
+            'status' => $status,
+            'status_name' => $statusName,
+            'service_id' => $checkAlias,
+        ];
     }
 }

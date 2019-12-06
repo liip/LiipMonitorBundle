@@ -17,6 +17,7 @@
             <argument type="service" id="liip_monitor.helper" />
             <argument>%liip_monitor.view_template%</argument>
             <argument>%liip_monitor.failure_status_code%</argument>
+            <argument>%liip_monitor.is_lazy_run%</argument>
         </service>
     </services>
 </container>

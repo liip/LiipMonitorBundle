@@ -5,10 +5,12 @@ namespace Liip\MonitorBundle\Controller;
 use Liip\MonitorBundle\Helper\ArrayReporter;
 use Liip\MonitorBundle\Helper\PathHelper;
 use Liip\MonitorBundle\Helper\RunnerManager;
+use Liip\MonitorBundle\Helper\StreamedReporter;
 use Liip\MonitorBundle\Runner;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class HealthCheckController
 {
@@ -16,17 +18,20 @@ class HealthCheckController
     protected $pathHelper;
     protected $template;
     protected $failureStatusCode;
+    protected $isLazyRun;
 
     /**
      * @param $template
      * @param $failureStatusCode
+     * @param $isLazyRun
      */
-    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, $failureStatusCode)
+    public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, $failureStatusCode, $isLazyRun)
     {
         $this->runnerManager = $runnerManager;
         $this->pathHelper = $pathHelper;
         $this->template = $template;
         $this->failureStatusCode = $failureStatusCode;
+        $this->isLazyRun = $isLazyRun;
     }
 
     /**
@@ -38,6 +43,7 @@ class HealthCheckController
 
         $urls = $this->pathHelper->getRoutesJs([
             'liip_monitor_run_all_checks' => ['group' => $group],
+            'liip_monitor_stream_all_checks' => ['group' => $group],
             'liip_monitor_run_single_check' => ['checkId' => 'replaceme', 'group' => $group],
         ]);
 
@@ -51,6 +57,8 @@ class HealthCheckController
             'bundles/liipmonitor/javascript/ember-0.9.5.min.js',
             'bundles/liipmonitor/javascript/app.js',
         ]);
+
+        $isLazyRun = $this->isLazyRun ? 1 : 0;
 
         // this is a hack to make the bundle template agnostic.
         // URL generation for Assets and Routes is still handled by the framework.
@@ -114,6 +122,19 @@ class HealthCheckController
             'checks' => $report->getResults(),
             'globalStatus' => $report->getGlobalStatus(),
         ]);
+    }
+
+    public function streamAllChecksAction(Request $request)
+    {
+        return new StreamedResponse(
+            function () use ($request) {
+                $reporter = new StreamedReporter();
+                $runner = $this->getRunner($request);
+
+                $runner->addReporter($reporter);
+                $runner->run();
+            }
+        );
     }
 
     /**
