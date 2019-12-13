@@ -37,17 +37,14 @@ Health.Check = Em.Object.extend({
 });
 
 Health.healthController = Em.ArrayProxy.create({
-
-    content: [],
-
-    runChecks: function() {
+    batchCheck: function() {
         var self = this;
         jQuery.ajax({
             url: api.liip_monitor_run_all_checks,
             type: 'POST',
             dataType: 'json',
             success: function(data) {
-                var checks = data.checks.map(function(item) {
+                let checks = data.checks.map(function (item) {
                     return Health.Check.create(item);
                 });
                 self.set('content', checks);
@@ -56,6 +53,43 @@ Health.healthController = Em.ArrayProxy.create({
                 console.log("error while loading health checks");
             }
         });
+    },
+
+    streamCheck: function() {
+        let self = this;
+        let lastResponseLength = false;
+        jQuery.ajax({
+            url: api.liip_monitor_stream_all_checks,
+            type: 'POST',
+            xhrFields: {
+                onprogress: function(e)
+                {
+                    let progressResponse;
+                    let response = e.currentTarget.response;
+
+                    progressResponse = lastResponseLength === false ? response : response.substring(lastResponseLength);
+
+                    lastResponseLength = response.length;
+
+                    progressResponse = progressResponse.match(/{"checkName"(.*?)}/)[0];
+                    Health.healthController.addObject(JSON.parse(progressResponse));
+
+                }
+            },
+            error: function() {
+                console.log("error while loading health checks");
+            }
+        });
+    },
+
+    content: [],
+
+    runChecks: function () {
+        if (is_lazy_run) {
+            return this.streamCheck()
+        }
+        return this.batchCheck()
+
     },
 
     repeatCheck: function(check) {
