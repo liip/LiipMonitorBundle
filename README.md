@@ -259,7 +259,6 @@ groups. Additionally, the `monitor:list` has an option `--groups` to list all re
 ```yml
 liip_monitor:
     enable_controller:    false
-    is_lazy_run:          true # Load checks right after it finished using /stream method
     view_template:        null
     failure_status_code:  502
     mailer:

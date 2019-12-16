@@ -24,9 +24,6 @@
     <route id="liip_monitor_run_all_checks" path="/run">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksAction</default>
     </route>
-    <route id="liip_monitor_stream_all_checks" path="/stream">
-        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::streamAllChecksAction</default>
-    </route>
     <route id="liip_monitor_run_single_check" path="/run/{checkId}">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckAction</default>
     </route>

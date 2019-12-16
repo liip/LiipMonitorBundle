@@ -172,12 +172,6 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
 }</pre>
         </dd>
 
-        <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'stream'); ?>"><?php echo $request->getPathInfo().'stream'; ?></a></dt>
-        <dl>Performs all health checks, and lazily streams the results as an array of JSON objects. Works like <code><?php echo $request->getPathInfo().'run'; ?></code>,
-            but checks show right after it finish. Don't use it with standard json parsers. <br/>
-            If <code>is_lazy_run</code> parameter is <strong>true</strong> (by default), checks load using this method. Otherwise it load using <code><?php echo $request->getPathInfo().'run'; ?></code>.
-        </dl>
-
         <dt><?php echo $request->getPathInfo().'run/check_id'; ?></dt>
         <dd>Runs the health check specified by <code>check_id</code> and returns the result as a JSON object.
 <pre>
@@ -216,9 +210,6 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
         </dl>
 
 </div>
-<script type="text/javascript">
-    <?php echo "var is_lazy_run = $isLazyRun;"; ?>
-</script>
 <?php echo $javascript; ?>
 </body>
 </html>
