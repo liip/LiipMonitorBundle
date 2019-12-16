@@ -50,6 +50,8 @@ class ListChecksCommand extends Command
                 $this->listChecks($input, $output);
                 break;
         }
+
+        return 0;
     }
 
     protected function listChecks(InputInterface $input, OutputInterface $output)
