@@ -3,8 +3,8 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Common\Persistence\ConnectionRegistry;
-use ZendDiagnostics\Check\AbstractCheck;
-use ZendDiagnostics\Result\Success;
+use Laminas\Diagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Result\Success;
 
 class DoctrineDbal extends AbstractCheck
 {

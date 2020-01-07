@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle;
 
-use ZendDiagnostics\Runner\Reporter\ReporterInterface;
-use ZendDiagnostics\Runner\Runner as BaseRunner;
+use Laminas\Diagnostics\Runner\Reporter\ReporterInterface;
+use Laminas\Diagnostics\Runner\Runner as BaseRunner;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

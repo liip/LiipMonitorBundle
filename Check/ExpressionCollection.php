@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

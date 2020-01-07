@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckCollectionInterface;
-use ZendDiagnostics\Check\HttpService;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\HttpService;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

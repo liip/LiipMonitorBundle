@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle;
 
+use Laminas\Diagnostics\Check\CheckInterface;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckAssetsEnabledPass;
@@ -17,7 +18,7 @@ class LiipMonitorBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         if (method_exists($container, 'registerForAutoconfiguration')) {
-            $container->registerForAutoconfiguration('ZendDiagnostics\Check\CheckInterface')
+            $container->registerForAutoconfiguration(CheckInterface::class)
                 ->addTag('liip_monitor.check');
         }
 

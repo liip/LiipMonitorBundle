@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckCollectionInterface;
-use ZendDiagnostics\Check\PhpFlag;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\PhpFlag;
 
 class PhpFlagsCollection implements CheckCollectionInterface
 {

@@ -2,11 +2,11 @@
 
 namespace Liip\MonitorBundle\Check;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\Success;
+use Laminas\Diagnostics\Result\Warning;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Failure;
-use ZendDiagnostics\Result\Success;
-use ZendDiagnostics\Result\Warning;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

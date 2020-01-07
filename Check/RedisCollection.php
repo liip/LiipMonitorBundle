@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use ZendDiagnostics\Check\CheckCollectionInterface;
-use ZendDiagnostics\Check\Redis;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\Redis;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

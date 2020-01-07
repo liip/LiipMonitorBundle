@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.file_json" public="true" class="ZendDiagnostics\Check\JsonFile">
+        <service id="liip_monitor.check.file_json" public="true" class="Laminas\Diagnostics\Check\JsonFile">
             <argument>%%liip_monitor.check.file_json%%</argument>
             <call method="setLabel">
                 <argument>%liip_monitor.check.file_json.label%</argument>

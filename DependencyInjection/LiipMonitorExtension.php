@@ -154,34 +154,19 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             case 'file_xml':
             case 'file_yaml':
             case 'expressions':
+            case 'pdo_connections':
                 $container->setParameter($prefix.'.'.$group, $values);
                 break;
 
             case 'symfony_version':
-                break;
-
             case 'opcache_memory':
-                if (!class_exists('ZendDiagnostics\Check\OpCacheMemory')) {
-                    throw new \InvalidArgumentException('Please require at least "v1.0.4" of "ZendDiagnostics"');
-                }
                 break;
 
             case 'doctrine_migrations':
-                if (!class_exists('ZendDiagnostics\Check\DoctrineMigration')) {
-                    throw new \InvalidArgumentException('Please require at least "v1.0.6" of "ZendDiagnostics"');
-                }
-
-                if (!class_exists('Doctrine\Migrations\Configuration\Configuration')) {
+                if (!class_exists(DoctrineMigrationConfiguration::class)) {
                     throw new \InvalidArgumentException('Please require at least "v2.0.0" of "Doctrine Migrations Library"');
                 }
 
-                $container->setParameter($prefix.'.'.$group, $values);
-                break;
-
-            case 'pdo_connections':
-                if (!class_exists('ZendDiagnostics\Check\PDOCheck')) {
-                    throw new \InvalidArgumentException('Please require at least "v1.0.5" of "ZendDiagnostics"');
-                }
                 $container->setParameter($prefix.'.'.$group, $values);
                 break;
         }

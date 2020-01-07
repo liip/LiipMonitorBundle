@@ -2,11 +2,11 @@
 
 namespace Liip\MonitorBundle\Tests\Check;
 
+use Laminas\Diagnostics\Check\Redis;
 use Liip\MonitorBundle\Check\RedisCollection;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
-use ZendDiagnostics\Check\Redis;
 
 final class RedisCollectionTest extends TestCase
 {
@@ -28,7 +28,7 @@ final class RedisCollectionTest extends TestCase
         $collection = new RedisCollection(['default' => $config]);
         $checks = $collection->getChecks();
 
-        /** @var \ZendDiagnostics\Check\Redis $check */
+        /** @var Redis $check */
         $check = $checks['redis_default'];
 
         $this->assertAuthPropertyValue($check, self::AUTH);

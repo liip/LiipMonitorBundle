@@ -2,8 +2,8 @@
 
 namespace Liip\MonitorBundle\Tests;
 
+use Laminas\Diagnostics\Runner\Reporter\ReporterInterface;
 use Liip\MonitorBundle\Runner;
-use ZendDiagnostics\Runner\Reporter\ReporterInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -46,6 +46,6 @@ class RunnerTest extends \PHPUnit\Framework\TestCase
      */
     private function createMockReporter()
     {
-        return $this->getMockBuilder('ZendDiagnostics\Runner\Reporter\ReporterInterface')->getMock();
+        return $this->getMockBuilder(ReporterInterface::class)->getMock();
     }
 }

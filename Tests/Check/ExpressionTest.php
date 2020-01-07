@@ -2,6 +2,10 @@
 
 namespace Liip\MonitorBundle\Tests\Check;
 
+use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
+use Laminas\Diagnostics\Result\Success;
+use Laminas\Diagnostics\Result\Warning;
 use Liip\MonitorBundle\Check\Expression;
 
 /**
@@ -18,7 +22,7 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('foo', $check->getLabel());
 
         $result = $check->check();
-        $this->assertInstanceOf('ZendDiagnostics\Result\ResultInterface', $result);
+        $this->assertInstanceOf(ResultInterface::class, $result);
         $this->assertInstanceOf($expectedResultClass, $result);
         $this->assertSame($expectedMessage, $result->getMessage());
     }
@@ -26,10 +30,10 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
     public function checkResultProvider()
     {
         return [
-            ['true', 'true', null, null, 'ZendDiagnostics\Result\Success', ''],
-            ['false', 'true', 'warning', 'fail', 'ZendDiagnostics\Result\Warning', 'warning'],
-            ['true', 'false', 'warning', 'fail', 'ZendDiagnostics\Result\Failure', 'fail'],
-            ['false', 'false', 'warning', 'fail', 'ZendDiagnostics\Result\Failure', 'fail'],
+            ['true', 'true', null, null, Success::class, ''],
+            ['false', 'true', 'warning', 'fail', Warning::class, 'warning'],
+            ['true', 'false', 'warning', 'fail', Failure::class, 'fail'],
+            ['false', 'false', 'warning', 'fail', Failure::class, 'fail'],
         ];
     }
 }

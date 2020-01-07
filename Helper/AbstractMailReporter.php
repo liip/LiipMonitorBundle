@@ -3,10 +3,10 @@
 namespace Liip\MonitorBundle\Helper;
 
 use ArrayObject;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Collection as ResultsCollection;
-use ZendDiagnostics\Result\ResultInterface;
-use ZendDiagnostics\Runner\Reporter\ReporterInterface;
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Collection as ResultsCollection;
+use Laminas\Diagnostics\Result\ResultInterface;
+use Laminas\Diagnostics\Runner\Reporter\ReporterInterface;
 
 abstract class AbstractMailReporter implements ReporterInterface
 {

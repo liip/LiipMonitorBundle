@@ -3,10 +3,10 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Migrations\Configuration\Configuration;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Check\DoctrineMigration as LaminasDoctrineMigration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use ZendDiagnostics\Check\CheckCollectionInterface;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Check\DoctrineMigration as ZendDoctrineMigration;
 
 /**
  * Class DoctrineMigrationsCollection.
@@ -53,7 +53,7 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
         if (null === $this->checks) {
             $this->checks = [];
             foreach ($this->migrations as $key => $migration) {
-                $check = new ZendDoctrineMigration($this->container->get($migration));
+                $check = new LaminasDoctrineMigration($this->container->get($migration));
                 $check->setLabel(sprintf('Doctrine migrations "%s"', $key));
 
                 $this->checks[$key] = $check;

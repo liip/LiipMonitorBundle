@@ -84,7 +84,7 @@ liip_monitor:
 
 ## Adding Health Checks ##
 
-See [Writing Custom Checks](https://docs.zendframework.com/zend-diagnostics/custom-checks/) for instructions
+See [Writing Custom Checks](https://docs.laminas.dev/laminas-diagnostics/custom-checks/) for instructions
 on creating a custom check.
 
 Once you implemented the class then it's time to register the check service with our service container:
@@ -107,7 +107,7 @@ define the ``id`` used when running health checks individually, otherwise the fu
 id must be used in this case.
 
 If your app's service definition is using `autoconfigure` to discover services then classes 
-which implement `ZendDiagnostics\Check\CheckInterface` will be tagged automatically.
+which implement `Laminas\Diagnostics\Check\CheckInterface` will be tagged automatically.
 
 ## Available Built-in Health Checks ##
 
