@@ -16,7 +16,7 @@ use Symfony\Component\Mailer\MailerInterface;
 class MailerCompilerPass implements CompilerPassInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

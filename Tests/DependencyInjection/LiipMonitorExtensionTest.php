@@ -97,12 +97,19 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
 
-    public function testDisabledMailer()
+    public function testDisabledDefaultMailer()
     {
         $this->load();
 
         $this->assertContainerBuilderHasParameter('liip_monitor.mailer.enabled', false);
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.recipient'));
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.sender'));
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.subject'));
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.send_on_warning'));
+    }
 
+    public function testDisabledMailer()
+    {
         $this->load(
             [
                 'mailer' => [
@@ -120,6 +127,27 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.sender'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.subject'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.send_on_warning'));
+    }
+
+    public function testEnabledMailer()
+    {
+        $this->load(
+            [
+                'mailer' => [
+                    'enabled'   => true,
+                    'recipient' => 'foo@example.com',
+                    'sender' => 'bar@example.com',
+                    'subject' => 'Health Check',
+                    'send_on_warning' => true,
+                ],
+            ]
+        );
+
+        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.enabled', true);
+        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.recipient', ['foo@example.com']);
+        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.sender', 'bar@example.com');
+        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.subject', 'Health Check');
+        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.send_on_warning', true);
     }
 
     /**
