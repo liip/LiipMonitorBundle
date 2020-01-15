@@ -113,6 +113,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->expectExceptionMessage('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
         $this->expectException(\InvalidArgumentException::class);
 
+        $this->assertContainerBuilderNotHasService('mailer');
         $this->compile();
     }
 
