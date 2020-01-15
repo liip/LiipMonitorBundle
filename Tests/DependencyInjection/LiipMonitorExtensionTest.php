@@ -9,7 +9,6 @@ use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -113,7 +112,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->load(
             [
                 'mailer' => [
-                    'enabled'   => false,
+                    'enabled' => false,
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',
@@ -134,7 +133,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->load(
             [
                 'mailer' => [
-                    'enabled'   => true,
+                    'enabled' => true,
                     'recipient' => 'foo@example.com',
                     'sender' => 'bar@example.com',
                     'subject' => 'Health Check',

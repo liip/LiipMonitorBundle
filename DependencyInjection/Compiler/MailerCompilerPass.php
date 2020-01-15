@@ -6,7 +6,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * Class MailerCompilerPass.
@@ -33,9 +32,9 @@ class MailerCompilerPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('mailer');
-        $filename   = \Swift_Mailer::class !== $definition->getClass() ? 'symfony_mailer.xml' : 'swift_mailer.xml';
+        $filename = \Swift_Mailer::class !== $definition->getClass() ? 'symfony_mailer.xml' : 'swift_mailer.xml';
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
         $loader->load($filename);
     }
 }
