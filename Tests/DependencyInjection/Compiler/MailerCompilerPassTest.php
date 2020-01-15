@@ -117,7 +117,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new MailerCompilerPass());
     }
