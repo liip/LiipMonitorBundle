@@ -32,6 +32,7 @@ class LiipMonitorBundleTest extends \PHPUnit\Framework\TestCase
             'Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass' => true,
             'Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass' => true,
             'Liip\MonitorBundle\DependencyInjection\Compiler\AdditionalReporterCompilerPass' => true,
+            'Liip\MonitorBundle\DependencyInjection\Compiler\MailerCompilerPass' => true,
         ];
 
         $this->container->expects($this->exactly(count($compilerPasses)))
