@@ -239,9 +239,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     private function configureMailer(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if (false === $config['mailer']['enabled']) {
-            $config['mailer'] = [
-                'enabled' => false,
-            ];
+            return;
         }
 
         foreach ($config['mailer'] as $key => $value) {

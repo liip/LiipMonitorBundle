@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * Class MailerCompilerPass.
- *
  * @author Carlos Dominguez <ixarlie@gmail.com>
  */
 class MailerCompilerPass implements CompilerPassInterface

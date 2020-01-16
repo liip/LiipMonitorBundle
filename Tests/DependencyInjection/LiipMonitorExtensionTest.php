@@ -100,7 +100,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.enabled', false);
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.enabled'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.recipient'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.sender'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.subject'));
@@ -121,7 +121,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ]
         );
 
-        $this->assertContainerBuilderHasParameter('liip_monitor.mailer.enabled', false);
+        $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.enabled'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.recipient'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.sender'));
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.subject'));
