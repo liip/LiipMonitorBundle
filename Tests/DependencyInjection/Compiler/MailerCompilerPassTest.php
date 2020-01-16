@@ -65,6 +65,19 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
+    public function testSwiftMailerWithAliasDefinition()
+    {
+        $this->setParameter('liip_monitor.mailer.enabled', true);
+        $this->setDefinition('swift.mailer', new Definition(\Swift_Mailer::class));
+        $this->container->setAlias('mailer', 'swift.mailer');
+
+        $this->assertContainerBuilderHasAlias('mailer');
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('liip_monitor.reporter.swift_mailer', SwiftMailerReporter::class);
+    }
+
     public function testSymfonyMailer()
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
@@ -107,6 +120,19 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
+    public function testSymfonyMailerWithAliasDefinition()
+    {
+        $this->setParameter('liip_monitor.mailer.enabled', true);
+        $this->setDefinition('symfony.mailer', new Definition(MailerInterface::class));
+        $this->container->setAlias('mailer', 'symfony.mailer');
+
+        $this->assertContainerBuilderHasAlias('mailer');
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasService('liip_monitor.reporter.symfony_mailer', SymfonyMailerReporter::class);
+    }
+
     public function testMailerWithoutPackage()
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
@@ -114,6 +140,19 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $this->assertContainerBuilderNotHasService('mailer');
+        $this->compile();
+    }
+
+    public function testMailerMissingAliasDefinition()
+    {
+        $this->setParameter('liip_monitor.mailer.enabled', true);
+        $this->setDefinition('swift.mailer', new Definition(\Swift_Mailer::class));
+
+        $this->assertFalse($this->container->hasAlias('mailer'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
+
         $this->compile();
     }
 
