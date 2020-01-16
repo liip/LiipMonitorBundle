@@ -9,7 +9,6 @@ use Doctrine\Migrations\Configuration\Configuration as DoctrineMigrationConfigur
 use Doctrine\Migrations\MigrationException;
 use Liip\MonitorBundle\DoctrineMigrations\Configuration as LiipMigrationConfiguration;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -65,7 +64,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             $loader->load('controller.xml');
         }
 
-        $this->configureMailer($container, $loader, $config);
+        $this->configureMailer($container, $config);
 
         $container->setParameter(sprintf('%s.default_group', $this->getAlias()), $config['default_group']);
 
@@ -236,7 +235,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         }
     }
 
-    private function configureMailer(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    private function configureMailer(ContainerBuilder $container, array $config)
     {
         if (false === $config['mailer']['enabled']) {
             return;
