@@ -48,9 +48,6 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
         $this->migrations = $migrations;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getChecks()
     {
         if (null === $this->checks) {

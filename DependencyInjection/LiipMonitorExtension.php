@@ -111,9 +111,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         $this->configureDoctrineMigrationsCheck($container, $containerParams);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         foreach ($this->migrationConfigurationsServices as $services) {

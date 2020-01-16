@@ -20,9 +20,6 @@ class AppKernel extends Kernel
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config_'.$this->environment.'.yml');

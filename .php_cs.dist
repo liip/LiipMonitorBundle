@@ -7,7 +7,14 @@ $finder = PhpCsFixer\Finder::create()
 ;
 
 return PhpCsFixer\Config::create()
-    ->setRules(['@Symfony' => true])
+    ->setRules([
+        '@Symfony' => true,
+        'no_superfluous_phpdoc_tags' => [
+            'allow_mixed' => true,
+            'allow_unused_params' => false,
+            'remove_inheritdoc' => true,
+        ],
+    ])
     ->setFinder($finder)
     ->setUsingCache(false)
 ;
