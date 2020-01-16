@@ -27,7 +27,7 @@
     "require": {
         "php": "^7.1",
         "symfony/framework-bundle": "^3.4 || ^4.0 || ^5.0",
-        "zendframework/zenddiagnostics": "^1.5"
+        "laminas/laminas-diagnostics": "^1.5"
     },
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^3.0 || ^4.0",

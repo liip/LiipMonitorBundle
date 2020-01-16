@@ -2,6 +2,34 @@
 
 namespace Liip\MonitorBundle\Tests\DependencyInjection;
 
+use Laminas\Diagnostics\Check\ApcFragmentation;
+use Laminas\Diagnostics\Check\ApcMemory;
+use Laminas\Diagnostics\Check\ClassExists;
+use Laminas\Diagnostics\Check\CpuPerformance;
+use Laminas\Diagnostics\Check\DirReadable;
+use Laminas\Diagnostics\Check\DirWritable;
+use Laminas\Diagnostics\Check\DiskUsage;
+use Laminas\Diagnostics\Check\ExtensionLoaded;
+use Laminas\Diagnostics\Check\GuzzleHttpService;
+use Laminas\Diagnostics\Check\HttpService;
+use Laminas\Diagnostics\Check\IniFile;
+use Laminas\Diagnostics\Check\JsonFile;
+use Laminas\Diagnostics\Check\Memcache;
+use Laminas\Diagnostics\Check\OpCacheMemory;
+use Laminas\Diagnostics\Check\PDOCheck;
+use Laminas\Diagnostics\Check\PhpFlag;
+use Laminas\Diagnostics\Check\PhpVersion;
+use Laminas\Diagnostics\Check\ProcessRunning;
+use Laminas\Diagnostics\Check\RabbitMQ;
+use Laminas\Diagnostics\Check\Redis;
+use Laminas\Diagnostics\Check\SecurityAdvisory;
+use Laminas\Diagnostics\Check\StreamWrapperExists;
+use Laminas\Diagnostics\Check\XmlFile;
+use Laminas\Diagnostics\Check\YamlFile;
+use Liip\MonitorBundle\Check\CustomErrorPages;
+use Liip\MonitorBundle\Check\DoctrineDbal;
+use Liip\MonitorBundle\Check\Expression;
+use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
@@ -204,41 +232,41 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     public function checkProvider()
     {
         return [
-            ['php_extensions', ['foo'], 'ZendDiagnostics\Check\ExtensionLoaded'],
-            ['php_flags', ['foo' => 'true'], 'ZendDiagnostics\Check\PhpFlag', 'php_flag_foo'],
-            ['php_version', ['5.3.3' => '='], 'ZendDiagnostics\Check\PhpVersion', 'php_version_5.3.3'],
-            ['process_running', 'foo', 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'],
-            ['process_running', ['foo'], 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running'],
-            ['process_running', ['foo', 'bar'], 'ZendDiagnostics\Check\ProcessRunning', 'process_foo_running', 2],
-            ['process_running', ['foo', 'bar'], 'ZendDiagnostics\Check\ProcessRunning', 'process_bar_running', 2],
-            ['readable_directory', ['foo'], 'ZendDiagnostics\Check\DirReadable'],
-            ['writable_directory', ['foo'], 'ZendDiagnostics\Check\DirWritable'],
-            ['class_exists', ['Foo'], 'ZendDiagnostics\Check\ClassExists'],
-            ['cpu_performance', 0.5, 'ZendDiagnostics\Check\CpuPerformance'],
-            ['disk_usage', ['path' => __DIR__], 'ZendDiagnostics\Check\DiskUsage'],
+            ['php_extensions', ['foo'], ExtensionLoaded::class],
+            ['php_flags', ['foo' => 'true'], PhpFlag::class, 'php_flag_foo'],
+            ['php_version', ['5.3.3' => '='], PhpVersion::class, 'php_version_5.3.3'],
+            ['process_running', 'foo', ProcessRunning::class, 'process_foo_running'],
+            ['process_running', ['foo'], ProcessRunning::class, 'process_foo_running'],
+            ['process_running', ['foo', 'bar'], ProcessRunning::class, 'process_foo_running', 2],
+            ['process_running', ['foo', 'bar'], ProcessRunning::class, 'process_bar_running', 2],
+            ['readable_directory', ['foo'], DirReadable::class],
+            ['writable_directory', ['foo'], DirWritable::class],
+            ['class_exists', ['Foo'], ClassExists::class],
+            ['cpu_performance', 0.5, CpuPerformance::class],
+            ['disk_usage', ['path' => __DIR__], DiskUsage::class],
             ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
-            ['opcache_memory', null, 'ZendDiagnostics\Check\OpCacheMemory'],
-            ['apc_memory', null, 'ZendDiagnostics\Check\ApcMemory'],
-            ['apc_fragmentation', null, 'ZendDiagnostics\Check\ApcFragmentation'],
-            ['doctrine_dbal', 'foo', 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'],
-            ['doctrine_dbal', ['foo'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection'],
-            ['doctrine_dbal', ['foo', 'bar'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_foo_connection', 2],
-            ['doctrine_dbal', ['foo', 'bar'], 'Liip\MonitorBundle\Check\DoctrineDbal', 'doctrine_dbal_bar_connection', 2],
-            ['memcache', ['foo' => null], 'ZendDiagnostics\Check\Memcache', 'memcache_foo'],
-            ['redis', ['foo' => null], 'ZendDiagnostics\Check\Redis', 'redis_foo'],
-            ['http_service', ['foo' => null], 'ZendDiagnostics\Check\HttpService', 'http_service_foo'],
-            ['guzzle_http_service', ['foo' => null], 'ZendDiagnostics\Check\GuzzleHttpService', 'guzzle_http_service_foo'],
-            ['rabbit_mq', ['foo' => null], 'ZendDiagnostics\Check\RabbitMQ', 'rabbit_mq_foo'],
-            ['symfony_version', null, 'Liip\MonitorBundle\Check\SymfonyVersion'],
-            ['custom_error_pages', ['error_codes' => [500], 'path' => __DIR__, 'controller' => 'foo'], 'Liip\MonitorBundle\Check\CustomErrorPages'],
-            ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], 'ZendDiagnostics\Check\SecurityAdvisory'],
-            ['stream_wrapper_exists', ['foo'], 'ZendDiagnostics\Check\StreamWrapperExists'],
-            ['file_ini', ['foo.ini'], 'ZendDiagnostics\Check\IniFile'],
-            ['file_json', ['foo.json'], 'ZendDiagnostics\Check\JsonFile'],
-            ['file_xml', ['foo.xml'], 'ZendDiagnostics\Check\XmlFile'],
-            ['file_yaml', ['foo.yaml'], 'ZendDiagnostics\Check\YamlFile'],
-            ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], 'Liip\MonitorBundle\Check\Expression', 'expression_foo'],
-            ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], 'ZendDiagnostics\Check\PDOCheck', 'pdo_foo'],
+            ['opcache_memory', null, OpCacheMemory::class],
+            ['apc_memory', null, ApcMemory::class],
+            ['apc_fragmentation', null, ApcFragmentation::class],
+            ['doctrine_dbal', 'foo', DoctrineDbal::class, 'doctrine_dbal_foo_connection'],
+            ['doctrine_dbal', ['foo'], DoctrineDbal::class, 'doctrine_dbal_foo_connection'],
+            ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_foo_connection', 2],
+            ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_bar_connection', 2],
+            ['memcache', ['foo' => null], Memcache::class, 'memcache_foo'],
+            ['redis', ['foo' => null], Redis::class, 'redis_foo'],
+            ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
+            ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
+            ['rabbit_mq', ['foo' => null], RabbitMQ::class, 'rabbit_mq_foo'],
+            ['symfony_version', null, SymfonyVersion::class],
+            ['custom_error_pages', ['error_codes' => [500], 'path' => __DIR__, 'controller' => 'foo'], CustomErrorPages::class],
+            ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
+            ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class],
+            ['file_ini', ['foo.ini'], IniFile::class],
+            ['file_json', ['foo.json'], JsonFile::class],
+            ['file_xml', ['foo.xml'], XmlFile::class],
+            ['file_yaml', ['foo.yaml'], YamlFile::class],
+            ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], Expression::class, 'expression_foo'],
+            ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], PDOCheck::class, 'pdo_foo'],
         ];
     }
 

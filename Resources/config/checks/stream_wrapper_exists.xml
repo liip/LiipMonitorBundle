@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.stream_wrapper_exists" public="true" class="ZendDiagnostics\Check\StreamWrapperExists">
+        <service id="liip_monitor.check.stream_wrapper_exists" public="true" class="Laminas\Diagnostics\Check\StreamWrapperExists">
             <argument>%%liip_monitor.check.stream_wrapper_exists%%</argument>
             <tag name="liip_monitor.check" alias="stream_wrapper_exists" />
         </service>

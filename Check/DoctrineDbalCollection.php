@@ -3,7 +3,7 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Common\Persistence\ConnectionRegistry;
-use ZendDiagnostics\Check\CheckCollectionInterface;
+use Laminas\Diagnostics\Check\CheckCollectionInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

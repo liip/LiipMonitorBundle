@@ -3,10 +3,10 @@
 namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Laminas\Diagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Result\Success;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\ConnectionException;
-use ZendDiagnostics\Check\AbstractCheck;
-use ZendDiagnostics\Result\Success;
 
 class DoctrineMongoDb extends AbstractCheck
 {

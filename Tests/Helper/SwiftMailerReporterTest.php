@@ -2,15 +2,16 @@
 
 namespace Liip\MonitorBundle\Tests\Helper;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\AbstractResult;
+use Laminas\Diagnostics\Result\Collection;
+use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
+use Laminas\Diagnostics\Result\Skip;
+use Laminas\Diagnostics\Result\Success;
+use Laminas\Diagnostics\Result\Warning;
 use Liip\MonitorBundle\Helper\SwiftMailerReporter;
 use Prophecy\Argument;
-use ZendDiagnostics\Result\AbstractResult;
-use ZendDiagnostics\Result\Collection;
-use ZendDiagnostics\Result\Failure;
-use ZendDiagnostics\Result\ResultInterface;
-use ZendDiagnostics\Result\Skip;
-use ZendDiagnostics\Result\Success;
-use ZendDiagnostics\Result\Warning;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -26,7 +27,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
         $mailer->send()->shouldNotBeCalled();
 
         $results = new Collection();
-        $results[$this->prophesize('ZendDiagnostics\Check\CheckInterface')->reveal()] = $result;
+        $results[$this->prophesize(CheckInterface::class)->reveal()] = $result;
 
         $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);
@@ -41,7 +42,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
         $mailer->send(Argument::type('Swift_Message'))->shouldBeCalled();
 
         $results = new Collection();
-        $results[$this->prophesize('ZendDiagnostics\Check\CheckInterface')->reveal()] = $result;
+        $results[$this->prophesize(CheckInterface::class)->reveal()] = $result;
 
         $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);

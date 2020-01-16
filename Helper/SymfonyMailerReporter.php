@@ -2,11 +2,11 @@
 
 namespace Liip\MonitorBundle\Helper;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Collection as ResultsCollection;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Collection as ResultsCollection;
-use ZendDiagnostics\Result\ResultInterface;
 
 class SymfonyMailerReporter extends AbstractMailReporter
 {

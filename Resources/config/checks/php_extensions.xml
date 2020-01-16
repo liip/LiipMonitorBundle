@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.php_extensions" public="true" class="ZendDiagnostics\Check\ExtensionLoaded">
+        <service id="liip_monitor.check.php_extensions" public="true" class="Laminas\Diagnostics\Check\ExtensionLoaded">
             <argument>%%liip_monitor.check.php_extensions%%</argument>
             <tag name="liip_monitor.check" alias="php_extensions" />
         </service>

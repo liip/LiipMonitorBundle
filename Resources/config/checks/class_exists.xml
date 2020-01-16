@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.class_exists" public="true" class="ZendDiagnostics\Check\ClassExists">
+        <service id="liip_monitor.check.class_exists" public="true" class="Laminas\Diagnostics\Check\ClassExists">
             <argument>%%liip_monitor.check.class_exists%%</argument>
             <tag name="liip_monitor.check" alias="class_exists" />
         </service>

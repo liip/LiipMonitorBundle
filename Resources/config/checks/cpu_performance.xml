@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.cpu_performance" public="true" class="ZendDiagnostics\Check\CpuPerformance">
+        <service id="liip_monitor.check.cpu_performance" public="true" class="Laminas\Diagnostics\Check\CpuPerformance">
             <argument>%%liip_monitor.check.cpu_performance%%</argument>
             <tag name="liip_monitor.check" alias="cpu_performance" />
         </service>

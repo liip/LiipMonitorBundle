@@ -2,15 +2,15 @@
 
 namespace Liip\MonitorBundle\Tests\Helper;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Collection;
+use Laminas\Diagnostics\Result\Failure;
 use Liip\MonitorBundle\Helper\SymfonyMailerReporter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Collection;
-use ZendDiagnostics\Result\Failure;
 
 class SymfonyMailerReporterTest extends TestCase
 {

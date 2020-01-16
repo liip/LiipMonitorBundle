@@ -2,11 +2,11 @@
 
 namespace Liip\MonitorBundle\Helper;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Collection as ResultsCollection;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Swift_Mailer;
 use Swift_Message;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Collection as ResultsCollection;
-use ZendDiagnostics\Result\ResultInterface;
 
 /**
  * @author louis <louis@systemli.org>

@@ -2,15 +2,15 @@
 
 namespace Liip\MonitorBundle\Helper;
 
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\Collection as ResultsCollection;
+use Laminas\Diagnostics\Result\ResultInterface;
+use Laminas\Diagnostics\Result\SkipInterface;
+use Laminas\Diagnostics\Result\SuccessInterface;
+use Laminas\Diagnostics\Result\WarningInterface;
+use Laminas\Diagnostics\Runner\Reporter\ReporterInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use ZendDiagnostics\Check\CheckInterface;
-use ZendDiagnostics\Result\Collection as ResultsCollection;
-use ZendDiagnostics\Result\ResultInterface;
-use ZendDiagnostics\Result\SkipInterface;
-use ZendDiagnostics\Result\SuccessInterface;
-use ZendDiagnostics\Result\WarningInterface;
-use ZendDiagnostics\Runner\Reporter\ReporterInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

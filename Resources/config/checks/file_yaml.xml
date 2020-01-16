@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="liip_monitor.check.file_yaml" public="true" class="ZendDiagnostics\Check\YamlFile">
+        <service id="liip_monitor.check.file_yaml" public="true" class="Laminas\Diagnostics\Check\YamlFile">
             <argument>%%liip_monitor.check.file_yaml%%</argument>
             <call method="setLabel">
                 <argument>%liip_monitor.check.file_yaml.label%</argument>
