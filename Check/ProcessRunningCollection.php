@@ -26,9 +26,6 @@ class ProcessRunningCollection implements CheckCollectionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getChecks()
     {
         return $this->checks;

@@ -31,9 +31,6 @@ class GuzzleHttpServiceCollection implements CheckCollectionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getChecks()
     {
         return $this->checks;

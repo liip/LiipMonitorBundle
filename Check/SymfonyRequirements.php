@@ -21,9 +21,6 @@ class SymfonyRequirements implements CheckInterface
         require $file;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function check()
     {
         $symfonyRequirements = new \SymfonyRequirements();

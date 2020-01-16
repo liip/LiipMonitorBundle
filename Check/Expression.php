@@ -36,9 +36,6 @@ class Expression implements CheckInterface
         $this->criticalMessage = $criticalMessage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function check()
     {
         $language = $this->getExpressionLanguage();
@@ -54,9 +51,6 @@ class Expression implements CheckInterface
         return new Success();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabel()
     {
         return $this->label;

@@ -19,9 +19,6 @@ class SymfonyVersion implements CheckInterface
     const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
     const VERSION_CHECK_URL = 'http://symfony.com/roadmap.json?version=%s';
 
-    /**
-     * {@inheritdoc}
-     */
     public function check()
     {
         $currentBranch = Kernel::MAJOR_VERSION.'.'.Kernel::MINOR_VERSION;
@@ -49,9 +46,6 @@ class SymfonyVersion implements CheckInterface
         return new Success(sprintf('Your current Symfony branch reaches it\'s end of life in %s.', $endOfLife));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabel()
     {
         return 'Symfony version';

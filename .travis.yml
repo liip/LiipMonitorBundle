@@ -58,7 +58,7 @@ jobs:
     - stage: Code Quality
       php: 7.3
       script:
-        - ./vendor/bin/php-cs-fixer fix -v --dry-run
+        - ./vendor/bin/php-cs-fixer fix -v --dry-run --diff
 
     - stage: Code Coverage
       php: 7.3

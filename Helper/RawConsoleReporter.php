@@ -33,9 +33,6 @@ class RawConsoleReporter implements ReporterInterface
         $this->output = $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
@@ -68,33 +65,21 @@ class RawConsoleReporter implements ReporterInterface
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
         return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
         return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onStop(ResultsCollection $results)
     {
         return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onFinish(ResultsCollection $results)
     {
         return;

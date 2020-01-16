@@ -22,9 +22,6 @@ class HttpServiceCollection implements CheckCollectionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getChecks()
     {
         return $this->checks;

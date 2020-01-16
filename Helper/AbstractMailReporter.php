@@ -41,37 +41,22 @@ abstract class AbstractMailReporter implements ReporterInterface
         $this->sendOnWarning = $sendOnWarning;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onStart(ArrayObject $checks, $runnerConfig)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onStop(ResultsCollection $results)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onFinish(ResultsCollection $results)
     {
         if ($results->getUnknownCount() > 0) {
