@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -242,15 +241,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         if (false === $config['mailer']['enabled']) {
             return;
         }
-
-        try {
-            $mailerDefinition = $container->findDefinition('mailer');
-        } catch (ServiceNotFoundException $e) {
-            throw new \InvalidArgumentException('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
-        }
-
-        $filename = \Swift_Mailer::class !== $mailerDefinition->getClass() ? 'symfony_mailer.xml' : 'swift_mailer.xml';
-        $loader->load($filename);
 
         foreach ($config['mailer'] as $key => $value) {
             $container->setParameter(sprintf('%s.mailer.%s', $this->getAlias(), $key), $value);
