@@ -33,6 +33,11 @@ class ConsoleReporter implements ReporterInterface
         $this->output = $output;
     }
 
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+    }
+
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
