@@ -72,6 +72,8 @@ class HealthCheckCommand extends Command
             $reporter = $this->reporter;
         }
 
+        $reporter->setOutput($output);
+
         if ($allGroups) {
             $groups = $this->runnerManager->getGroups();
         }
