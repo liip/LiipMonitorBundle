@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Kernel;
 class SymfonyVersion implements CheckInterface
 {
     const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
-    const VERSION_CHECK_URL = 'http://symfony.com/roadmap.json?version=%s';
+    const VERSION_CHECK_URL = 'https://symfony.com/releases/%s.json';
 
     public function check()
     {
@@ -103,14 +103,23 @@ class SymfonyVersion implements CheckInterface
      */
     private function getResponseAndDecode($url)
     {
-        $opts = [
-            'http' => [
-                'method' => 'GET',
-                'header' => "User-Agent: LiipMonitorBundle\r\n",
-            ],
-        ];
-
-        $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
+        if (function_exists('curl_version')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'LiipMonitorBundle');
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $array = json_decode($data, true);
+        } else {
+            $opts  = [
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "User-Agent: LiipMonitorBundle\r\n",
+                ],
+            ];
+            $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
+        }
 
         if (empty($array)) {
             throw new \Exception(sprintf('Invalid response from "%s".', $url));
