@@ -103,16 +103,18 @@ class SymfonyVersion implements CheckInterface
      */
     private function getResponseAndDecode($url)
     {
-        if (function_exists('curl_version')) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'LiipMonitorBundle');
-            $data = curl_exec($ch);
-            curl_close($ch);
-            $array = json_decode($data, true);
+        if (class_exists(\Symfony\Component\HttpClient\HttpClient::class)) {
+            $client = \Symfony\Component\HttpClient\HttpClient::create();
+            try {
+                $content = $client->request('GET', $url)->getContent();
+                $array = json_decode($content, true);
+            } catch (ClientExceptionInterface $e) {
+            } catch (RedirectionExceptionInterface $e) {
+            } catch (ServerExceptionInterface $e) {
+            } catch (TransportExceptionInterface $e) {
+            }
         } else {
-            $opts  = [
+            $opts = [
                 'http' => [
                     'method' => 'GET',
                     'header' => "User-Agent: LiipMonitorBundle\r\n",
