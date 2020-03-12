@@ -6,6 +6,7 @@ use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -103,26 +104,18 @@ class SymfonyVersion implements CheckInterface
      */
     private function getResponseAndDecode($url)
     {
-        if (class_exists(\Symfony\Component\HttpClient\HttpClient::class)) {
-            $client = \Symfony\Component\HttpClient\HttpClient::create();
-            try {
-                $content = $client->request('GET', $url)->getContent();
-                $array = json_decode($content, true);
-            } catch (ClientExceptionInterface $e) {
-            } catch (RedirectionExceptionInterface $e) {
-            } catch (ServerExceptionInterface $e) {
-            } catch (TransportExceptionInterface $e) {
-            }
-        } else {
-            $opts = [
-                'http' => [
-                    'method' => 'GET',
-                    'header' => "User-Agent: LiipMonitorBundle\r\n",
-                ],
-            ];
-            $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
+        if (class_exists(HttpClient::class)) {
+            $client = HttpClient::create();
+            return $client->request('GET', $url)->toArray();
         }
 
+        $opts = [
+            'http' => [
+                'method' => 'GET',
+                'header' => "User-Agent: LiipMonitorBundle\r\n",
+            ],
+        ];
+        $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
         if (empty($array)) {
             throw new \Exception(sprintf('Invalid response from "%s".', $url));
         }
