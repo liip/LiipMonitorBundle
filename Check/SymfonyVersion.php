@@ -105,8 +105,7 @@ class SymfonyVersion implements CheckInterface
     private function getResponseAndDecode($url)
     {
         if (class_exists(HttpClient::class)) {
-            $client = HttpClient::create();
-            return $client->request('GET', $url)->toArray();
+            return HttpClient::create()->request('GET', $url)->toArray();
         }
 
         $opts = [
@@ -115,7 +114,9 @@ class SymfonyVersion implements CheckInterface
                 'header' => "User-Agent: LiipMonitorBundle\r\n",
             ],
         ];
+
         $array = json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
+
         if (empty($array)) {
             throw new \Exception(sprintf('Invalid response from "%s".', $url));
         }
