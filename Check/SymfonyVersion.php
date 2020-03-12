@@ -6,6 +6,7 @@ use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -17,7 +18,7 @@ use Symfony\Component\HttpKernel\Kernel;
 class SymfonyVersion implements CheckInterface
 {
     const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
-    const VERSION_CHECK_URL = 'http://symfony.com/roadmap.json?version=%s';
+    const VERSION_CHECK_URL = 'https://symfony.com/releases/%s.json';
 
     public function check()
     {
@@ -103,6 +104,10 @@ class SymfonyVersion implements CheckInterface
      */
     private function getResponseAndDecode($url)
     {
+        if (class_exists(HttpClient::class)) {
+            return HttpClient::create()->request('GET', $url)->toArray();
+        }
+
         $opts = [
             'http' => [
                 'method' => 'GET',
