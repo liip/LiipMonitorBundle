@@ -163,7 +163,7 @@ class HealthCheckController
      */
     protected function runTests(Request $request, $checkId = null)
     {
-        $reporters = $request->query->get('reporters', []);
+        $reporters = $request->query->get('reporters') ?? [];
 
         if (!is_array($reporters)) {
             $reporters = [$reporters];
