@@ -32,7 +32,7 @@
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^3.0 || ^4.0",
         "sensiolabs/security-checker": "^5.0 || ^6.0",
-        "guzzlehttp/guzzle": "^5.3.2 || ^6.3.3",
+        "guzzlehttp/guzzle": "^5.3.2 || ^6.3.3 || ^7.0.1",
         "symfony/expression-language": "^3.4 || ^4.0 || ^5.0",
         "swiftmailer/swiftmailer": "^5.4 || ^6.1",
         "doctrine/migrations": "^2.0",
