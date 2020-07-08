@@ -1,0 +1,20 @@
+daysUntilStale: 60
+daysUntilClose: 7
+exemptLabels: []
+staleLabel: stale
+issues:
+    markComment: >
+        This issue has been automatically marked as stale because it has not had
+        recent activity. It will be closed if no further activity occurs. Thank you
+        for your contributions.
+    closeComment: >
+        This issue has been automatically closed. Feel free to re-open if it is
+        still relevant.
+pulls:
+    markComment: >
+        This pull request has been automatically marked as stale because it has not
+        had recent activity. It will be closed if no further activity occurs. Thank
+        you for your contributions.
+    closeComment: >
+        This pull request has been automatically closed. Feel free to re-create if it
+        is still relevant.
