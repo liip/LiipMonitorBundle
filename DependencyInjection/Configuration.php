@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -321,12 +322,20 @@ class Configuration implements ConfigurationInterface
                         ->info('Checks if error pages have been customized for given error codes')
                         ->children()
                             ->arrayNode('error_codes')
+                                ->example('[404, 503]')
+                                ->info('The status codes that should be customized')
                                 ->isRequired()
                                 ->requiresAtLeastOneElement()
                                 ->prototype('scalar')->end()
                             ->end()
-                            ->scalarNode('path')->defaultValue('%kernel.root_dir%')->end()
-                            ->scalarNode('controller')->defaultValue('%twig.exception_listener.controller%')->end()
+                            ->scalarNode('path')
+                                ->info('The directory where your custom error page twig templates are located. Keep as "%kernel.project_dir%" to use default location.')
+                                ->defaultValue('%kernel.project_dir%')
+                            ->end()
+                            ->scalarNode('controller')
+                                ->defaultNull()
+                                ->setDeprecated(...self::getCustomErrorPagesControllerDeprecationMessage())
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode('security_advisory')
@@ -410,5 +419,28 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $node;
+    }
+
+    /**
+     * Returns the correct deprecation param's as an array for setDeprecated.
+     *
+     * Symfony/Config v5.1 introduces a deprecation notice when calling
+     * setDeprecation() with less than 3 args and the getDeprecation method was
+     * introduced at the same time. By checking if getDeprecation() exists,
+     * we can determine the correct param count to use when calling setDeprecated.
+     */
+    private static function getCustomErrorPagesControllerDeprecationMessage()
+    {
+        $message = 'The custom error page controller option is no longer used; the corresponding config parameter was deprecated in 2.13 and will be dropped in 3.0.';
+
+        if (method_exists(BaseNode::class, 'getDeprecation')) {
+            return [
+                'liip/monitor-bundle',
+                '2.13',
+                $message,
+            ];
+        }
+
+        return [$message];
     }
 }
