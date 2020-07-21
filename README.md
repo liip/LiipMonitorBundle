@@ -415,9 +415,11 @@ liip_monitor:
 
                 # Checks if error pages have been customized for given error codes
                 custom_error_pages:
+                    # The status codes that should be customized
                     error_codes:          [] # Required
-                    path:                 '%kernel.root_dir%'
-                    controller:           '%twig.exception_listener.controller%'
+
+                    # The directory where your custom error page twig templates are located. Keep as "%kernel.project_dir%" to use default location.
+                    path:                 '%kernel.project_dir%'
 
                 # Checks installed composer dependencies against the SensioLabs Security Advisory database
                 security_advisory:

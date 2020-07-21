@@ -5,7 +5,6 @@ namespace Liip\MonitorBundle\Check;
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
 use Laminas\Diagnostics\Result\Success;
-use Symfony\Bundle\TwigBundle\DependencyInjection\Configuration;
 
 /**
  * Checks if error pages have been customized.
@@ -15,11 +14,6 @@ use Symfony\Bundle\TwigBundle\DependencyInjection\Configuration;
 class CustomErrorPages implements CheckInterface
 {
     /**
-     * @var string
-     */
-    protected $kernelRootDir;
-
-    /**
      * @var array
      */
     protected $errorCodes;
@@ -27,50 +21,35 @@ class CustomErrorPages implements CheckInterface
     /**
      * @var string
      */
-    protected $exceptionController;
+    protected $path;
 
     /**
-     * Construct.
-     *
-     * @param array  $errorCodes
-     * @param string $kernelRootDir
-     * @param string $exceptionController
+     * @var string
      */
-    public function __construct($errorCodes, $kernelRootDir, $exceptionController)
+    protected $projectDir;
+
+    public function __construct(array $errorCodes, $path, $projectDir)
     {
         $this->errorCodes = $errorCodes;
-        $this->kernelRootDir = $kernelRootDir;
-        $this->exceptionController = $exceptionController;
+        $this->path = $path;
+        $this->projectDir = $projectDir;
     }
 
     public function check()
     {
-        // check if twig exception controller is not the default one.
-        $config = new Configuration();
-        $tree = $config->getConfigTreeBuilder()->buildTree();
+        $dir = $this->getCustomTemplateDirectory();
+        $missingTemplates = [];
 
-        $reflectionTree = new \ReflectionClass($tree);
-        $reflectionChildren = $reflectionTree->getProperty('children');
-        $reflectionChildren->setAccessible(true);
+        foreach ($this->errorCodes as $errorCode) {
+            $template = sprintf('%s/error%d.html.twig', $dir, $errorCode);
 
-        $values = $reflectionChildren->getValue($tree);
-
-        // we suppose pages has been customized if the exception controller is not the default one,
-        // so we don't look for template file in this case.
-        if ($values['exception_controller']->getDefaultValue() == $this->exceptionController) {
-            $missingTemplate = [];
-
-            foreach ($this->errorCodes as $errorCode) {
-                $template = sprintf('%s/Resources/TwigBundle/views/Exception/error%d.html.twig', $this->kernelRootDir, $errorCode);
-
-                if (!file_exists($template)) {
-                    $missingTemplate[] = $errorCode;
-                }
+            if (!file_exists($template)) {
+                $missingTemplates[] = $errorCode;
             }
+        }
 
-            if (count($missingTemplate) > 0) {
-                return new Failure(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplate)));
-            }
+        if (count($missingTemplates) > 0) {
+            return new Failure(sprintf('No custom error page found for the following codes: %s', implode(', ', $missingTemplates)));
         }
 
         return new Success();
@@ -79,5 +58,21 @@ class CustomErrorPages implements CheckInterface
     public function getLabel()
     {
         return 'Custom error pages';
+    }
+
+    /**
+     * @return string
+     */
+    private function getCustomTemplateDirectory()
+    {
+        if ($this->projectDir !== $this->path) {
+            return $this->path; // using custom directory
+        }
+
+        if (file_exists($dir = $this->projectDir.'/templates/bundles/TwigBundle/Exception')) {
+            return $dir; // using standard 4.0+ directory
+        }
+
+        return $this->projectDir.'/app/Resources/TwigBundle/views/Exception'; // assume using 3.4 dir structure
     }
 }

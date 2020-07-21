@@ -69,6 +69,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             $checkAlias = $name;
         }
 
+        $this->container->setParameter('kernel.project_dir', __DIR__);
         $this->load(['checks' => [$name => $config]]);
         $this->compile();
 
@@ -258,7 +259,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
             ['rabbit_mq', ['foo' => null], RabbitMQ::class, 'rabbit_mq_foo'],
             ['symfony_version', null, SymfonyVersion::class],
-            ['custom_error_pages', ['error_codes' => [500], 'path' => __DIR__, 'controller' => 'foo'], CustomErrorPages::class],
+            ['custom_error_pages', ['error_codes' => [500]], CustomErrorPages::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
             ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class],
             ['file_ini', ['foo.ini'], IniFile::class],
