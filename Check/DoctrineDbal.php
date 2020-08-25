@@ -2,7 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
-use Doctrine\Common\Persistence\ConnectionRegistry;
+use Doctrine\Persistence\ConnectionRegistry;
 use Laminas\Diagnostics\Check\AbstractCheck;
 use Laminas\Diagnostics\Result\Success;
 
