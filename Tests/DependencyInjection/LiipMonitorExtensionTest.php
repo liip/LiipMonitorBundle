@@ -47,7 +47,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     {
         parent::setUp();
 
-        $doctrineMock = $this->getMockBuilder('Doctrine\Common\Persistence\ConnectionRegistry')->getMock();
+        $doctrineMock = $this->getMockBuilder('Doctrine\Persistence\ConnectionRegistry')->getMock();
         $this->container->set('doctrine', $doctrineMock);
         $this->container->addCompilerPass(new AddGroupsCompilerPass());
         $this->container->addCompilerPass(new GroupRunnersCompilerPass());
