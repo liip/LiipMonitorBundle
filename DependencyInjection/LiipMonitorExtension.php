@@ -51,7 +51,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         $loader->load('helper.xml');
         $loader->load('commands.xml');
 
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         if (null === $config['view_template']) {
