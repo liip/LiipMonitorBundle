@@ -17,13 +17,14 @@ class PhpExtensionCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $config) {
-            $check = new PhpExtension($config['name']);
+            $extensionName = $config['name'];
 
-            if (!empty($config['label'])) {
-                $check->setLabel($config['label']);
-            }
+            $check = new PhpExtension($extensionName);
 
-            $this->checks[sprintf('php_extension_%s', $config['name'])] = $check;
+            $label = $config['label'] ?? sprintf('PHP extension `%s` is loaded', $extensionName);
+            $check->setLabel($label);
+
+            $this->checks[sprintf('php_extension_%s', $extensionName)] = $check;
         }
     }
 

@@ -132,19 +132,8 @@ class Configuration implements ConfigurationInterface
                                 foreach ($flags as $flagName => $flagValue) {
                                     if (is_scalar($flagValue)) {
                                         $flags[$flagName] = [
-                                            'flag' => $flagName,
                                             'value' => $flagValue,
                                         ];
-                                    } elseif (is_array($flagValue)) {
-                                        $flags[$flagName]['flag'] = $flagName;
-
-                                        if (!empty($flagName['value'])) {
-                                            $flags[$flagName]['value'] = $flagName['value'];
-                                        }
-
-                                        if (!empty($flagName['label'])) {
-                                            $flags[$flagName]['label'] = $flagName['label'];
-                                        }
                                     }
                                 }
 
@@ -155,8 +144,8 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifArray()
                                 ->then(function ($value) {
-                                    if (!isset($value['flag'], $value['value'])) {
-                                        throw new InvalidArgumentException('You should define a php flag and its value');
+                                    if (!isset($value['value'])) {
+                                        throw new InvalidArgumentException('You should define a value of php flag');
                                     }
 
                                     return $value;
@@ -168,7 +157,32 @@ class Configuration implements ConfigurationInterface
                         ->info('Pairs of a version and a comparison operator')
                         ->example('5.4.15: >=')
                         ->useAttributeAsKey('version')
-                        ->prototype('scalar')->end()
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($versions) {
+                                foreach ($versions as $version => $value) {
+                                    if (is_scalar($value)) {
+                                        $versions[$version] = [
+                                            'operator' => $value,
+                                        ];
+                                    }
+                                }
+
+                                return $versions;
+                            })
+                        ->end()
+                        ->prototype('variable')
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['operator'])) {
+                                        throw new InvalidArgumentException('You should define a comparison operator');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->variableNode('process_running')
                         ->info('Process name/pid or an array of process names/pids')

@@ -14,9 +14,13 @@ class PhpVersionCollection implements CheckCollectionInterface
 
     public function __construct(array $configs)
     {
-        foreach ($configs as $version => $comparisonOperator) {
+        foreach ($configs as $version => $value) {
+            $comparisonOperator = $value['operator'];
+
             $check = new PhpVersion($version, $comparisonOperator);
-            $check->setLabel(sprintf('PHP version "%s" "%s"', $comparisonOperator, $version));
+
+            $label = $value['label'] ?? sprintf('PHP version "%s" "%s"', $comparisonOperator, $version);
+            $check->setLabel($label);
 
             $this->checks[sprintf('php_version_%s', $version)] = $check;
         }

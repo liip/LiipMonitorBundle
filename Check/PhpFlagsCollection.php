@@ -15,12 +15,12 @@ class PhpFlagsCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $setting => $value) {
-            $check = new PhpFlag($value['flag'], $value['value']);
+            $check = new PhpFlag($setting, $value['value']);
 
-            $label = !empty($value['label']) ? $value['label'] : sprintf('PHP flag "%s"', $setting);
+            $label = $value['label'] ?? sprintf('PHP flag "%s"', $setting);
             $check->setLabel($label);
 
-            $this->checks[sprintf('php_flag_%s', $value['flag'])] = $check;
+            $this->checks[sprintf('php_flag_%s', $setting)] = $check;
         }
     }
 
