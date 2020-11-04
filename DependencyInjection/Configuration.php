@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\DependencyInjection;
 
+use InvalidArgumentException;
 use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -104,7 +105,22 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('php_extensions')
                         ->info('Validate that a named extension or a collection of extensions is available')
                         ->example('session.use_only_cookies: false')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['name' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['name'])) {
+                                        throw new InvalidArgumentException('You should define extension name');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('php_flags')
                         ->info('Pairs of a PHP setting and an expected value')
@@ -213,7 +229,7 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->always(function ($value) {
                                     if (is_array($value) && !isset($value['configuration_file']) && !class_exists('Doctrine\\Bundle\\MigrationsBundle\\Command\\DoctrineCommand')) {
-                                        throw new \InvalidArgumentException('You should explicitly define "configuration_file" parameter or install doctrine/doctrine-migrations-bundle to use empty parameter.');
+                                        throw new InvalidArgumentException('You should explicitly define "configuration_file" parameter or install doctrine/doctrine-migrations-bundle to use empty parameter.');
                                     }
 
                                     return $value;

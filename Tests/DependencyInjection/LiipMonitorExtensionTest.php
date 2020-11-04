@@ -9,7 +9,6 @@ use Laminas\Diagnostics\Check\CpuPerformance;
 use Laminas\Diagnostics\Check\DirReadable;
 use Laminas\Diagnostics\Check\DirWritable;
 use Laminas\Diagnostics\Check\DiskUsage;
-use Laminas\Diagnostics\Check\ExtensionLoaded;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
 use Laminas\Diagnostics\Check\HttpService;
 use Laminas\Diagnostics\Check\IniFile;
@@ -29,6 +28,7 @@ use Laminas\Diagnostics\Check\YamlFile;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
+use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
@@ -233,7 +233,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     public function checkProvider()
     {
         return [
-            ['php_extensions', ['foo'], ExtensionLoaded::class],
+            ['php_extensions', ['foo', ['name' => 'bar', 'label' => 'baz']], PhpExtension::class, 'php_extension_foo', 2],
+            ['php_extensions', ['foo', ['name' => 'bar', 'label' => 'baz']], PhpExtension::class, 'php_extension_bar', 2],
             ['php_flags', ['foo' => 'true'], PhpFlag::class, 'php_flag_foo'],
             ['php_version', ['5.3.3' => '='], PhpVersion::class, 'php_version_5.3.3'],
             ['process_running', 'foo', ProcessRunning::class, 'process_foo_running'],
