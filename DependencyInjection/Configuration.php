@@ -114,7 +114,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifArray()
                                 ->then(function ($value) {
                                     if (!isset($value['name'])) {
-                                        throw new InvalidArgumentException('You should define extension name');
+                                        throw new InvalidArgumentException('You should define an extension name');
                                     }
 
                                     return $value;
@@ -126,7 +126,43 @@ class Configuration implements ConfigurationInterface
                         ->info('Pairs of a PHP setting and an expected value')
                         ->example('session.use_only_cookies: false')
                         ->useAttributeAsKey('setting')
-                        ->prototype('scalar')->defaultValue(true)->end()
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($flags) {
+                                foreach ($flags as $flagName => $flagValue) {
+                                    if (is_scalar($flagValue)) {
+                                        $flags[$flagName] = [
+                                            'flag' => $flagName,
+                                            'value' => $flagValue,
+                                        ];
+                                    } elseif (is_array($flagValue)) {
+                                        $flags[$flagName]['flag'] = $flagName;
+
+                                        if (!empty($flagName['value'])) {
+                                            $flags[$flagName]['value'] = $flagName['value'];
+                                        }
+
+                                        if (!empty($flagName['label'])) {
+                                            $flags[$flagName]['label'] = $flagName['label'];
+                                        }
+                                    }
+                                }
+
+                                return $flags;
+                            })
+                        ->end()
+                        ->prototype('variable')
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['flag'], $value['value'])) {
+                                        throw new InvalidArgumentException('You should define a php flag and its value');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('php_version')
                         ->info('Pairs of a version and a comparison operator')

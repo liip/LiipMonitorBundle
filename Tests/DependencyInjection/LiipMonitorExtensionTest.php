@@ -235,7 +235,10 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         return [
             ['php_extensions', ['foo', ['name' => 'bar', 'label' => 'baz']], PhpExtension::class, 'php_extension_foo', 2],
             ['php_extensions', ['foo', ['name' => 'bar', 'label' => 'baz']], PhpExtension::class, 'php_extension_bar', 2],
-            ['php_flags', ['foo' => 'true'], PhpFlag::class, 'php_flag_foo'],
+            ['php_extensions', [['name' => 'foo']], PhpExtension::class, 'php_extension_foo'],
+            ['php_flags', ['foo' => 'true', 'bar' => ['value' => 'false', 'label' => 'baz']], PhpFlag::class, 'php_flag_foo', 2],
+            ['php_flags', ['foo' => 'true', 'bar' => ['value' => 'false', 'label' => 'baz']], PhpFlag::class, 'php_flag_bar', 2],
+            ['php_flags', ['foo' => ['value' => 'false']], PhpFlag::class, 'php_flag_foo'],
             ['php_version', ['5.3.3' => '='], PhpVersion::class, 'php_version_5.3.3'],
             ['process_running', 'foo', ProcessRunning::class, 'process_foo_running'],
             ['process_running', ['foo'], ProcessRunning::class, 'process_foo_running'],
