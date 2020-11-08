@@ -290,6 +290,7 @@ class Configuration implements ConfigurationInterface
                             ->integerNode('warning')->defaultValue(70)->end()
                             ->integerNode('critical')->defaultValue(90)->end()
                             ->scalarNode('path')->defaultValue('%kernel.cache_dir%')->end()
+                            ->scalarNode('label')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('symfony_requirements')

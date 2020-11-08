@@ -5,7 +5,6 @@ namespace Liip\MonitorBundle\Tests\DependencyInjection;
 use Laminas\Diagnostics\Check\ApcFragmentation;
 use Laminas\Diagnostics\Check\ApcMemory;
 use Laminas\Diagnostics\Check\CpuPerformance;
-use Laminas\Diagnostics\Check\DiskUsage;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
 use Laminas\Diagnostics\Check\HttpService;
 use Laminas\Diagnostics\Check\IniFile;
@@ -24,6 +23,7 @@ use Laminas\Diagnostics\Check\XmlFile;
 use Laminas\Diagnostics\Check\YamlFile;
 use Liip\MonitorBundle\Check\ClassExists;
 use Liip\MonitorBundle\Check\CustomErrorPages;
+use Liip\MonitorBundle\Check\DiskUsage;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\PhpExtension;
@@ -254,6 +254,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['class_exists', ['Foo', ['name' => 'Bar', 'label' => 'baz']], ClassExists::class, 'class_exists_Bar', 2],
             ['cpu_performance', 0.5, CpuPerformance::class],
             ['disk_usage', ['path' => __DIR__], DiskUsage::class],
+            ['disk_usage', ['path' => __DIR__, 'label' => 'foo'], DiskUsage::class],
             ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
             ['opcache_memory', null, OpCacheMemory::class],
             ['apc_memory', null, ApcMemory::class],

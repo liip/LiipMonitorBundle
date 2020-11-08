@@ -5,10 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.disk_usage" public="true" class="Laminas\Diagnostics\Check\DiskUsage">
+        <service id="liip_monitor.check.disk_usage" public="true" class="Liip\MonitorBundle\Check\DiskUsage">
             <argument>%%liip_monitor.check.disk_usage.warning%%</argument>
             <argument>%%liip_monitor.check.disk_usage.critical%%</argument>
             <argument>%%liip_monitor.check.disk_usage.path%%</argument>
+            <argument>%%liip_monitor.check.disk_usage.label%%</argument>
             <tag name="liip_monitor.check" alias="disk_usage" />
         </service>
     </services>
