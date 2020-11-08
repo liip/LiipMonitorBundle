@@ -4,7 +4,6 @@ namespace Liip\MonitorBundle\Tests\DependencyInjection;
 
 use Laminas\Diagnostics\Check\ApcFragmentation;
 use Laminas\Diagnostics\Check\ApcMemory;
-use Laminas\Diagnostics\Check\ClassExists;
 use Laminas\Diagnostics\Check\CpuPerformance;
 use Laminas\Diagnostics\Check\DiskUsage;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
@@ -23,6 +22,7 @@ use Laminas\Diagnostics\Check\SecurityAdvisory;
 use Laminas\Diagnostics\Check\StreamWrapperExists;
 use Laminas\Diagnostics\Check\XmlFile;
 use Laminas\Diagnostics\Check\YamlFile;
+use Liip\MonitorBundle\Check\ClassExists;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
@@ -250,7 +250,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['readable_directory', ['foo', ['path' => 'bar', 'label' => 'baz']], ReadableDirectory::class, 'readable_directory_bar', 2],
             ['writable_directory', ['foo', ['path' => 'bar']], WritableDirectory::class, 'writable_directory_foo', 2],
             ['writable_directory', ['foo', ['path' => 'bar', 'label' => 'baz']], WritableDirectory::class, 'writable_directory_bar', 2],
-            ['class_exists', ['Foo'], ClassExists::class],
+            ['class_exists', ['Foo', ['name' => 'Bar']], ClassExists::class, 'class_exists_Foo', 2],
+            ['class_exists', ['Foo', ['name' => 'Bar', 'label' => 'baz']], ClassExists::class, 'class_exists_Bar', 2],
             ['cpu_performance', 0.5, CpuPerformance::class],
             ['disk_usage', ['path' => __DIR__], DiskUsage::class],
             ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],

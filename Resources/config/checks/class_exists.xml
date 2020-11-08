@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.class_exists" public="true" class="Laminas\Diagnostics\Check\ClassExists">
+        <service id="liip_monitor.check.class_exists" public="true" class="Liip\MonitorBundle\Check\ClassExistsCollection">
             <argument>%%liip_monitor.check.class_exists%%</argument>
-            <tag name="liip_monitor.check" alias="class_exists" />
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>

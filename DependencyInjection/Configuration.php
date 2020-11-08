@@ -263,7 +263,22 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('class_exists')
                         ->info('Validate that a class or a collection of classes is available')
                         ->example('["Lua", "My\Fancy\Class"]')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['name' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['name'])) {
+                                        throw new InvalidArgumentException('You should define a class name');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->scalarNode('cpu_performance')
                         ->info('Benchmark CPU performance and return failure if it is below the given ratio')
