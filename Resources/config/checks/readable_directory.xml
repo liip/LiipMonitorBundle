@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.readable_directory" public="true" class="Laminas\Diagnostics\Check\DirReadable">
+        <service id="liip_monitor.check.readable_directory" public="true" class="Liip\MonitorBundle\Check\ReadableDirectoryCollection">
             <argument>%%liip_monitor.check.readable_directory%%</argument>
-            <tag name="liip_monitor.check" alias="readable_directory" />
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>

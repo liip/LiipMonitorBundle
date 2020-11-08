@@ -29,6 +29,7 @@ use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\PhpExtension;
+use Liip\MonitorBundle\Check\ReadableDirectory;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
@@ -246,7 +247,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['process_running', ['foo'], ProcessRunning::class, 'process_foo_running'],
             ['process_running', ['foo', ['name' => 'bar']], ProcessRunning::class, 'process_foo_running', 2],
             ['process_running', ['foo', ['name' => 'bar', 'label' => 'baz']], ProcessRunning::class, 'process_bar_running', 2],
-            ['readable_directory', ['foo'], DirReadable::class],
+            ['readable_directory', ['foo', ['path' => 'bar']], ReadableDirectory::class, 'readable_directory_foo', 2],
+            ['readable_directory', ['foo', ['path' => 'bar', 'label' => 'baz']], ReadableDirectory::class, 'readable_directory_bar', 2],
             ['writable_directory', ['foo'], DirWritable::class],
             ['class_exists', ['Foo'], ClassExists::class],
             ['cpu_performance', 0.5, CpuPerformance::class],
