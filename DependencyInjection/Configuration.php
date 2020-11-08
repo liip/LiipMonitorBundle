@@ -243,7 +243,22 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('writable_directory')
                         ->info('Validate that a given path (or a collection of paths) is a dir and is writable')
                         ->example('["%kernel.cache_dir%"]')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['path' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['path'])) {
+                                        throw new InvalidArgumentException('You should define a directory path');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('class_exists')
                         ->info('Validate that a class or a collection of classes is available')

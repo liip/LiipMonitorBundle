@@ -7,7 +7,7 @@ namespace Liip\MonitorBundle\Check;
 use Laminas\Diagnostics\Check\CheckCollectionInterface;
 use Laminas\Diagnostics\Check\CheckInterface;
 
-class ReadableDirectoryCollection implements CheckCollectionInterface
+class WritableDirectoryCollection implements CheckCollectionInterface
 {
     /**
      * @var CheckInterface[]
@@ -19,12 +19,12 @@ class ReadableDirectoryCollection implements CheckCollectionInterface
         foreach ($configs as $config) {
             $directoryName = $config['path'];
 
-            $check = new ReadableDirectory($directoryName);
+            $check = new WritableDirectory($directoryName);
 
-            $label = $config['label'] ?? sprintf('Directory `%s` is readable', $directoryName);
+            $label = $config['label'] ?? sprintf('Directory `%s` is writable', $directoryName);
             $check->setLabel($label);
 
-            $this->checks[sprintf('readable_directory_%s', $directoryName)] = $check;
+            $this->checks[sprintf('writable_directory_%s', $directoryName)] = $check;
         }
     }
 

@@ -6,8 +6,6 @@ use Laminas\Diagnostics\Check\ApcFragmentation;
 use Laminas\Diagnostics\Check\ApcMemory;
 use Laminas\Diagnostics\Check\ClassExists;
 use Laminas\Diagnostics\Check\CpuPerformance;
-use Laminas\Diagnostics\Check\DirReadable;
-use Laminas\Diagnostics\Check\DirWritable;
 use Laminas\Diagnostics\Check\DiskUsage;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
 use Laminas\Diagnostics\Check\HttpService;
@@ -31,6 +29,7 @@ use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\ReadableDirectory;
 use Liip\MonitorBundle\Check\SymfonyVersion;
+use Liip\MonitorBundle\Check\WritableDirectory;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
@@ -249,7 +248,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['process_running', ['foo', ['name' => 'bar', 'label' => 'baz']], ProcessRunning::class, 'process_bar_running', 2],
             ['readable_directory', ['foo', ['path' => 'bar']], ReadableDirectory::class, 'readable_directory_foo', 2],
             ['readable_directory', ['foo', ['path' => 'bar', 'label' => 'baz']], ReadableDirectory::class, 'readable_directory_bar', 2],
-            ['writable_directory', ['foo'], DirWritable::class],
+            ['writable_directory', ['foo', ['path' => 'bar']], WritableDirectory::class, 'writable_directory_foo', 2],
+            ['writable_directory', ['foo', ['path' => 'bar', 'label' => 'baz']], WritableDirectory::class, 'writable_directory_bar', 2],
             ['class_exists', ['Foo'], ClassExists::class],
             ['cpu_performance', 0.5, CpuPerformance::class],
             ['disk_usage', ['path' => __DIR__], DiskUsage::class],

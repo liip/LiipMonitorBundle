@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.writable_directory" public="true" class="Laminas\Diagnostics\Check\DirWritable">
+        <service id="liip_monitor.check.writable_directory" public="true" class="Liip\MonitorBundle\Check\WritableDirectoryCollection">
             <argument>%%liip_monitor.check.writable_directory%%</argument>
-            <tag name="liip_monitor.check" alias="writable_directory" />
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>

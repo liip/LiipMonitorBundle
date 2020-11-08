@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
-use Laminas\Diagnostics\Check\DirReadable;
+use Laminas\Diagnostics\Check\DirWritable;
 use Laminas\Diagnostics\Result\ResultInterface;
 
-class ReadableDirectory implements CheckInterface
+class WritableDirectory implements CheckInterface
 {
     /**
      * @var CheckInterface
@@ -17,7 +17,7 @@ class ReadableDirectory implements CheckInterface
 
     public function __construct(string $path, string $label = null)
     {
-        $check = new DirReadable($path);
+        $check = new DirWritable($path);
         $check->setLabel($label);
 
         $this->check = $check;
