@@ -12,17 +12,17 @@ class ProcessRunningCollection implements CheckCollectionInterface
 {
     private $checks = [];
 
-    public function __construct($processes)
+    public function __construct(array $configs)
     {
-        if (!is_array($processes)) {
-            $processes = [$processes];
-        }
+        foreach ($configs as $config) {
+            $processName = $config['name'];
 
-        foreach ($processes as $process) {
-            $check = new ProcessRunning($process);
-            $check->setLabel(sprintf('Process "%s" running', $process));
+            $check = new ProcessRunning($processName);
 
-            $this->checks[sprintf('process_%s_running', $process)] = $check;
+            $label = $config['label'] ?? sprintf('Process "%s" running', $processName);
+            $check->setLabel($label);
+
+            $this->checks[sprintf('process_%s_running', $processName)] = $check;
         }
     }
 

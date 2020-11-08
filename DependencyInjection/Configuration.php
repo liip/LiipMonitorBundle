@@ -187,6 +187,38 @@ class Configuration implements ConfigurationInterface
                     ->variableNode('process_running')
                         ->info('Process name/pid or an array of process names/pids')
                         ->example('[apache, foo]')
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $key => $process) {
+                                        if (is_scalar($process)) {
+                                            $value[$key] = [
+                                                'name' => $process,
+                                            ];
+                                        }
+                                    }
+                                } else {
+                                    $value = [
+                                        ['name' => $value],
+                                    ];
+                                }
+
+                                return $value;
+                            })
+                        ->end()
+                        ->validate()
+                            ->always()
+                            ->then(function ($value) {
+                                foreach ($value as $process) {
+                                    if (!isset($process['name'])) {
+                                        throw new InvalidArgumentException('You should define a process name');
+                                    }
+                                }
+
+                                return $value;
+                            })
+                        ->end()
                     ->end()
                     ->arrayNode('readable_directory')
                         ->info('Validate that a given path (or a collection of paths) is a dir and is readable')
