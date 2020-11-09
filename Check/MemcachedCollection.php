@@ -16,7 +16,9 @@ class MemcachedCollection implements CheckCollectionInterface
     {
         foreach ($configs as $name => $config) {
             $check = new Memcached($config['host'], $config['port']);
-            $check->setLabel(sprintf('Memcached "%s"', $name));
+
+            $label = $config['label'] ?? sprintf('Memcached "%s"', $name);
+            $check->setLabel($label);
 
             $this->checks[sprintf('memcached_%s', $name)] = $check;
         }

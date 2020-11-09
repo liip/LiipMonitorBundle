@@ -8,6 +8,7 @@ use Laminas\Diagnostics\Check\HttpService;
 use Laminas\Diagnostics\Check\IniFile;
 use Laminas\Diagnostics\Check\JsonFile;
 use Laminas\Diagnostics\Check\Memcache;
+use Laminas\Diagnostics\Check\Memcached;
 use Laminas\Diagnostics\Check\PDOCheck;
 use Laminas\Diagnostics\Check\PhpFlag;
 use Laminas\Diagnostics\Check\PhpVersion;
@@ -268,6 +269,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_bar_connection', 2],
             ['memcache', ['foo' => null], Memcache::class, 'memcache_foo'],
             ['memcache', ['foo' => ['label' => 'bar']], Memcache::class, 'memcache_foo'],
+            ['memcached', ['foo' => null], Memcached::class, 'memcached_foo'],
+            ['memcached', ['foo' => ['label' => 'bar']], Memcached::class, 'memcached_foo'],
             ['redis', ['foo' => null], Redis::class, 'redis_foo'],
             ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
