@@ -5,8 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.security_advisory" public="true" class="Laminas\Diagnostics\Check\SecurityAdvisory">
+        <service id="liip_monitor.check.security_advisory" public="true" class="Liip\MonitorBundle\Check\SecurityAdvisory">
             <argument>%%liip_monitor.check.security_advisory.lock_file%%</argument>
+            <argument>%%liip_monitor.check.security_advisory.label%%</argument>
             <tag name="liip_monitor.check" alias="security_advisory" />
         </service>
     </services>

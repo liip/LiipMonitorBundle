@@ -496,6 +496,7 @@ class Configuration implements ConfigurationInterface
                         ->info('Checks installed composer dependencies against the SensioLabs Security Advisory database')
                         ->children()
                             ->scalarNode('lock_file')->defaultValue('%kernel.project_dir%/composer.lock')->end()
+                            ->scalarNode('label')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('stream_wrapper_exists')

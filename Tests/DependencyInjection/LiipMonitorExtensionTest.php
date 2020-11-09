@@ -15,7 +15,6 @@ use Laminas\Diagnostics\Check\PhpVersion;
 use Laminas\Diagnostics\Check\ProcessRunning;
 use Laminas\Diagnostics\Check\RabbitMQ;
 use Laminas\Diagnostics\Check\Redis;
-use Laminas\Diagnostics\Check\SecurityAdvisory;
 use Laminas\Diagnostics\Check\StreamWrapperExists;
 use Laminas\Diagnostics\Check\XmlFile;
 use Laminas\Diagnostics\Check\YamlFile;
@@ -29,6 +28,7 @@ use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\OpCacheMemory;
 use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\ReadableDirectory;
+use Liip\MonitorBundle\Check\SecurityAdvisory;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\Check\WritableDirectory;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
@@ -282,6 +282,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['symfony_version', null, SymfonyVersion::class],
             ['custom_error_pages', ['error_codes' => [500]], CustomErrorPages::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
+            ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock', 'label' => 'foo'], SecurityAdvisory::class],
             ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class],
             ['file_ini', ['foo.ini'], IniFile::class],
             ['file_json', ['foo.json'], JsonFile::class],
