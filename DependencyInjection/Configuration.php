@@ -388,6 +388,7 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('host')->defaultValue('localhost')->end()
                                 ->integerNode('port')->defaultValue(11211)->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()

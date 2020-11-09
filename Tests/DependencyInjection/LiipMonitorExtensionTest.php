@@ -267,6 +267,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_foo_connection', 2],
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_bar_connection', 2],
             ['memcache', ['foo' => null], Memcache::class, 'memcache_foo'],
+            ['memcache', ['foo' => ['label' => 'bar']], Memcache::class, 'memcache_foo'],
             ['redis', ['foo' => null], Redis::class, 'redis_foo'],
             ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
