@@ -431,6 +431,7 @@ class Configuration implements ConfigurationInterface
                                     ->cannotBeEmpty()
                                     ->info('Connection name from doctrine DBAL configuration')
                                 ->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                             ->beforeNormalization()
                                 ->ifString()

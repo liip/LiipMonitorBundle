@@ -54,7 +54,9 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
             $this->checks = [];
             foreach ($this->migrations as $key => $migration) {
                 $check = new LaminasDoctrineMigration($this->container->get($migration));
-                $check->setLabel(sprintf('Doctrine migrations "%s"', $key));
+
+                $label = $migration['label'] ?? sprintf('Doctrine migrations "%s"', $key);
+                $check->setLabel($label);
 
                 $this->checks[$key] = $check;
             }

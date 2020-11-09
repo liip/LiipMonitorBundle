@@ -19,7 +19,6 @@ use Liip\MonitorBundle\Check\CpuPerformance;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DiskUsage;
 use Liip\MonitorBundle\Check\DoctrineDbal;
-use Liip\MonitorBundle\Check\DoctrineMongoDb;
 use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\IniFile;
 use Liip\MonitorBundle\Check\JsonFile;
