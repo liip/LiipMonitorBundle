@@ -5,9 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="liip_monitor.check.apc_memory" public="true" class="Laminas\Diagnostics\Check\ApcMemory">
+        <service id="liip_monitor.check.apc_memory" public="true" class="Liip\MonitorBundle\Check\ApcMemory">
             <argument>%%liip_monitor.check.apc_memory.warning%%</argument>
             <argument>%%liip_monitor.check.apc_memory.critical%%</argument>
+            <argument>%%liip_monitor.check.apc_memory.label%%</argument>
             <tag name="liip_monitor.check" alias="apc_memory" />
         </service>
     </services>

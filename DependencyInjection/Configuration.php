@@ -313,6 +313,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->integerNode('warning')->defaultValue(70)->end()
                             ->integerNode('critical')->defaultValue(90)->end()
+                            ->scalarNode('label')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('apc_fragmentation')
