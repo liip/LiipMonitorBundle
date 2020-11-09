@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
 
@@ -12,16 +13,23 @@ use Laminas\Diagnostics\Result\Warning;
  */
 class SymfonyRequirements implements CheckInterface
 {
-    public function __construct($file)
+    /**
+     * @var string|null
+     */
+    private $label;
+
+    public function __construct(string $file, string $label = null)
     {
         if (!file_exists($file)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not exist.', $file));
         }
 
+        $this->label = $label;
+
         require $file;
     }
 
-    public function check()
+    public function check(): ResultInterface
     {
         $symfonyRequirements = new \SymfonyRequirements();
 
@@ -36,8 +44,8 @@ class SymfonyRequirements implements CheckInterface
         return new Success();
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
-        return 'Symfony2 Requirements';
+        return $this->label ?? 'Symfony2 Requirements';
     }
 }

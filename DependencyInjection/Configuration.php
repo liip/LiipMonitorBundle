@@ -297,6 +297,7 @@ class Configuration implements ConfigurationInterface
                         ->info('Checks Symfony2 requirements file')
                         ->children()
                             ->scalarNode('file')->defaultValue('%kernel.root_dir%/SymfonyRequirements.php')->end()
+                            ->scalarNode('label')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('opcache_memory')

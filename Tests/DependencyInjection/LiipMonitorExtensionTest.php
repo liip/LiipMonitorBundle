@@ -255,7 +255,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['cpu_performance', 0.5, CpuPerformance::class],
             ['disk_usage', ['path' => __DIR__], DiskUsage::class],
             ['disk_usage', ['path' => __DIR__, 'label' => 'foo'], DiskUsage::class],
-            ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
+            ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php', 'label' => 'foo'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
             ['opcache_memory', null, OpCacheMemory::class],
             ['apc_memory', null, ApcMemory::class],
             ['apc_fragmentation', null, ApcFragmentation::class],
