@@ -446,6 +446,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('content')->defaultNull()->end()
                                 ->scalarNode('method')->defaultValue('GET')->end()
                                 ->scalarNode('body')->defaultNull()->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()

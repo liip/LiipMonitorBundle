@@ -25,7 +25,9 @@ class GuzzleHttpServiceCollection implements CheckCollectionInterface
                 $config['method'],
                 $config['body']
             );
-            $check->setLabel(sprintf('Guzzle Http Service "%s"', $name));
+
+            $label = $config['label'] ?? sprintf('Guzzle Http Service "%s"', $name);
+            $check->setLabel($label);
 
             $this->checks[sprintf('guzzle_http_service_%s', $name)] = $check;
         }

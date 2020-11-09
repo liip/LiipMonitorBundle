@@ -276,6 +276,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
             ['http_service', ['foo' => ['label' => 'bar']], HttpService::class, 'http_service_foo'],
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
+            ['guzzle_http_service', ['foo' => ['label' => 'bar']], GuzzleHttpService::class, 'guzzle_http_service_foo'],
             ['rabbit_mq', ['foo' => null], RabbitMQ::class, 'rabbit_mq_foo'],
             ['symfony_version', null, SymfonyVersion::class],
             ['custom_error_pages', ['error_codes' => [500]], CustomErrorPages::class],
