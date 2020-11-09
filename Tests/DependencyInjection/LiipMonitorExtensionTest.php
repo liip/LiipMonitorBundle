@@ -281,6 +281,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['rabbit_mq', ['foo' => ['label' => 'bar']], RabbitMQ::class, 'rabbit_mq_foo'],
             ['symfony_version', null, SymfonyVersion::class],
             ['custom_error_pages', ['error_codes' => [500]], CustomErrorPages::class],
+            ['custom_error_pages', ['error_codes' => [500], 'label' => 'foo'], CustomErrorPages::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock', 'label' => 'foo'], SecurityAdvisory::class],
             ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class, 'stream_wrapper_exists_foo'],

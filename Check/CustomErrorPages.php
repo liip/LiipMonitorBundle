@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 
 /**
@@ -28,14 +29,20 @@ class CustomErrorPages implements CheckInterface
      */
     protected $projectDir;
 
-    public function __construct(array $errorCodes, $path, $projectDir)
+    /**
+     * @var string|null
+     */
+    private $label;
+
+    public function __construct(array $errorCodes, string $path, string $projectDir, string $label = null)
     {
         $this->errorCodes = $errorCodes;
         $this->path = $path;
         $this->projectDir = $projectDir;
+        $this->label = $label;
     }
 
-    public function check()
+    public function check(): ResultInterface
     {
         $dir = $this->getCustomTemplateDirectory();
         $missingTemplates = [];
@@ -55,15 +62,12 @@ class CustomErrorPages implements CheckInterface
         return new Success();
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
-        return 'Custom error pages';
+        return $this->label ?? 'Custom error pages';
     }
 
-    /**
-     * @return string
-     */
-    private function getCustomTemplateDirectory()
+    private function getCustomTemplateDirectory(): string
     {
         if ($this->projectDir !== $this->path) {
             return $this->path; // using custom directory

@@ -9,6 +9,7 @@
             <argument>%%liip_monitor.check.custom_error_pages.error_codes%%</argument>
             <argument>%%liip_monitor.check.custom_error_pages.path%%</argument>
             <argument>%kernel.project_dir%</argument>
+            <argument>%%liip_monitor.check.custom_error_pages.label%%</argument>
             <tag name="liip_monitor.check" alias="custom_error_pages" />
         </service>
     </services>

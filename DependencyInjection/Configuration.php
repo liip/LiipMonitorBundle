@@ -490,6 +490,7 @@ class Configuration implements ConfigurationInterface
                                 ->defaultNull()
                                 ->setDeprecated(...self::getCustomErrorPagesControllerDeprecationMessage())
                             ->end()
+                            ->scalarNode('label')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('security_advisory')
