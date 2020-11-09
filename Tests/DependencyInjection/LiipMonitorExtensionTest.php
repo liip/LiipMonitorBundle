@@ -19,6 +19,7 @@ use Liip\MonitorBundle\Check\CpuPerformance;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DiskUsage;
 use Liip\MonitorBundle\Check\DoctrineDbal;
+use Liip\MonitorBundle\Check\DoctrineMongoDb;
 use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\IniFile;
 use Liip\MonitorBundle\Check\JsonFile;
@@ -268,6 +269,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['doctrine_dbal', ['foo'], DoctrineDbal::class, 'doctrine_dbal_foo_connection'],
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_foo_connection', 2],
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_bar_connection', 2],
+            ['doctrine_dbal', ['foo', ['name' => 'bar', 'label' => 'baz']], DoctrineDbal::class, 'doctrine_dbal_bar_connection', 2],
             ['memcache', ['foo' => null], Memcache::class, 'memcache_foo'],
             ['memcache', ['foo' => ['label' => 'bar']], Memcache::class, 'memcache_foo'],
             ['memcached', ['foo' => null], Memcached::class, 'memcached_foo'],

@@ -348,11 +348,75 @@ class Configuration implements ConfigurationInterface
                         ->defaultNull()
                         ->info('Connection name or an array of connection names')
                         ->example('[default, crm]')
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $key => $connection) {
+                                        if (is_scalar($connection)) {
+                                            $value[$key] = [
+                                                'name' => $connection,
+                                            ];
+                                        }
+                                    }
+                                } else {
+                                    $value = [
+                                        ['name' => $value],
+                                    ];
+                                }
+
+                                return $value;
+                            })
+                        ->end()
+                        ->validate()
+                            ->ifArray()
+                            ->then(function ($value) {
+                                foreach ($value as $connection) {
+                                    if (!isset($connection['name'])) {
+                                        throw new InvalidArgumentException('You should define connection name');
+                                    }
+                                }
+
+                                return $value;
+                            })
+                        ->end()
                     ->end()
                     ->variableNode('doctrine_mongodb')
                         ->defaultNull()
                         ->info('Connection name or an array of connection names')
                         ->example('[default, crm]')
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $key => $connection) {
+                                        if (is_scalar($connection)) {
+                                            $value[$key] = [
+                                                'name' => $connection,
+                                            ];
+                                        }
+                                    }
+                                } else {
+                                    $value = [
+                                        ['name' => $value],
+                                    ];
+                                }
+
+                                return $value;
+                            })
+                        ->end()
+                        ->validate()
+                            ->ifArray()
+                            ->then(function ($value) {
+                                foreach ($value as $connection) {
+                                    if (!isset($connection['name'])) {
+                                        throw new InvalidArgumentException('You should define connection name');
+                                    }
+                                }
+
+                                return $value;
+                            })
+                        ->end()
                     ->end()
                     ->arrayNode('doctrine_migrations')
                         ->useAttributeAsKey('name')

@@ -14,15 +14,15 @@ class DoctrineDbalCollection implements CheckCollectionInterface
 
     public function __construct(ConnectionRegistry $manager, $connections)
     {
-        if (!is_array($connections)) {
-            $connections = [$connections];
-        }
-
         foreach ($connections as $connection) {
-            $check = new DoctrineDbal($manager, $connection);
-            $check->setLabel(sprintf('Doctrine DBAL "%s" connection', $connection));
+            $connectionName = $connection['name'];
 
-            $this->checks[sprintf('doctrine_dbal_%s_connection', $connection)] = $check;
+            $check = new DoctrineDbal($manager, $connectionName);
+
+            $label = $connection['label'] ?? sprintf('Doctrine DBAL "%s" connection', $connectionName);
+            $check->setLabel($label);
+
+            $this->checks[sprintf('doctrine_dbal_%s_connection', $connectionName)] = $check;
         }
     }
 
