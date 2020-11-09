@@ -272,6 +272,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['memcached', ['foo' => null], Memcached::class, 'memcached_foo'],
             ['memcached', ['foo' => ['label' => 'bar']], Memcached::class, 'memcached_foo'],
             ['redis', ['foo' => null], Redis::class, 'redis_foo'],
+            ['redis', ['foo' => ['label' => 'bar']], Redis::class, 'redis_foo'],
             ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
             ['rabbit_mq', ['foo' => null], RabbitMQ::class, 'rabbit_mq_foo'],

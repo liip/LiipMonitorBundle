@@ -416,6 +416,7 @@ class Configuration implements ConfigurationInterface
                                 ->integerNode('port')->defaultValue(6379)->end()
                                 ->scalarNode('password')->defaultNull()->end()
                                 ->scalarNode('dsn')->defaultNull()->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()

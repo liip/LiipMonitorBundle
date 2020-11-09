@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckCollectionInterface;
 use Laminas\Diagnostics\Check\Redis;
+use function sprintf;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -20,9 +21,11 @@ class RedisCollection implements CheckCollectionInterface
             }
 
             $check = new Redis($config['host'], $config['port'], $config['password']);
-            $check->setLabel(\sprintf('Redis "%s"', $name));
 
-            $this->checks[\sprintf('redis_%s', $name)] = $check;
+            $label = $config['label'] ?? sprintf('Redis "%s"', $name);
+            $check->setLabel($label);
+
+            $this->checks[sprintf('redis_%s', $name)] = $check;
         }
     }
 
