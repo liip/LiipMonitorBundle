@@ -280,9 +280,29 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-                    ->scalarNode('cpu_performance')
+                    ->variableNode('cpu_performance')
                         ->info('Benchmark CPU performance and return failure if it is below the given ratio')
                         ->example('1.0 # This is the power of an EC2 micro instance')
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($value) {
+                                if (!is_array($value)) {
+                                    $value = ['performance' => $value];
+                                }
+
+                                return $value;
+                            })
+                        ->end()
+                        ->validate()
+                            ->ifArray()
+                            ->then(function ($value) {
+                                if (!isset($value['performance'])) {
+                                    throw new InvalidArgumentException('You should define performance value');
+                                }
+
+                                return $value;
+                            })
+                        ->end()
                     ->end()
                     ->arrayNode('disk_usage')
                         ->info('Checks to see if the disk usage is below warning/critical percent thresholds')
