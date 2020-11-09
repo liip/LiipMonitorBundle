@@ -13,7 +13,6 @@ use Laminas\Diagnostics\Check\PhpVersion;
 use Laminas\Diagnostics\Check\ProcessRunning;
 use Laminas\Diagnostics\Check\RabbitMQ;
 use Laminas\Diagnostics\Check\Redis;
-use Laminas\Diagnostics\Check\StreamWrapperExists;
 use Liip\MonitorBundle\Check\ApcFragmentation;
 use Liip\MonitorBundle\Check\ApcMemory;
 use Liip\MonitorBundle\Check\ClassExists;
@@ -27,6 +26,7 @@ use Liip\MonitorBundle\Check\OpCacheMemory;
 use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\ReadableDirectory;
 use Liip\MonitorBundle\Check\SecurityAdvisory;
+use Liip\MonitorBundle\Check\StreamWrapperExists;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\Check\WritableDirectory;
 use Liip\MonitorBundle\Check\XmlFile;
@@ -283,7 +283,8 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['custom_error_pages', ['error_codes' => [500]], CustomErrorPages::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock', 'label' => 'foo'], SecurityAdvisory::class],
-            ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class],
+            ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class, 'stream_wrapper_exists_foo'],
+            ['stream_wrapper_exists', ['foo', ['name' => 'bar', 'label' => 'baz']], StreamWrapperExists::class, 'stream_wrapper_exists_bar', 2],
             ['file_ini', ['foo.ini'], IniFile::class, 'file_ini_foo.ini'],
             ['file_ini', ['foo.ini', ['path' => 'bar.ini', 'label' => 'baz']], IniFile::class, 'file_ini_foo.ini', 2],
             ['file_json', ['foo.json'], JsonFile::class, 'file_json_foo.json'],

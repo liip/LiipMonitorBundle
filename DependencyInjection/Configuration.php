@@ -502,7 +502,22 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('stream_wrapper_exists')
                         ->info('Validate that a stream wrapper or collection of stream wrappers exists')
                         ->example('[\'zlib\', \'bzip2\', \'zip\']')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['name' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['name'])) {
+                                        throw new InvalidArgumentException('You should define a stream wrapper name');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('file_ini')
                         ->info('Find and validate INI files')
