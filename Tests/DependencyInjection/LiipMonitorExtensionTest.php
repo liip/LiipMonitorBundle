@@ -274,6 +274,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['redis', ['foo' => null], Redis::class, 'redis_foo'],
             ['redis', ['foo' => ['label' => 'bar']], Redis::class, 'redis_foo'],
             ['http_service', ['foo' => null], HttpService::class, 'http_service_foo'],
+            ['http_service', ['foo' => ['label' => 'bar']], HttpService::class, 'http_service_foo'],
             ['guzzle_http_service', ['foo' => null], GuzzleHttpService::class, 'guzzle_http_service_foo'],
             ['rabbit_mq', ['foo' => null], RabbitMQ::class, 'rabbit_mq_foo'],
             ['symfony_version', null, SymfonyVersion::class],

@@ -15,8 +15,16 @@ class HttpServiceCollection implements CheckCollectionInterface
     public function __construct(array $configs)
     {
         foreach ($configs as $name => $config) {
-            $check = new HttpService($config['host'], $config['port'], $config['path'], $config['status_code'], $config['content']);
-            $check->setLabel(sprintf('Http Service "%s"', $name));
+            $check = new HttpService(
+                $config['host'],
+                $config['port'],
+                $config['path'],
+                $config['status_code'],
+                $config['content']
+            );
+
+            $label = $config['label'] ?? sprintf('Http Service "%s"', $name);
+            $check->setLabel($label);
 
             $this->checks[sprintf('http_service_%s', $name)] = $check;
         }

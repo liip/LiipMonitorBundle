@@ -430,6 +430,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('path')->defaultValue('/')->end()
                                 ->integerNode('status_code')->defaultValue(200)->end()
                                 ->scalarNode('content')->defaultNull()->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()
