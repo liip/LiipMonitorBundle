@@ -10,7 +10,6 @@ use Laminas\Diagnostics\Check\HttpService;
 use Laminas\Diagnostics\Check\IniFile;
 use Laminas\Diagnostics\Check\JsonFile;
 use Laminas\Diagnostics\Check\Memcache;
-use Laminas\Diagnostics\Check\OpCacheMemory;
 use Laminas\Diagnostics\Check\PDOCheck;
 use Laminas\Diagnostics\Check\PhpFlag;
 use Laminas\Diagnostics\Check\PhpVersion;
@@ -26,6 +25,7 @@ use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DiskUsage;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
+use Liip\MonitorBundle\Check\OpCacheMemory;
 use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\ReadableDirectory;
 use Liip\MonitorBundle\Check\SymfonyVersion;
@@ -257,6 +257,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['disk_usage', ['path' => __DIR__, 'label' => 'foo'], DiskUsage::class],
             ['symfony_requirements', ['file' => __DIR__.'/../../LiipMonitorBundle.php', 'label' => 'foo'], 'Liip\MonitorBundle\Check\SymfonyRequirements'],
             ['opcache_memory', null, OpCacheMemory::class],
+            ['opcache_memory', ['label' => 'foo'], OpCacheMemory::class],
             ['apc_memory', null, ApcMemory::class],
             ['apc_fragmentation', null, ApcFragmentation::class],
             ['doctrine_dbal', 'foo', DoctrineDbal::class, 'doctrine_dbal_foo_connection'],

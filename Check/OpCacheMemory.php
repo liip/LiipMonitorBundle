@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
-use Laminas\Diagnostics\Check\ClassExists as LaminasClassExists;
+use Laminas\Diagnostics\Check\OpCacheMemory as LaminasOpCacheMemory;
 use Laminas\Diagnostics\Result\ResultInterface;
 
-class ClassExists implements CheckInterface
+class OpCacheMemory implements CheckInterface
 {
     /**
      * @var CheckInterface
      */
     private $check;
 
-    public function __construct(string $name, string $label = null)
+    public function __construct(int $warningThreshold, int $criticalThreshold, string $label = null)
     {
-        $check = new LaminasClassExists($name);
+        $check = new LaminasOpCacheMemory($warningThreshold, $criticalThreshold);
         $check->setLabel($label);
 
         $this->check = $check;
