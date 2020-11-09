@@ -507,22 +507,82 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('file_ini')
                         ->info('Find and validate INI files')
                         ->example('[\'path/to/my.ini\']')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['path' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['path'])) {
+                                        throw new InvalidArgumentException('You should define a file path');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('file_json')
                         ->info('Find and validate JSON files')
                         ->example('[\'path/to/my.json\']')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['path' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['path'])) {
+                                        throw new InvalidArgumentException('You should define a file path');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('file_xml')
                         ->info('Find and validate XML files')
                         ->example('[\'path/to/my.xml\']')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['path' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['path'])) {
+                                        throw new InvalidArgumentException('You should define a file path');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('file_yaml')
                         ->info('Find and validate YAML files')
                         ->example('[\'path/to/my.yml\']')
-                        ->prototype('scalar')->end()
+                        ->prototype('variable')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($value) { return ['path' => $value]; })
+                            ->end()
+                            ->validate()
+                                ->ifArray()
+                                ->then(function ($value) {
+                                    if (!isset($value['path'])) {
+                                        throw new InvalidArgumentException('You should define a file path');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('pdo_connections')
                         ->info('PDO connections to check for connection')

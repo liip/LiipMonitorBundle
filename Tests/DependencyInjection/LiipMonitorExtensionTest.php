@@ -5,8 +5,6 @@ namespace Liip\MonitorBundle\Tests\DependencyInjection;
 use Laminas\Diagnostics\Check\CpuPerformance;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
 use Laminas\Diagnostics\Check\HttpService;
-use Laminas\Diagnostics\Check\IniFile;
-use Laminas\Diagnostics\Check\JsonFile;
 use Laminas\Diagnostics\Check\Memcache;
 use Laminas\Diagnostics\Check\Memcached;
 use Laminas\Diagnostics\Check\PDOCheck;
@@ -16,8 +14,6 @@ use Laminas\Diagnostics\Check\ProcessRunning;
 use Laminas\Diagnostics\Check\RabbitMQ;
 use Laminas\Diagnostics\Check\Redis;
 use Laminas\Diagnostics\Check\StreamWrapperExists;
-use Laminas\Diagnostics\Check\XmlFile;
-use Laminas\Diagnostics\Check\YamlFile;
 use Liip\MonitorBundle\Check\ApcFragmentation;
 use Liip\MonitorBundle\Check\ApcMemory;
 use Liip\MonitorBundle\Check\ClassExists;
@@ -25,12 +21,16 @@ use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DiskUsage;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
+use Liip\MonitorBundle\Check\IniFile;
+use Liip\MonitorBundle\Check\JsonFile;
 use Liip\MonitorBundle\Check\OpCacheMemory;
 use Liip\MonitorBundle\Check\PhpExtension;
 use Liip\MonitorBundle\Check\ReadableDirectory;
 use Liip\MonitorBundle\Check\SecurityAdvisory;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\Check\WritableDirectory;
+use Liip\MonitorBundle\Check\XmlFile;
+use Liip\MonitorBundle\Check\YamlFile;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckTagCompilerPass;
@@ -284,10 +284,14 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock'], SecurityAdvisory::class],
             ['security_advisory', ['lock_file' => __DIR__.'/../../composer.lock', 'label' => 'foo'], SecurityAdvisory::class],
             ['stream_wrapper_exists', ['foo'], StreamWrapperExists::class],
-            ['file_ini', ['foo.ini'], IniFile::class],
-            ['file_json', ['foo.json'], JsonFile::class],
-            ['file_xml', ['foo.xml'], XmlFile::class],
-            ['file_yaml', ['foo.yaml'], YamlFile::class],
+            ['file_ini', ['foo.ini'], IniFile::class, 'file_ini_foo.ini'],
+            ['file_ini', ['foo.ini', ['path' => 'bar.ini', 'label' => 'baz']], IniFile::class, 'file_ini_foo.ini', 2],
+            ['file_json', ['foo.json'], JsonFile::class, 'file_json_foo.json'],
+            ['file_json', ['foo.json', ['path' => 'bar.json', 'label' => 'baz']], JsonFile::class, 'file_json_foo.json', 2],
+            ['file_xml', ['foo.xml'], XmlFile::class, 'file_xml_foo.xml'],
+            ['file_xml', ['foo.xml', ['path' => 'bar.xml', 'label' => 'baz']], XmlFile::class, 'file_xml_foo.xml', 2],
+            ['file_yaml', ['foo.yaml'], YamlFile::class, 'file_yaml_foo.yaml'],
+            ['file_yaml', ['foo.yaml', ['path' => 'bar.yaml', 'label' => 'baz']], YamlFile::class, 'file_yaml_foo.yaml', 2],
             ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], Expression::class, 'expression_foo'],
             ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], PDOCheck::class, 'pdo_foo'],
         ];

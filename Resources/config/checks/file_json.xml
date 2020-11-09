@@ -4,17 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="liip_monitor.check.file_json.label">File (JSON)</parameter>
-    </parameters>
-
     <services>
-        <service id="liip_monitor.check.file_json" public="true" class="Laminas\Diagnostics\Check\JsonFile">
+        <service id="liip_monitor.check.file_json" public="true" class="Liip\MonitorBundle\Check\JsonFileCollection">
             <argument>%%liip_monitor.check.file_json%%</argument>
-            <call method="setLabel">
-                <argument>%liip_monitor.check.file_json.label%</argument>
-            </call>
-            <tag name="liip_monitor.check" alias="file_json" />
+            <tag name="liip_monitor.check_collection" />
         </service>
     </services>
 </container>
