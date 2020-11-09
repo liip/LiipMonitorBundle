@@ -2,7 +2,6 @@
 
 namespace Liip\MonitorBundle\Tests\DependencyInjection;
 
-use Laminas\Diagnostics\Check\ApcFragmentation;
 use Laminas\Diagnostics\Check\CpuPerformance;
 use Laminas\Diagnostics\Check\GuzzleHttpService;
 use Laminas\Diagnostics\Check\HttpService;
@@ -19,6 +18,7 @@ use Laminas\Diagnostics\Check\SecurityAdvisory;
 use Laminas\Diagnostics\Check\StreamWrapperExists;
 use Laminas\Diagnostics\Check\XmlFile;
 use Laminas\Diagnostics\Check\YamlFile;
+use Liip\MonitorBundle\Check\ApcFragmentation;
 use Liip\MonitorBundle\Check\ApcMemory;
 use Liip\MonitorBundle\Check\ClassExists;
 use Liip\MonitorBundle\Check\CustomErrorPages;
@@ -261,6 +261,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['apc_memory', null, ApcMemory::class],
             ['apc_memory', ['label' => 'foo'], ApcMemory::class],
             ['apc_fragmentation', null, ApcFragmentation::class],
+            ['apc_fragmentation', ['label' => 'foo'], ApcFragmentation::class],
             ['doctrine_dbal', 'foo', DoctrineDbal::class, 'doctrine_dbal_foo_connection'],
             ['doctrine_dbal', ['foo'], DoctrineDbal::class, 'doctrine_dbal_foo_connection'],
             ['doctrine_dbal', ['foo', 'bar'], DoctrineDbal::class, 'doctrine_dbal_foo_connection', 2],
