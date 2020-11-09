@@ -29,8 +29,16 @@ class RabbitMQCollection implements CheckCollectionInterface
                 }
             }
 
-            $check = new RabbitMQ($config['host'], $config['port'], $config['user'], $config['password'], $config['vhost']);
-            $check->setLabel(sprintf('Rabbit MQ "%s"', $name));
+            $check = new RabbitMQ(
+                $config['host'],
+                $config['port'],
+                $config['user'],
+                $config['password'],
+                $config['vhost']
+            );
+
+            $label = $config['label'] ?? sprintf('Rabbit MQ "%s"', $name);
+            $check->setLabel($label);
 
             $this->checks[sprintf('rabbit_mq_%s', $name)] = $check;
         }

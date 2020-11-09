@@ -465,6 +465,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('password')->defaultValue('guest')->end()
                                 ->scalarNode('vhost')->defaultValue('/')->end()
                                 ->scalarNode('dsn')->defaultNull()->end()
+                                ->scalarNode('label')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()
