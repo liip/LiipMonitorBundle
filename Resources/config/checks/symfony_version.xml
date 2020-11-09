@@ -6,6 +6,7 @@
 
     <services>
         <service id="liip_monitor.check.symfony_version" public="true" class="Liip\MonitorBundle\Check\SymfonyVersion">
+            <argument>%%liip_monitor.check.symfony_version%%</argument>
             <tag name="liip_monitor.check" alias="symfony_version" />
         </service>
     </services>

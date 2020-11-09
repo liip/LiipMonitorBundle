@@ -469,8 +469,18 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-                    ->booleanNode('symfony_version')
+                    ->variableNode('symfony_version')
                         ->info('Checks the version of this app against the latest stable release')
+                        ->beforeNormalization()
+                            ->always()
+                            ->then(function ($value) {
+                                if (!is_array($value)) {
+                                    $value = [$value];
+                                }
+
+                                return $value;
+                            })
+                        ->end()
                     ->end()
                     ->arrayNode('custom_error_pages')
                         ->info('Checks if error pages have been customized for given error codes')

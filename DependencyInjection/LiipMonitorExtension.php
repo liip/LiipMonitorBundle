@@ -155,10 +155,11 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             case 'file_yaml':
             case 'expressions':
             case 'pdo_connections':
-                $container->setParameter($prefix.'.'.$group, $values);
+            case 'symfony_version':
+
+            $container->setParameter($prefix.'.'.$group, $values);
                 break;
 
-            case 'symfony_version':
             case 'opcache_memory':
                 break;
 
