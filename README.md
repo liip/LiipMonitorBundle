@@ -277,62 +277,102 @@ liip_monitor:
             name:
 
                 # Validate that a named extension or a collection of extensions is available
-                php_extensions:       [] # Example: apc, xdebug
+                php_extensions:       # Example: [apc, xdebug]
+                    
+                    # Prototype
+                    - apc
+                    - { name: xdebug, label: 'My check label' } 
 
                 # Pairs of a PHP setting and an expected value
                 php_flags:            # Example: session.use_only_cookies: false
 
                     # Prototype
-                    setting:              ~
+                    setting: false
+                    session.use_only_cookies: 
+                        value: false
+                        label: 'My check label'
 
                 # Pairs of a version and a comparison operator
                 php_version:          # Example: 5.4.15: >=
 
                     # Prototype
-                    version:              ~
+                    7.1.0: >=
+                    7.1.1: 
+                        operator: >=
+                        label: 'My check label'
+
 
                 # Process name/pid or an array of process names/pids
                 process_running:      ~ # Example: [apache, foo]
 
+                    # Prototype
+                    - apache
+                    - { name: foo, label: 'My check label' } 
+
                 # Validate that a given path (or a collection of paths) is a dir and is readable
-                readable_directory:   [] # Example: ["%kernel.cache_dir%"]
+                readable_directory:   # Example: ["%kernel.cache_dir%"]
+
+                    # Prototype
+                    - "%kernel.cache_dir%"
+                    - { path: /path, label: 'My check label' } 
 
                 # Validate that a given path (or a collection of paths) is a dir and is writable
-                writable_directory:   [] # Example: ["%kernel.cache_dir%"]
+                writable_directory:   # Example: ["%kernel.cache_dir%"]
+
+                    # Prototype
+                    - "%kernel.cache_dir%"
+                    - { path: /path, label: 'My check label' } 
 
                 # Validate that a class or a collection of classes is available
-                class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
+                class_exists:         # Example: ["Lua", "My\Fancy\Class"]
+
+                    # Prototype
+                    - Lua
+                    - { name: My\Fancy\Class, label: 'My check label' } 
 
                 # Benchmark CPU performance and return failure if it is below the given ratio
                 cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
+
+                    # Prototype
+                    performance: 1.0
+                    label: 'My check label'
 
                 # Checks to see if the disk usage is below warning/critical percent thresholds
                 disk_usage:
                     warning:              70
                     critical:             90
                     path:                 '%kernel.cache_dir%'
+                    label: 'My check label'
 
                 # Checks Symfony2 requirements file
                 symfony_requirements:
                     file:                 '%kernel.root_dir%/SymfonyRequirements.php'
+                    label: 'My check label'
 
                 # Checks to see if the OpCache memory usage is below warning/critical thresholds
                 opcache_memory:
                     warning:              70
                     critical:             90
+                    label: 'My check label'
 
                 # Checks to see if the APC memory usage is below warning/critical thresholds
                 apc_memory:
                     warning:              70
                     critical:             90
+                    label: 'My check label'
 
                 # Checks to see if the APC fragmentation is below warning/critical thresholds
                 apc_fragmentation:
                     warning:              70
                     critical:             90
+                    label: 'My check label'
 
                 # Connection name or an array of connection names
                 doctrine_dbal:        null # Example: [default, crm]
+
+                    # Prototype
+                    - default
+                    - { name: crm, label: 'My check label' } 
                 
                 # Checks to see if migrations from specified configuration file are applied
                 doctrine_migrations:
@@ -340,6 +380,7 @@ liip_monitor:
                     application_migrations: 
                         configuration_file:  %kernel.root_dir%/Resources/config/migrations.yml
                         connection:          default
+                        label:              'My check label'
                     migrations_with_doctrine_bundle: 
                         connection:          default
                     migrations_with_doctrine_bundle_v2: default
@@ -354,6 +395,10 @@ liip_monitor:
                 # Connection name or an array of connection names
                 doctrine_mongodb:        null # Example: [default, crm]
 
+                    # Prototype
+                    - default
+                    - { name: crm, label: 'My check label' } 
+
                 # Check if MemCache extension is loaded and given server is reachable
                 memcache:
 
@@ -361,6 +406,7 @@ liip_monitor:
                     name:
                         host:                 localhost
                         port:                 11211
+                        label:                'My check label'
 
                 # Validate that a Redis service is running
                 redis:
@@ -370,6 +416,7 @@ liip_monitor:
                         host:                 localhost
                         port:                 6379
                         password:             null
+                        label:                'My check label'
                         # or
                         dsn: redis://localhost:6379
 
@@ -383,6 +430,8 @@ liip_monitor:
                         path:                 /
                         status_code:          200
                         content:              null
+                        label:                'My check label'
+
 
                 # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
                 guzzle_http_service:
@@ -396,6 +445,8 @@ liip_monitor:
                         content:              null
                         method:               GET
                         body:                 null
+                        label:                'My check label'
+
 
                 # Validate that a RabbitMQ service is running
                 rabbit_mq:
@@ -407,11 +458,14 @@ liip_monitor:
                         user:                 guest
                         password:             guest
                         vhost:                /
+                        label:                'My check label'
                         # or
                         dsn: amqp://guest:guest@localhost:5672/%2F
 
                 # Checks the version of this app against the latest stable release
                 symfony_version:      ~
+                    # Prototype
+                    label:                'My check label'
 
                 # Checks if error pages have been customized for given error codes
                 custom_error_pages:
@@ -421,24 +475,47 @@ liip_monitor:
                     # The directory where your custom error page twig templates are located. Keep as "%kernel.project_dir%" to use default location.
                     path:                 '%kernel.project_dir%'
 
+                    label:                'My check label'
+
                 # Checks installed composer dependencies against the SensioLabs Security Advisory database
                 security_advisory:
                     lock_file:            '%kernel.root_dir%/../composer.lock'
+                    label:                'My check label'
 
                 # Validate that a stream wrapper or collection of stream wrappers exists
-                stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
+                stream_wrapper_exists:   # Example: ['zlib', 'bzip2', 'zip']
+
+                    # Prototype
+                    - zlib
+                    - { name: bzip2, label: 'My check label' } 
 
                 # Find and validate INI files
-                file_ini:             [] # Example: ['path/to/my.ini']
+                file_ini:                # Example: ['path/to/my.ini']
+
+                    # Prototype
+                    - path/to/my.ini
+                    - { name: path/to/another/my.ini, label: 'My check label' } 
 
                 # Find and validate JSON files
-                file_json:            [] # Example: ['path/to/my.json']
+                file_json:               # Example: ['path/to/my.json']
+
+                    # Prototype
+                    - path/to/my.json
+                    - { name: path/to/another/my.json, label: 'My check label' } 
 
                 # Find and validate XML files
-                file_xml:             [] # Example: ['path/to/my.xml']
+                file_xml:                # Example: ['path/to/my.xml']
+
+                    # Prototype
+                    - path/to/my.xml
+                    - { name: path/to/another/my.xml, label: 'My check label' } 
 
                 # Find and validate YAML files
-                file_yaml:            [] # Example: ['path/to/my.yml']
+                file_yaml:              # Example: ['path/to/my.yml']
+
+                    # Prototype
+                    - path/to/my.yml
+                    - { name: path/to/another/my.yml, label: 'My check label' } 
                 
                 # PDO connections to check for connection
                 pdo_connections:
