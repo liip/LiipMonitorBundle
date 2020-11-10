@@ -104,7 +104,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->arrayNode('php_extensions')
                         ->info('Validate that a named extension or a collection of extensions is available')
-                        ->example('session.use_only_cookies: false')
+                        ->example('[apc, xdebug]')
                         ->prototype('variable')
                             ->beforeNormalization()
                                 ->ifString()
