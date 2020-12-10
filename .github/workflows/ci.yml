@@ -1,0 +1,135 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 1,16 * *'
+
+jobs:
+  symfony-version-tests:
+    name: "Test: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [7.3, 7.4]
+        symfony: [4.4.*, 5.0.*, 5.1.*, 5.2.*]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Install Symfony Flex
+        run: composer global require --no-progress --no-scripts --no-plugins symfony/flex dev-main
+
+      - name: Install symfony/mailer
+        run: composer require --dev "symfony/mailer" --no-update
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --prefer-dist
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+
+      - name: Run tests
+        run: vendor/bin/phpunit -v
+
+  prefer-lowest-tests:
+    name: "Test: prefer-lowest"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.1
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          dependency-versions: lowest
+          composer-options: --prefer-dist
+
+      - name: Run tests
+        run: vendor/bin/phpunit -v
+
+  code-coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: xdebug
+
+      - name: Install symfony/mailer
+        run: composer require --dev "symfony/mailer" --no-update
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --prefer-dist
+
+      - name: Run code coverage
+        run: vendor/bin/phpunit -v --coverage-text --coverage-clover=coverage.clover
+
+      - name: Send code coverage
+        run: |
+          wget https://scrutinizer-ci.com/ocular.phar
+          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+  composer-validate:
+    name: Validate composer.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict --no-check-lock
+
+  cs-check:
+    name: PHP Coding Standards
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --prefer-dist
+
+      - name: Check CS
+        run: vendor/bin/php-cs-fixer fix -v --dry-run --diff-format=udiff
