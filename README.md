@@ -1,6 +1,6 @@
 # Liip Monitor Bundle #
 
-[![Build Status](https://travis-ci.com/liip/LiipMonitorBundle.svg?branch=master)](https://travis-ci.com/liip/LiipMonitorBundle)
+[![CI Status](https://github.com/liip/LiipMonitorBundle/workflows/CI/badge.svg)](https://github.com/liip/LiipMonitorBundle/actions?query=workflow%3ACI)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/)
 
 This bundle provides a way to run a series of application related health checks.

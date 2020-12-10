@@ -22,8 +22,6 @@
             "homepage": "https://github.com/liip/LiipMonitorBundle/contributors"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^7.1",
         "symfony/framework-bundle": "^3.4 || ^4.0 || ^5.0",
