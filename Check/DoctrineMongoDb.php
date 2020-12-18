@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Laminas\Diagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Result\Failure;
 use Laminas\Diagnostics\Result\Success;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\ConnectionException;
