@@ -2,43 +2,29 @@
 
 namespace Liip\MonitorBundle\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\PDOSqlite\Driver;
-use Doctrine\Migrations\Configuration\AbstractFileConfiguration;
 use Doctrine\Migrations\Configuration\Configuration as DoctrineMigrationConfiguration;
-use Doctrine\Migrations\MigrationException;
-use Liip\MonitorBundle\DoctrineMigrations\Configuration as LiipMigrationConfiguration;
+use Liip\MonitorBundle\DependencyInjection\DoctrineMigrations\DoctrineMigrationsLoader;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class LiipMonitorExtension extends Extension implements CompilerPassInterface
 {
     /**
-     * Tuple (migrationsConfiguration, tempConfiguration) for doctrine migrations check.
+     * Loader for doctrine migrations to support both v2 and v3 major versions.
      *
-     * @var array
+     * @var DoctrineMigrationsLoader
      */
-    private $migrationConfigurationsServices = [];
+    private $migrationsLoader;
 
     /**
-     * Connection object needed for correct migration loading.
-     *
-     * @var Connection
+     * LiipMonitorExtension constructor.
      */
-    private $fakeConnection;
-
     public function __construct()
     {
-        if (class_exists(Connection::class)) {
-            $this->fakeConnection = new Connection([], new Driver());
-        }
+        $this->migrationsLoader = new DoctrineMigrationsLoader();
     }
 
     /**
@@ -112,15 +98,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        foreach ($this->migrationConfigurationsServices as $services) {
-            list($configurationService, $configuration) = $services;
-            /** @var Definition $configurationService */
-            /** @var DoctrineMigrationConfiguration $configuration */
-            $versions = $this->getPredefinedMigrations($container, $configuration, $this->fakeConnection);
-            if ($versions) {
-                $configurationService->addMethodCall('registerMigrations', [$versions]);
-            }
-        }
+        $this->migrationsLoader->process($container);
     }
 
     /**
@@ -197,20 +175,11 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
                 continue;
             }
 
-            $services = [];
-            foreach ($groupChecks['doctrine_migrations'] as $key => $config) {
-                try {
-                    $serviceConfiguration =
-                        $this->createMigrationConfigurationService($container, $config['connection'], $config['configuration_file'] ?? null);
-
-                    $serviceId = sprintf('liip_monitor.check.doctrine_migrations.configuration.%s.%s', $groupName, $key);
-                    $container->setDefinition($serviceId, $serviceConfiguration);
-
-                    $services[$key] = $serviceId;
-                } catch (MigrationException $e) {
-                    throw new MigrationException(sprintf('Invalid doctrine migration check under "%s.%s": %s', $groupName, $key, $e->getMessage()), $e->getCode(), $e);
-                }
-            }
+            $services = $this->migrationsLoader->loadMigrationChecks(
+                $container,
+                $groupChecks['doctrine_migrations'],
+                $groupName
+            );
 
             $parameter = sprintf('%s.check.%s.%s', $this->getAlias(), 'doctrine_migrations', $groupName);
             $container->setParameter($parameter, $services);
@@ -226,172 +195,5 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         foreach ($config['mailer'] as $key => $value) {
             $container->setParameter(sprintf('%s.mailer.%s', $this->getAlias(), $key), $value);
         }
-    }
-
-    /**
-     * Return key-value array with migration version as key and class as a value defined in config file.
-     *
-     * @param ContainerBuilder               $container  The container
-     * @param DoctrineMigrationConfiguration $config     Current configuration
-     * @param Connection                     $connection Fake connections
-     *
-     * @return array[]
-     */
-    private function getPredefinedMigrations(ContainerBuilder $container, DoctrineMigrationConfiguration $config, Connection $connection)
-    {
-        $result = [];
-
-        $diff = new LiipMigrationConfiguration($connection);
-
-        if ($namespace = $config->getMigrationsNamespace()) {
-            $diff->setMigrationsNamespace($config->getMigrationsNamespace());
-        }
-
-        if ($dir = $config->getMigrationsDirectory()) {
-            $diff->setMigrationsDirectory($dir);
-        }
-
-        $diff->setContainer($container);
-        $diff->configure();
-
-        foreach ($config->getMigrations() as $version) {
-            $result[$version->getVersion()] = get_class($version->getMigration());
-        }
-
-        foreach ($diff->getAvailableVersions() as $version) {
-            unset($result[$version]);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Creates migration configuration service definition.
-     *
-     * @param ContainerBuilder $container      DI Container
-     * @param string           $connectionName Connection name for container service
-     * @param string           $filename       File name with migration configuration
-     *
-     * @return DefinitionDecorator|ChildDefinition
-     */
-    private function createMigrationConfigurationService(ContainerBuilder $container, string $connectionName, string $filename = null)
-    {
-        $configuration = $this->createTemporaryConfiguration($container, $this->fakeConnection, $filename);
-
-        $configurationServiceName = 'liip_monitor.check.doctrine_migrations.abstract_configuration';
-        $serviceConfiguration = class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
-            ? new ChildDefinition($configurationServiceName)
-            : new DefinitionDecorator($configurationServiceName)
-        ;
-
-        $this->migrationConfigurationsServices[] = [$serviceConfiguration, $configuration];
-
-        $serviceConfiguration->replaceArgument(
-            0,
-            new Reference(sprintf('doctrine.dbal.%s_connection', $connectionName))
-        );
-
-        if ($configuration->getMigrationsNamespace()) {
-            $serviceConfiguration->addMethodCall(
-                'setMigrationsNamespace',
-                [$configuration->getMigrationsNamespace()]
-            );
-        }
-
-        if ($configuration->getMigrationsTableName()) {
-            $serviceConfiguration->addMethodCall(
-                'setMigrationsTableName',
-                [$configuration->getMigrationsTableName()]
-            );
-        }
-
-        if ($configuration->getMigrationsColumnName()) {
-            $serviceConfiguration->addMethodCall(
-                'setMigrationsColumnName',
-                [$configuration->getMigrationsColumnName()]
-            );
-        }
-
-        if ($configuration->getName()) {
-            $serviceConfiguration->addMethodCall('setName', [$configuration->getName()]);
-        }
-
-        if ($configuration->getMigrationsDirectory()) {
-            $directory = $configuration->getMigrationsDirectory();
-            $pathPlaceholders = ['kernel.root_dir', 'kernel.cache_dir', 'kernel.logs_dir'];
-            foreach ($pathPlaceholders as $parameter) {
-                $kernelDir = realpath($container->getParameter($parameter));
-                if (0 === strpos(realpath($directory), $kernelDir)) {
-                    $directory = str_replace($kernelDir, "%{$parameter}%", $directory);
-                    break;
-                }
-            }
-
-            $serviceConfiguration->addMethodCall(
-                'setMigrationsDirectory',
-                [$directory]
-            );
-        }
-
-        $serviceConfiguration->addMethodCall('configure', []);
-
-        if ($configuration->areMigrationsOrganizedByYear()) {
-            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYear', [true]);
-
-            return $serviceConfiguration;
-        } elseif ($configuration->areMigrationsOrganizedByYearAndMonth()) {
-            $serviceConfiguration->addMethodCall('setMigrationsAreOrganizedByYearAndMonth', [true]);
-
-            return $serviceConfiguration;
-        }
-
-        return $serviceConfiguration;
-    }
-
-    /**
-     * Creates in-memory migration configuration for setting up container service.
-     *
-     * @param ContainerBuilder $container  The container
-     * @param Connection       $connection Fake connection
-     * @param string           $filename   Migrations configuration file
-     */
-    private function createTemporaryConfiguration(
-        ContainerBuilder $container,
-        Connection $connection,
-        string $filename = null
-    ): DoctrineMigrationConfiguration {
-        if (null === $filename) {
-            // this is configured from migrations bundle
-            return new DoctrineMigrationConfiguration($connection);
-        }
-
-        // -------
-        // This part must be in sync with Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper::loadConfig
-        $map = [
-            'xml' => '\XmlConfiguration',
-            'yaml' => '\YamlConfiguration',
-            'yml' => '\YamlConfiguration',
-            'php' => '\ArrayConfiguration',
-            'json' => '\JsonConfiguration',
-        ];
-        // --------
-
-        $filename = $container->getParameterBag()->resolveValue($filename);
-        $info = pathinfo($filename);
-        // check we can support this file type
-        if (empty($map[$info['extension']])) {
-            throw new \InvalidArgumentException('Given config file type is not supported');
-        }
-
-        $class = 'Doctrine\Migrations\Configuration';
-        $class .= $map[$info['extension']];
-        // -------
-
-        /** @var AbstractFileConfiguration $configuration */
-        $configuration = new $class($connection);
-        $configuration->load($filename);
-        $configuration->validate();
-
-        return $configuration;
     }
 }

@@ -12,16 +12,5 @@
 
             <tag name="liip_monitor.check_collection" />
         </service>
-
-        <service id="liip_monitor.check.doctrine_migrations.abstract_configuration"
-                 class="Liip\MonitorBundle\DoctrineMigrations\Configuration"
-                 public="true"
-                 abstract="true">
-            <argument /> <!-- Connection -->
-
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
     </services>
 </container>

@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\DependencyInjection;
 
+use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -211,14 +212,24 @@ class Configuration implements ConfigurationInterface
                                 })
                             ->end()
                             ->validate()
-                                ->always(function ($value) {
-                                    if (is_array($value) && !isset($value['configuration_file']) && !class_exists('Doctrine\\Bundle\\MigrationsBundle\\Command\\DoctrineCommand')) {
+                                ->ifArray()
+                                ->then(static function (array $value): array {
+                                    $isError = !isset($value['configuration_file'])
+                                        && !class_exists(DoctrineMigrationsBundle::class);
+
+                                    if ($isError) {
                                         throw new \InvalidArgumentException('You should explicitly define "configuration_file" parameter or install doctrine/doctrine-migrations-bundle to use empty parameter.');
                                     }
 
                                     return $value;
                                 })
                             ->end()
+                        ->end()
+                        ->beforeNormalization()
+                            ->ifString()
+                            ->then(static function (string $value): array {
+                                return ['default' => $value];
+                            })
                         ->end()
                         ->example(
                             [
