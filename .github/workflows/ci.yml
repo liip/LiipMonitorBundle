@@ -90,12 +90,7 @@ jobs:
           composer-options: --prefer-dist
 
       - name: Run code coverage
-        run: vendor/bin/phpunit -v --coverage-text --coverage-clover=coverage.clover
-
-      - name: Send code coverage
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+        run: vendor/bin/phpunit -v --coverage-text
 
   composer-validate:
     name: Validate composer.json

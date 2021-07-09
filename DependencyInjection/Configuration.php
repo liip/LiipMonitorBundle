@@ -350,7 +350,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->arrayNode('security_advisory')
-                        ->info('Checks installed composer dependencies against the SensioLabs Security Advisory database')
+                        ->info('Checks installed composer dependencies against the Security Advisory database')
                         ->children()
                             ->scalarNode('lock_file')->defaultValue('%kernel.project_dir%/composer.lock')->end()
                         ->end()
