@@ -17,6 +17,9 @@ jobs:
       matrix:
         php: [7.4, 8.0]
         symfony: [4.4.*, 5.3.*, 5.4.*]
+        include:
+          - php: 8.0
+            symfony: 6.0.*
 
     steps:
       - name: Checkout code
@@ -54,7 +57,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: 7.3
           coverage: none
 
       - name: Install dependencies
