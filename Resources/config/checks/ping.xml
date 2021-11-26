@@ -6,8 +6,7 @@
 
     <services>
         <service id="liip_monitor.check.ping" public="true" class="Liip\MonitorBundle\Check\Ping">
-            <argument>%%liip_monitor.check.ping%%</argument>
-            <tag name="liip_monitor.check_collection" />
+            <tag name="liip_monitor.check" alias="ping" />
         </service>
     </services>
 </container>
