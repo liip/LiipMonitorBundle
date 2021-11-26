@@ -37,6 +37,7 @@ use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Liip\MonitorBundle\Check\Ping;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -268,6 +269,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['file_yaml', ['foo.yaml'], YamlFile::class],
             ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], Expression::class, 'expression_foo'],
             ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], PDOCheck::class, 'pdo_foo'],
+            ['ping', null, Ping::class],
         ];
     }
 

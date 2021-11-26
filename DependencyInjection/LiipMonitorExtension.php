@@ -138,6 +138,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
 
             case 'symfony_version':
             case 'opcache_memory':
+            case 'ping':
                 break;
 
             case 'doctrine_migrations':

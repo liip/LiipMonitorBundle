@@ -425,6 +425,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('warning_message')->defaultNull()->end()
                         ->scalarNode('critical_message')->defaultNull()->end()
                     ->end()
+                    ->booleanNode('ping')
+                        ->info('Checks the availability of application')
+                    ->end()
                 ->end()
             ->end()
         ;
