@@ -28,6 +28,7 @@ use Laminas\Diagnostics\Check\XmlFile;
 use Laminas\Diagnostics\Check\YamlFile;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DoctrineDbal;
+use Liip\MonitorBundle\Check\ElasticSearch;
 use Liip\MonitorBundle\Check\Expression;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
@@ -61,6 +62,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
      */
     public function testChecksLoaded($name, $config, $checkClass, $checkAlias = null, $checkCount = 1)
     {
+        var_dump($name, $config);
         // skip checks for missing classes
         if (!class_exists($checkClass)) {
             $this->setExpectedException('InvalidArgumentException');
@@ -270,6 +272,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], Expression::class, 'expression_foo'],
             ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], PDOCheck::class, 'pdo_foo'],
             ['ping', null, Ping::class],
+            ['elastic_search', ['host' => 'elastic', 'port' => 9200, 'index' => 'index_name',], ElasticSearch::class],
         ];
     }
 

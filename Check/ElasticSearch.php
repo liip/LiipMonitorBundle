@@ -3,24 +3,23 @@
 namespace Liip\MonitorBundle\Check;
 
 use Exception;
-use InvalidArgumentException;
-use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Check\AbstractCheck;
 use Laminas\Diagnostics\Result\Failure;
 use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 
-class ElasticSearch implements CheckInterface
+class ElasticSearch extends AbstractCheck
 {
-    private const CHECK_NAME = 'ElasticSearch';
-    private const URI = '/_cluster/health/';
-
-    private $label;
     private $url;
 
-    public function __construct(array $config)
+    public function __construct(string $host, string $port, string $index)
     {
-        $this->url = $this->buildUrl($config);
-        $this->label = (sprintf('%s "%s"', self::CHECK_NAME, $this->url));
+        $this->url = sprintf(
+            'http://%s:%s/_cluster/health/%s',
+            $host,
+            $port,
+            $index
+        );
     }
 
     public function check(): ResultInterface
@@ -35,35 +34,15 @@ class ElasticSearch implements CheckInterface
         }
 
         $message = sprintf(
-            'Status: \'%s\'. Report: \'%s\'.',
-            $elasticData['status'],
-            json_encode($elasticData)
+            'Status: \'%s\'.',
+            $elasticData['status']
         );
 
-        if ('green' === $elasticData['status']) {
-            return new Success($message);
+        if (in_array($elasticData['status'], ['green', 'yellow'])) {
+            return new Success($message, $elasticData);
         }
 
-        return new Failure($message);
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    private function buildUrl(array $config): string
-    {
-        if (!isset($config['host']) && !isset($config['port']) && !isset($config['index'])) {
-            throw new InvalidArgumentException(sprintf(
-                'These parameters are required. Got - host:\'%s\', port:\'%s\', index:\'%s\'.',
-                $config['host'] ?? '',
-                $config['port'] ?? '',
-                $config['index'] ?? ''
-            ));
-        }
-
-        return 'http://' . $config['host'] . ':' . $config['port'] . self::URI . $config['index'];
+        return new Failure($message, $elasticData);
     }
 
     private function executeRequest(): array
