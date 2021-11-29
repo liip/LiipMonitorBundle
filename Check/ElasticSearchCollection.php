@@ -19,10 +19,12 @@ class ElasticSearchCollection implements CheckCollectionInterface
     {
         $checks = [];
         foreach ($this->configs as $name => $config) {
-            $label = self::NAME_PREFIX . $name;
             $check = new ElasticSearch($config['host'], $config['port'], $config['index']);
-            $check->setLabel($label);
-            $checks[$label] = $check;
+            $check->setLabel(sprintf(
+                'ElasticSearch "%s" connection',
+                $name
+            ));
+            $checks[self::NAME_PREFIX . $name] = $check;
         }
 
         return $checks;
