@@ -469,19 +469,9 @@ liip_monitor:
                         warning_message:      null
                         critical_message:     null
 
-                    # Ping
-                    ping:      ~
+                # Ping
+                ping:      ~
     
-                    # ElasticSearch check. Check connection and status of cluster/index
-                    elastic_search_collection:
-                        check_1:
-                            host: elastic
-                            port: 9200
-                            index: index_1
-                        check_2:
-                            host: elastic
-                            port: 9200
-                            index: index_2
 ```
 
 ## REST API DOCS ##

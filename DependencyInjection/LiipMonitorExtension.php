@@ -133,8 +133,6 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             case 'file_yaml':
             case 'expressions':
             case 'pdo_connections':
-            case 'elastic_search':
-            case 'elastic_search_collection':
                 $container->setParameter($prefix.'.'.$group, $values);
                 break;
 
