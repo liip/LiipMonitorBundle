@@ -53,7 +53,11 @@ class ElasticSearch extends AbstractCheck
             ],
         ];
 
-        $array = json_decode(file_get_contents($this->url, false, stream_context_create($opts)), true);
+        $data = @file_get_contents($this->url, false, stream_context_create($opts));
+        if (false === $data) {
+            throw new Exception(sprintf('Connection to "%s" failed.', $this->url));
+        }
+        $array = json_decode($data, true);
 
         if (empty($array)) {
             throw new Exception(sprintf('Invalid response from "%s".', $this->url));
