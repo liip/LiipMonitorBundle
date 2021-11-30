@@ -69,5 +69,4 @@ class ElasticSearch extends AbstractCheck
 
         return $array;
     }
-
 }
