@@ -24,7 +24,11 @@ class ElasticSearch extends AbstractCheck
 
     public function check(): ResultInterface
     {
-        $elasticData = $this->executeRequest();
+        try {
+            $elasticData = $this->executeRequest();
+        } catch (Exception $exception) {
+            return new Failure($exception->getMessage());
+        }
 
         if (false === isset($elasticData['status'])) {
             return new Failure(sprintf(
