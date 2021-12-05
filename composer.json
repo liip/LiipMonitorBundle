@@ -24,7 +24,7 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "symfony/framework-bundle": "^4.4 || ^5.0",
+        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
         "laminas/laminas-diagnostics": "^1.5"
     },
     "require-dev": {
