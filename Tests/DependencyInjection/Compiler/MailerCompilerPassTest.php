@@ -13,7 +13,7 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailerCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testDisabledMailer()
+    public function testDisabledMailer(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', false);
 
@@ -23,7 +23,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderNotHasService('liip_monitor.reporter.swift_mailer');
     }
 
-    public function testSwiftMailer()
+    public function testSwiftMailer(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->setDefinition('mailer', new Definition(\Swift_Mailer::class));
@@ -65,7 +65,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    public function testSwiftMailerWithAliasDefinition()
+    public function testSwiftMailerWithAliasDefinition(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->setDefinition('swift.mailer', new Definition(\Swift_Mailer::class));
@@ -78,7 +78,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('liip_monitor.reporter.swift_mailer', SwiftMailerReporter::class);
     }
 
-    public function testSymfonyMailer()
+    public function testSymfonyMailer(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->setDefinition('mailer', new Definition(MailerInterface::class));
@@ -120,7 +120,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    public function testSymfonyMailerWithAliasDefinition()
+    public function testSymfonyMailerWithAliasDefinition(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->setDefinition('symfony.mailer', new Definition(MailerInterface::class));
@@ -133,7 +133,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('liip_monitor.reporter.symfony_mailer', SymfonyMailerReporter::class);
     }
 
-    public function testMailerWithoutPackage()
+    public function testMailerWithoutPackage(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->expectExceptionMessage('To enable mail reporting you have to install the "swiftmailer/swiftmailer" or "symfony/mailer".');
@@ -143,7 +143,7 @@ class MailerCompilerPassTest extends AbstractCompilerPassTestCase
         $this->compile();
     }
 
-    public function testMailerMissingAliasDefinition()
+    public function testMailerMissingAliasDefinition(): void
     {
         $this->setParameter('liip_monitor.mailer.enabled', true);
         $this->setDefinition('swift.mailer', new Definition(\Swift_Mailer::class));

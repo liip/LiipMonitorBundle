@@ -35,7 +35,7 @@ final class V2MigrationsLoader extends AbstractDoctrineMigrationsLoader implemen
      */
     private $migrationConfigurationsServices = [];
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         foreach ($this->migrationConfigurationsServices as $services) {
             [$configurationService, $configuration] = $services;

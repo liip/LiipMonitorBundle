@@ -9,7 +9,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
 {
     const SERVICE_ID_PREFIX = 'liip_monitor.check.';
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasParameter('liip_monitor.checks')) {
             return;
@@ -23,10 +23,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
         $this->addGroupTags($container, $checkCollections, 'liip_monitor.check_collection');
     }
 
-    /**
-     * @return array
-     */
-    private function parseGroups(ContainerBuilder $container, array $data)
+    private function parseGroups(ContainerBuilder $container, array $data): array
     {
         $checks = [];
         $checkCollections = [];
@@ -56,7 +53,7 @@ class AddGroupsCompilerPass implements CompilerPassInterface
      *
      * @param string $tag
      */
-    private function addGroupTags(ContainerBuilder $container, array $checks, $tag)
+    private function addGroupTags(ContainerBuilder $container, array $checks, $tag): void
     {
         foreach ($checks as $checkName => $groups) {
             $serviceId = self::SERVICE_ID_PREFIX.$checkName;

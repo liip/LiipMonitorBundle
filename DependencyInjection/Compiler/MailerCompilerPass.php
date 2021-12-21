@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class MailerCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasParameter('liip_monitor.mailer.enabled')) {
             return;

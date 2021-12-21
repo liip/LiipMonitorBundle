@@ -16,7 +16,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $runnerManager;
 
-    public function groupProvider()
+    public function groupProvider(): array
     {
         return [
             [null],
@@ -30,7 +30,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $group
      */
-    public function testGetRunner($group)
+    public function testGetRunner($group): void
     {
         $this->container
             ->expects($this->any())
@@ -57,7 +57,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    public function testGetRunnerReturnsNull()
+    public function testGetRunnerReturnsNull(): void
     {
         $this->container
             ->expects($this->any())
@@ -70,7 +70,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($result);
     }
 
-    public function testGetRunners()
+    public function testGetRunners(): void
     {
         $this->container
             ->expects($this->any())
@@ -100,7 +100,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($runner2, $result['group_2']);
     }
 
-    public function testGetGroups()
+    public function testGetGroups(): void
     {
         $this->container
             ->expects($this->any())
@@ -116,7 +116,7 @@ class RunnerManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('group_2', $result);
     }
 
-    public function testGetDefaultGroup()
+    public function testGetDefaultGroup(): void
     {
         $expectedResult = 'default';
 

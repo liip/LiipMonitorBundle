@@ -15,12 +15,12 @@ class Runner extends BaseRunner
     /**
      * @param string $alias
      */
-    public function addAdditionalReporter($alias, ReporterInterface $reporter)
+    public function addAdditionalReporter($alias, ReporterInterface $reporter): void
     {
         $this->additionalReporters[$alias] = $reporter;
     }
 
-    public function useAdditionalReporters(array $aliases)
+    public function useAdditionalReporters(array $aliases): void
     {
         foreach ($this->additionalReporters as $alias => $reporter) {
             if (in_array($alias, $aliases)) {
@@ -29,10 +29,7 @@ class Runner extends BaseRunner
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getAdditionalReporters()
+    public function getAdditionalReporters(): array
     {
         return $this->additionalReporters;
     }

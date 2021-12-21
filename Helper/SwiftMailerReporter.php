@@ -28,7 +28,7 @@ class SwiftMailerReporter extends AbstractMailReporter
         parent::__construct($recipients, $sender, $subject, $sendOnWarning);
     }
 
-    protected function sendEmail(ResultsCollection $results)
+    protected function sendEmail(ResultsCollection $results): void
     {
         $body = '';
 

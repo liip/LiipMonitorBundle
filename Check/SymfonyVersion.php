@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
 use Symfony\Component\HttpClient\HttpClient;
@@ -20,6 +21,9 @@ class SymfonyVersion implements CheckInterface
     const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
     const VERSION_CHECK_URL = 'https://symfony.com/releases/%s.json';
 
+    /**
+     * @return ResultInterface
+     */
     public function check()
     {
         $currentBranch = Kernel::MAJOR_VERSION.'.'.Kernel::MINOR_VERSION;
@@ -47,6 +51,9 @@ class SymfonyVersion implements CheckInterface
         return new Success(sprintf('Your current Symfony branch reaches it\'s end of life in %s.', $endOfLife));
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return 'Symfony version';
@@ -55,11 +62,9 @@ class SymfonyVersion implements CheckInterface
     /**
      * @param string $branch
      *
-     * @return string
-     *
      * @throws \Exception
      */
-    private function getLatestVersion($branch)
+    private function getLatestVersion($branch): string
     {
         $response = $this->getResponseAndDecode(self::PACKAGIST_URL);
 
@@ -96,13 +101,11 @@ class SymfonyVersion implements CheckInterface
     }
 
     /**
-     * @param $url
-     *
-     * @return array
+     * @param string $url
      *
      * @throws \Exception
      */
-    private function getResponseAndDecode($url)
+    private function getResponseAndDecode($url): array
     {
         if (class_exists(HttpClient::class)) {
             return HttpClient::create()->request('GET', $url)->toArray();

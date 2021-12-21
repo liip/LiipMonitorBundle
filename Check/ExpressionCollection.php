@@ -24,6 +24,9 @@ class ExpressionCollection implements CheckCollectionInterface
         }
     }
 
+    /**
+     * @return array|\Traversable
+     */
     public function getChecks()
     {
         return $this->checks;

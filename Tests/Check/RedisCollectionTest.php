@@ -16,7 +16,7 @@ final class RedisCollectionTest extends TestCase
      * @test
      * @dataProvider provideDsnWithAut
      */
-    public function handleDsnWithAuth(string $dsn)
+    public function handleDsnWithAuth(string $dsn): void
     {
         $config = [
           'dsn' => $dsn,
@@ -34,7 +34,7 @@ final class RedisCollectionTest extends TestCase
         $this->assertAuthPropertyValue($check, self::AUTH);
     }
 
-    private function assertAuthPropertyValue(Redis $check, string $auth)
+    private function assertAuthPropertyValue(Redis $check, string $auth): void
     {
         try {
             $refClass = new ReflectionClass($check);

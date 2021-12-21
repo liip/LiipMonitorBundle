@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcessWithAlias()
+    public function testProcessWithAlias(): void
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner_default', $runner);
@@ -35,7 +35,7 @@ class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    public function testProcessWithoutAlias()
+    public function testProcessWithoutAlias(): void
     {
         $runner = new Definition();
         $this->setDefinition('liip_monitor.runner_default', $runner);

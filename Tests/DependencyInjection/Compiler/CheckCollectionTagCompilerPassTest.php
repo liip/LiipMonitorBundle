@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class CheckCollectionTagCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $defaultGroup = 'grupo_predeterminado';
 

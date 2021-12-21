@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class GroupRunnersCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $noRunner = false === $container->hasDefinition('liip_monitor.runner');
         $noDefaultGroup = false === $container->hasParameter('liip_monitor.default_group');
@@ -45,10 +45,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $container->setParameter('liip_monitor.runners', $runners);
     }
 
-    /**
-     * @return array
-     */
-    private function getGroups(array $services)
+    private function getGroups(array $services): array
     {
         $groups = [];
         foreach ($services as $serviceId => $tags) {
@@ -62,10 +59,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         return array_keys($groups);
     }
 
-    /**
-     * @return array
-     */
-    private function getGroupsFromParameter(ContainerBuilder $container)
+    private function getGroupsFromParameter(ContainerBuilder $container): array
     {
         $groups = [];
 

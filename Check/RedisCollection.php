@@ -26,7 +26,7 @@ class RedisCollection implements CheckCollectionInterface
         }
     }
 
-    private function parseDsn(array &$config)
+    private function parseDsn(array &$config): void
     {
         $config = \array_merge($config, \parse_url($config['dsn']));
 
@@ -45,6 +45,9 @@ class RedisCollection implements CheckCollectionInterface
         }
     }
 
+    /**
+     * @return array|\Traversable
+     */
     public function getChecks()
     {
         return $this->checks;

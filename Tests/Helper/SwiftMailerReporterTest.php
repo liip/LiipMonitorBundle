@@ -21,7 +21,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider sendNoEmailProvider
      */
-    public function testSendNoEmail(ResultInterface $result, $sendOnWarning)
+    public function testSendNoEmail(ResultInterface $result, $sendOnWarning): void
     {
         $mailer = $this->prophesize('Swift_Mailer');
         $mailer->send()->shouldNotBeCalled();
@@ -36,7 +36,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider sendEmailProvider
      */
-    public function testSendEmail(ResultInterface $result, $sendOnWarning)
+    public function testSendEmail(ResultInterface $result, $sendOnWarning): void
     {
         $mailer = $this->prophesize('Swift_Mailer');
         $mailer->send(Argument::type('Swift_Message'))->shouldBeCalled();
@@ -48,7 +48,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
         $reporter->onFinish($results);
     }
 
-    public function sendEmailProvider()
+    public function sendEmailProvider(): array
     {
         return [
             [new Failure(), true],
@@ -58,7 +58,7 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function sendNoEmailProvider()
+    public function sendNoEmailProvider(): array
     {
         return [
             [new Success(), true],

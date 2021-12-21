@@ -41,22 +41,37 @@ abstract class AbstractMailReporter implements ReporterInterface
         $this->sendOnWarning = $sendOnWarning;
     }
 
+    /**
+     * @return void
+     */
     public function onStart(ArrayObject $checks, $runnerConfig)
     {
     }
 
+    /**
+     * @return bool|void
+     */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
     }
 
+    /**
+     * @return bool|void
+     */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
     }
 
+    /**
+     * @return void
+     */
     public function onStop(ResultsCollection $results)
     {
     }
 
+    /**
+     * @return void
+     */
     public function onFinish(ResultsCollection $results)
     {
         if ($results->getUnknownCount() > 0) {
@@ -78,5 +93,5 @@ abstract class AbstractMailReporter implements ReporterInterface
         }
     }
 
-    abstract protected function sendEmail(ResultsCollection $results);
+    abstract protected function sendEmail(ResultsCollection $results): void;
 }

@@ -22,7 +22,7 @@ class ListChecksCommand extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('monitor:list')
@@ -34,7 +34,7 @@ class ListChecksCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         switch (true) {
             case $input->getOption('reporters'):
@@ -54,7 +54,7 @@ class ListChecksCommand extends Command
         return 0;
     }
 
-    protected function listChecks(InputInterface $input, OutputInterface $output)
+    protected function listChecks(InputInterface $input, OutputInterface $output): void
     {
         $group = $input->getOption('group');
 
@@ -69,7 +69,7 @@ class ListChecksCommand extends Command
         $this->doListChecks($output, $runner);
     }
 
-    protected function listAllChecks(OutputInterface $output)
+    protected function listAllChecks(OutputInterface $output): void
     {
         foreach ($this->runnerManager->getRunners() as $group => $runner) {
             $output->writeln(sprintf('<fg=yellow;options=bold>%s</>', $group));
@@ -78,7 +78,7 @@ class ListChecksCommand extends Command
         }
     }
 
-    protected function listReporters(OutputInterface $output)
+    protected function listReporters(OutputInterface $output): void
     {
         $reporters = $this->runner->getAdditionalReporters();
         if (0 === count($reporters)) {
@@ -90,14 +90,14 @@ class ListChecksCommand extends Command
         }
     }
 
-    protected function listGroups(OutputInterface $output)
+    protected function listGroups(OutputInterface $output): void
     {
         foreach ($this->runnerManager->getGroups() as $group) {
             $output->writeln($group);
         }
     }
 
-    private function doListChecks(OutputInterface $output, Runner $runner)
+    private function doListChecks(OutputInterface $output, Runner $runner): void
     {
         $checks = $runner->getChecks();
 

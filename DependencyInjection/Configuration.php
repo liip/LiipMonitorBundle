@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\DependencyInjection;
 
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Symfony\Component\Config\Definition\BaseNode;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -19,10 +20,8 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the configuration tree.
-     *
-     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('liip_monitor');
 
@@ -86,7 +85,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function createGroupsNode()
+    private function createGroupsNode(): NodeDefinition
     {
         $builder = new TreeBuilder('groups');
 
@@ -440,7 +439,7 @@ class Configuration implements ConfigurationInterface
      * introduced at the same time. By checking if getDeprecation() exists,
      * we can determine the correct param count to use when calling setDeprecated.
      */
-    private static function getCustomErrorPagesControllerDeprecationMessage()
+    private static function getCustomErrorPagesControllerDeprecationMessage(): array
     {
         $message = 'The custom error page controller option is no longer used; the corresponding config parameter was deprecated in 2.13 and will be dropped in 3.0.';
 

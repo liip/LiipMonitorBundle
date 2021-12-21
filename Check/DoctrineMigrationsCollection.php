@@ -48,6 +48,9 @@ class DoctrineMigrationsCollection implements CheckCollectionInterface
         $this->migrations = $migrations;
     }
 
+    /**
+     * @return array|\Traversable
+     */
     public function getChecks()
     {
         if (null === $this->checks) {
