@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CheckCollectionTagCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasParameter('liip_monitor.default_group')) {
             return;

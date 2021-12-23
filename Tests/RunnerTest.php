@@ -10,7 +10,7 @@ use Liip\MonitorBundle\Runner;
  */
 class RunnerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testAdditionalReporters()
+    public function testAdditionalReporters(): void
     {
         $runner = new Runner();
 

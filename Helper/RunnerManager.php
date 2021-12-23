@@ -17,10 +17,8 @@ class RunnerManager
 
     /**
      * @param string|null $group
-     *
-     * @return Runner|null
      */
-    public function getRunner($group)
+    public function getRunner($group): ?Runner
     {
         $runnerServiceId = $this->getRunnerServiceId($group);
 
@@ -30,7 +28,7 @@ class RunnerManager
     /**
      * @return array|Runner[] key/value $group/$runner
      */
-    public function getRunners()
+    public function getRunners(): array
     {
         $runnerServiceIds = $this->container->getParameter('liip_monitor.runners');
 
@@ -48,7 +46,7 @@ class RunnerManager
     /**
      * @return array|string[]
      */
-    public function getGroups()
+    public function getGroups(): array
     {
         $runnerServiceIds = $this->container->getParameter('liip_monitor.runners');
 
@@ -63,20 +61,15 @@ class RunnerManager
         return $groups;
     }
 
-    /**
-     * @return string
-     */
-    public function getDefaultGroup()
+    public function getDefaultGroup(): string
     {
         return $this->container->getParameter('liip_monitor.default_group');
     }
 
     /**
      * @param string|null $group
-     *
-     * @return string|null
      */
-    private function getRunnerServiceId($group)
+    private function getRunnerServiceId($group): ?string
     {
         if (null === $group) {
             $group = $this->getDefaultGroup();
@@ -87,10 +80,7 @@ class RunnerManager
         return $this->container->has($runnerServiceId) ? $runnerServiceId : null;
     }
 
-    /**
-     * @return array
-     */
-    public function getReporters()
+    public function getReporters(): array
     {
         $runners = $this->getRunners();
         $reporters = [];

@@ -29,10 +29,7 @@ class HealthCheckController
         $this->failureStatusCode = $failureStatusCode;
     }
 
-    /**
-     * @return Response
-     */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
         $group = $this->getGroup($request);
 
@@ -61,10 +58,7 @@ class HealthCheckController
         return new Response($content, 200, ['Content-Type' => 'text/html']);
     }
 
-    /**
-     * @return Response
-     */
-    public function listAction(Request $request)
+    public function listAction(Request $request): JsonResponse
     {
         $ret = [];
 
@@ -77,10 +71,7 @@ class HealthCheckController
         return new JsonResponse($ret);
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function listAllAction()
+    public function listAllAction(): JsonResponse
     {
         $allChecks = [];
 
@@ -93,20 +84,14 @@ class HealthCheckController
         return new JsonResponse($allChecks);
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function listGroupsAction()
+    public function listGroupsAction(): JsonResponse
     {
         $groups = $this->runnerManager->getGroups();
 
         return new JsonResponse($groups);
     }
 
-    /**
-     * @return Response
-     */
-    public function runAllChecksAction(Request $request)
+    public function runAllChecksAction(Request $request): JsonResponse
     {
         $report = $this->runTests($request);
 
@@ -116,10 +101,7 @@ class HealthCheckController
         ]);
     }
 
-    /**
-     * @return Response
-     */
-    public function runAllChecksHttpStatusAction(Request $request)
+    public function runAllChecksHttpStatusAction(Request $request): Response
     {
         $report = $this->runTests($request);
 
@@ -131,10 +113,8 @@ class HealthCheckController
 
     /**
      * @param string $checkId
-     *
-     * @return Response
      */
-    public function runSingleCheckHttpStatusAction($checkId, Request $request)
+    public function runSingleCheckHttpStatusAction($checkId, Request $request): Response
     {
         $report = $this->runTests($request, $checkId);
 
@@ -146,10 +126,8 @@ class HealthCheckController
 
     /**
      * @param string $checkId
-     *
-     * @return Response
      */
-    public function runSingleCheckAction($checkId, Request $request)
+    public function runSingleCheckAction($checkId, Request $request): JsonResponse
     {
         $results = $this->runTests($request, $checkId)->getResults();
 
@@ -158,10 +136,8 @@ class HealthCheckController
 
     /**
      * @param string|null $checkId
-     *
-     * @return ArrayReporter
      */
-    protected function runTests(Request $request, $checkId = null)
+    protected function runTests(Request $request, $checkId = null): ArrayReporter
     {
         $reporters = $request->query->get('reporters') ?? [];
 
@@ -181,11 +157,9 @@ class HealthCheckController
     }
 
     /**
-     * @return Runner
-     *
      * @throws \Exception
      */
-    private function getRunner(Request $request)
+    private function getRunner(Request $request): Runner
     {
         $group = $this->getGroup($request);
 
@@ -198,18 +172,12 @@ class HealthCheckController
         throw new \RuntimeException(sprintf('Unknown check group "%s"', $group));
     }
 
-    /**
-     * @return string
-     */
-    private function getGroup(Request $request)
+    private function getGroup(Request $request): string
     {
         return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
     }
 
-    /**
-     * @return Response
-     */
-    public function listReportersAction()
+    public function listReportersAction(): JsonResponse
     {
         return new JsonResponse($this->runnerManager->getReporters());
     }

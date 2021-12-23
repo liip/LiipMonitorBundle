@@ -31,7 +31,7 @@ class SymfonyMailerReporterTest extends TestCase
     /**
      * @dataProvider getTestData
      */
-    public function testSendMail(array $recipients, string $sender, string $subject)
+    public function testSendMail(array $recipients, string $sender, string $subject): void
     {
         $reporter = new SymfonyMailerReporter($this->mailer->reveal(), $recipients, $sender, $subject);
 

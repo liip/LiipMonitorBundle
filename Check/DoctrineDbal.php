@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Doctrine\Persistence\ConnectionRegistry;
 use Laminas\Diagnostics\Check\AbstractCheck;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 
 class DoctrineDbal extends AbstractCheck
@@ -17,6 +18,9 @@ class DoctrineDbal extends AbstractCheck
         $this->connectionName = $connectionName;
     }
 
+    /**
+     * @return ResultInterface
+     */
     public function check()
     {
         $connection = $this->manager->getConnection($this->connectionName);

@@ -13,10 +13,7 @@ class PathHelper
         $this->routerHelper = $routerHelper;
     }
 
-    /**
-     * @return array
-     */
-    public function generateRoutes(array $routes)
+    public function generateRoutes(array $routes): array
     {
         $ret = [];
 
@@ -36,10 +33,7 @@ class PathHelper
         return $ret;
     }
 
-    /**
-     * @return string
-     */
-    public function getRoutesJs(array $routes)
+    public function getRoutesJs(array $routes): string
     {
         $script = '<script type="text/javascript" charset="utf-8">';
         $script .= "var api = {};\n";
@@ -51,10 +45,8 @@ class PathHelper
 
     /**
      * @param string[] $paths
-     *
-     * @return string
      */
-    public function getScriptTags(array $paths)
+    public function getScriptTags(array $paths): string
     {
         $ret = '';
         foreach ($paths as $path) {
@@ -66,10 +58,8 @@ class PathHelper
 
     /**
      * @param string[] $paths
-     *
-     * @return string
      */
-    public function getStyleTags(array $paths)
+    public function getStyleTags(array $paths): string
     {
         $ret = '';
         foreach ($paths as $path) {

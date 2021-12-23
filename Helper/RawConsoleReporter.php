@@ -33,11 +33,14 @@ class RawConsoleReporter implements ReporterInterface
         $this->output = $output;
     }
 
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
     }
 
+    /**
+     * @return bool|void
+     */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
@@ -62,29 +65,38 @@ class RawConsoleReporter implements ReporterInterface
         $this->output->writeln(sprintf(' %s', $check->getLabel().$performanceData));
     }
 
-    /**
-     * @return string
-     */
-    protected function getNagiosPerformanceData()
+    protected function getNagiosPerformanceData(): string
     {
         return '';
     }
 
+    /**
+     * @return void
+     */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
         return;
     }
 
+    /**
+     * @return bool|void
+     */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
         return;
     }
 
+    /**
+     * @return void
+     */
     public function onStop(ResultsCollection $results)
     {
         return;
     }
 
+    /**
+     * @return void
+     */
     public function onFinish(ResultsCollection $results)
     {
         return;

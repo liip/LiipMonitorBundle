@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $checkConfig = [
             'groups' => [

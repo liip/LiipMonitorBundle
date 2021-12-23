@@ -30,7 +30,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
     /**
      * Loads the services based on your application configuration.
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('runner.xml');
@@ -96,7 +96,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         $this->configureDoctrineMigrationsCheck($container, $containerParams);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->migrationsLoader->process($container);
     }
@@ -106,7 +106,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      * @param string $group
      * @param array  $values
      */
-    private function setParameters(ContainerBuilder $container, $checkName, $group, $values)
+    private function setParameters(ContainerBuilder $container, $checkName, $group, $values): void
     {
         $prefix = sprintf('%s.check.%s', $this->getAlias(), $checkName);
         switch ($checkName) {
@@ -161,10 +161,8 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      *
      * @param ContainerBuilder $container The container
      * @param array            $params    Container params
-     *
-     * @return void
      */
-    private function configureDoctrineMigrationsCheck(ContainerBuilder $container, array $params)
+    private function configureDoctrineMigrationsCheck(ContainerBuilder $container, array $params): void
     {
         if (!$container->hasDefinition('liip_monitor.check.doctrine_migrations') || !isset($params['groups'])) {
             return;
@@ -186,7 +184,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         }
     }
 
-    private function configureMailer(ContainerBuilder $container, array $config)
+    private function configureMailer(ContainerBuilder $container, array $config): void
     {
         if (false === $config['mailer']['enabled']) {
             return;

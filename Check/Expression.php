@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -36,6 +37,9 @@ class Expression implements CheckInterface
         $this->criticalMessage = $criticalMessage;
     }
 
+    /**
+     * @return ResultInterface
+     */
     public function check()
     {
         $language = $this->getExpressionLanguage();
@@ -51,12 +55,15 @@ class Expression implements CheckInterface
         return new Success();
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return $this->label;
     }
 
-    protected function getExpressionLanguage()
+    protected function getExpressionLanguage(): ExpressionLanguage
     {
         $language = new ExpressionLanguage();
         $language->register(

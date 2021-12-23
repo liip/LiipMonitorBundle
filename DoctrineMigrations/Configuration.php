@@ -29,20 +29,16 @@ class Configuration extends BaseConfiguration
      * Set service container.
      *
      * @param ContainerInterface $container Service container
-     *
-     * @return void
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
     }
 
     /**
      * Tune this configuration parameters according to migrations bundle.
-     *
-     * @return void
      */
-    public function configure()
+    public function configure(): void
     {
         if (null === self::$haveMigrationBundle) {
             self::$haveMigrationBundle = class_exists(DoctrineCommand::class);

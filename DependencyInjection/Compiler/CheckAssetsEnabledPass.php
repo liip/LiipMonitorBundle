@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 class CheckAssetsEnabledPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('liip_monitor.health_controller') && !$container->has('assets.packages')) {
             throw new LogicException('Controller support cannot be enabled unless the frameworkbundle "assets" support is also enabled.');

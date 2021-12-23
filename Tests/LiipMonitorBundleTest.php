@@ -23,7 +23,7 @@ class LiipMonitorBundleTest extends \PHPUnit\Framework\TestCase
     /**
      * Test bundle build to add all required compiler passes.
      */
-    public function testBuildWithCompilerPasses()
+    public function testBuildWithCompilerPasses(): void
     {
         $compilerPasses = [
             'Liip\MonitorBundle\DependencyInjection\Compiler\CheckAssetsEnabledPass' => true,

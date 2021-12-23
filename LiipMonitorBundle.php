@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class LiipMonitorBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         if (method_exists($container, 'registerForAutoconfiguration')) {
             $container->registerForAutoconfiguration(CheckInterface::class)

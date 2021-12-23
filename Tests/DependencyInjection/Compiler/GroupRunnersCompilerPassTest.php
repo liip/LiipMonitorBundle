@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $defaultGroup = 'groupe_par_défaut';
 

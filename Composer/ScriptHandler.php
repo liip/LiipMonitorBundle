@@ -11,7 +11,7 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseHandler;
  */
 class ScriptHandler extends BaseHandler
 {
-    public static function checkHealth(Event $event)
+    public static function checkHealth(Event $event): void
     {
         $options = self::getOptions($event);
 

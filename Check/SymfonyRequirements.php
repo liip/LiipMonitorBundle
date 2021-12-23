@@ -4,6 +4,7 @@ namespace Liip\MonitorBundle\Check;
 
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Failure;
+use Laminas\Diagnostics\Result\ResultInterface;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
 
@@ -21,6 +22,9 @@ class SymfonyRequirements implements CheckInterface
         require $file;
     }
 
+    /**
+     * @return ResultInterface
+     */
     public function check()
     {
         $symfonyRequirements = new \SymfonyRequirements();
@@ -36,6 +40,9 @@ class SymfonyRequirements implements CheckInterface
         return new Success();
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return 'Symfony2 Requirements';

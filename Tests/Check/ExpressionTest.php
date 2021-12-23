@@ -16,7 +16,7 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider checkResultProvider
      */
-    public function testCheckResult($warningCheck, $criticalCheck, $warningMessage, $criticalMessage, $expectedResultClass, $expectedMessage)
+    public function testCheckResult($warningCheck, $criticalCheck, $warningMessage, $criticalMessage, $expectedResultClass, $expectedMessage): void
     {
         $check = new Expression('foo', $warningCheck, $criticalCheck, $warningMessage, $criticalMessage);
         $this->assertSame('foo', $check->getLabel());
@@ -27,7 +27,7 @@ class ExpressionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedMessage, $result->getMessage());
     }
 
-    public function checkResultProvider()
+    public function checkResultProvider(): array
     {
         return [
             ['true', 'true', null, null, Success::class, ''],

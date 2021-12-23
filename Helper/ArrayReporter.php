@@ -21,22 +21,19 @@ class ArrayReporter implements ReporterInterface
     private $globalStatus = self::STATUS_OK;
     private $results = [];
 
-    /**
-     * @return array
-     */
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }
 
-    /**
-     * @return string
-     */
-    public function getGlobalStatus()
+    public function getGlobalStatus(): string
     {
         return $this->globalStatus;
     }
 
+    /**
+     * @return bool|void
+     */
     public function onAfterRun(CheckInterface $check, ResultInterface $result, $checkAlias = null)
     {
         switch (true) {
@@ -71,21 +68,33 @@ class ArrayReporter implements ReporterInterface
         ];
     }
 
+    /**
+     * @return void
+     */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
         return;
     }
 
+    /**
+     * @return bool|void
+     */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
         return;
     }
 
+    /**
+     * @return void
+     */
     public function onStop(ResultsCollection $results)
     {
         return;
     }
 
+    /**
+     * @return void
+     */
     public function onFinish(ResultsCollection $results)
     {
         return;

@@ -26,7 +26,7 @@ class HealthCheckCommand extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('monitor:health')
@@ -53,10 +53,7 @@ class HealthCheckCommand extends Command
         ;
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $failureCount = 0;
 

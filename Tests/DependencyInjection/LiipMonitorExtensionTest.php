@@ -58,7 +58,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     /**
      * @dataProvider checkProvider
      */
-    public function testChecksLoaded($name, $config, $checkClass, $checkAlias = null, $checkCount = 1)
+    public function testChecksLoaded($name, $config, $checkClass, $checkAlias = null, $checkCount = 1): void
     {
         // skip checks for missing classes
         if (!class_exists($checkClass)) {
@@ -79,7 +79,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertInstanceOf($checkClass, $runner->getCheck($checkAlias));
     }
 
-    public function testDefaultNoChecks()
+    public function testDefaultNoChecks(): void
     {
         $this->load();
         $this->compile();
@@ -87,7 +87,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertCount(0, $this->container->get('liip_monitor.runner')->getChecks());
     }
 
-    public function testDefaultGroupParameterHasNoChecks()
+    public function testDefaultGroupParameterHasNoChecks(): void
     {
         $this->load();
         $this->compile();
@@ -96,7 +96,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertSame('default', $this->container->getParameter('liip_monitor.default_group'));
     }
 
-    public function testDefaultGroupParameter()
+    public function testDefaultGroupParameter(): void
     {
         $this->load(['checks' => ['php_extensions' => ['foo']]]);
         $this->compile();
@@ -105,7 +105,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertSame('default', $this->container->getParameter('liip_monitor.default_group'));
     }
 
-    public function testDefaultGroupParameterCustom()
+    public function testDefaultGroupParameterCustom(): void
     {
         $this->load(['checks' => ['php_extensions' => ['foo']], 'default_group' => 'foo_bar']);
         $this->compile();
@@ -114,7 +114,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertSame('foo_bar', $this->container->getParameter('liip_monitor.default_group'));
     }
 
-    public function testEnableController()
+    public function testEnableController(): void
     {
         $this->load();
 
@@ -125,7 +125,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue($this->container->has('liip_monitor.health_controller'));
     }
 
-    public function testDisabledDefaultMailer()
+    public function testDisabledDefaultMailer(): void
     {
         $this->load();
 
@@ -136,7 +136,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.send_on_warning'));
     }
 
-    public function testDisabledMailer()
+    public function testDisabledMailer(): void
     {
         $this->load(
             [
@@ -157,7 +157,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertFalse($this->container->hasParameter('liip_monitor.mailer.send_on_warning'));
     }
 
-    public function testEnabledMailer()
+    public function testEnabledMailer(): void
     {
         $this->load(
             [
@@ -181,14 +181,14 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     /**
      * @dataProvider mailerConfigProvider
      */
-    public function testInvalidMailerConfig($config)
+    public function testInvalidMailerConfig($config): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
         $this->load($config);
     }
 
-    public function mailerConfigProvider()
+    public function mailerConfigProvider(): array
     {
         return [
             [
@@ -213,7 +213,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     /**
      * @dataProvider invalidCheckProvider
      */
-    public function testInvalidExpressionConfig(array $config)
+    public function testInvalidExpressionConfig(array $config): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -221,7 +221,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->compile();
     }
 
-    public function invalidCheckProvider()
+    public function invalidCheckProvider(): array
     {
         return [
             [['foo']],
@@ -230,7 +230,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         ];
     }
 
-    public function checkProvider()
+    public function checkProvider(): array
     {
         return [
             ['php_extensions', ['foo'], ExtensionLoaded::class],
