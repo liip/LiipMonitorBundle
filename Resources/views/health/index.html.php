@@ -208,7 +208,7 @@ $ curl -XPOST -H "Accept: application/json" <?php echo $request->getUriForPath($
             <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'run?group='.$group); ?>"><?php echo $request->getPathInfo().'run?group='.$group; ?></a></dt>
             <dt><?php echo $request->getPathInfo().'run/check_id?group='.$group; ?></dt>
         </dl>
-        Or use slug URl /group/{group} to specify the check group:
+        Or use slug URL /group/{group} to specify the check group:
         <dl>
             <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'checks/group/'.$group); ?>"><?php echo $request->getPathInfo().'checks/group/'.$group; ?></a></dt>
             <dt><a href="<?php echo $request->getUriForPath($request->getPathInfo().'http_status_checks/group/'.$group); ?>"><?php echo $request->getPathInfo().'http_status_checks/group/'.$group; ?></a></dt>
