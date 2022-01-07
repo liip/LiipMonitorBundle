@@ -174,7 +174,15 @@ class HealthCheckController
 
     private function getGroup(Request $request): string
     {
-        return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
+         // from slug routing
+         if ($request->attributes->get('group')){
+            return $request->attributes->get('group');
+        }
+        else
+        {
+            //or from get URL parameter
+            return $request->query->get('group') ?: $this->runnerManager->getDefaultGroup();
+        }
     }
 
     public function listReportersAction(): JsonResponse

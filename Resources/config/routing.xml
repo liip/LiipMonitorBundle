@@ -9,6 +9,9 @@
     <route id="liip_monitor_list_checks" path="/checks">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::listAction</default>
     </route>
+    <route id="liip_monitor_list_checks_slug" path="/checks/group/{group}">
+        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::listAction</default>
+    </route>
     <route id="liip_monitor_list_all_checks" path="/all_checks">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::listAllAction</default>
     </route>
@@ -18,13 +21,25 @@
     <route id="liip_monitor_run_all_checks_http_status" path="/http_status_checks">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksHttpStatusAction</default>
     </route>
+    <route id="liip_monitor_run_all_checks_http_status_slug" path="/http_status_checks/group/{group}">
+        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksHttpStatusAction</default>
+    </route>
     <route id="liip_monitor_run_single_check_http_status" path="/http_status_check/{checkId}">
+        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckHttpStatusAction</default>
+    </route>
+    <route id="liip_monitor_run_single_check_http_status_slug" path="/http_status_check/{checkId}/group/{group}">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckHttpStatusAction</default>
     </route>
     <route id="liip_monitor_run_all_checks" path="/run">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksAction</default>
     </route>
+    <route id="liip_monitor_run_all_checks_slug" path="/run/group/{group}">
+        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksAction</default>
+    </route>
     <route id="liip_monitor_run_single_check" path="/run/{checkId}">
+        <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckAction</default>
+    </route>
+    <route id="liip_monitor_run_single_check_slug" path="/run/{checkId}/group/{group}">
         <default key="_controller">Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckAction</default>
     </route>
     <route id="liip_monitor_list_reporters" path="/list/reporters">
