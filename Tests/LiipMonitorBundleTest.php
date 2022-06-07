@@ -42,6 +42,8 @@ class LiipMonitorBundleTest extends \PHPUnit\Framework\TestCase
                 function ($compilerPass) use (&$compilerPasses) {
                     $class = get_class($compilerPass);
                     unset($compilerPasses[$class]);
+
+                    return $this->container;
                 }
             );
 

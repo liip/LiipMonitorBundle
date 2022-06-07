@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class AddGroupsCompilerPass implements CompilerPassInterface
 {
-    const SERVICE_ID_PREFIX = 'liip_monitor.check.';
+    public const SERVICE_ID_PREFIX = 'liip_monitor.check.';
 
     public function process(ContainerBuilder $container): void
     {

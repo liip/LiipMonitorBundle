@@ -6,8 +6,8 @@ use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Collection;
 use Laminas\Diagnostics\Result\Failure;
 use Liip\MonitorBundle\Helper\SymfonyMailerReporter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -15,7 +15,7 @@ use Symfony\Component\Mime\Email;
 class SymfonyMailerReporterTest extends TestCase
 {
     /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|MailerInterface
+     * @var MockObject|MailerInterface
      */
     private $mailer;
 
@@ -25,7 +25,7 @@ class SymfonyMailerReporterTest extends TestCase
             $this->markTestSkipped('Symfony Mailer not available.');
         }
 
-        $this->mailer = $this->prophesize(MailerInterface::class);
+        $this->mailer = $this->createMock(MailerInterface::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class SymfonyMailerReporterTest extends TestCase
      */
     public function testSendMail(array $recipients, string $sender, string $subject): void
     {
-        $reporter = new SymfonyMailerReporter($this->mailer->reveal(), $recipients, $sender, $subject);
+        $reporter = new SymfonyMailerReporter($this->mailer, $recipients, $sender, $subject);
 
         $check = $this->prophesize(CheckInterface::class);
         $check->getLabel()->willReturn('Some Label');
@@ -41,15 +41,17 @@ class SymfonyMailerReporterTest extends TestCase
         $checks = new Collection();
         $checks[$check->reveal()] = new Failure('Something goes wrong');
 
-        $this->mailer->send(Argument::that(function (Email $message) use ($recipients, $sender, $subject): bool {
-            $this->assertEquals(Address::createArray($recipients), $message->getTo(), 'Check if Recipient is sent correctly.');
-            $this->assertEquals([Address::create($sender)], $message->getFrom(), 'Check that the from header is set correctly.');
-            $this->assertSame($subject, $message->getSubject(), 'Check that the subject has been set.');
+        $this->mailer
+            ->expects(self::once())
+            ->method('send')
+            ->with(self::callback(function (?Email $message) use ($recipients, $sender, $subject): bool {
+                self::assertEquals(Address::createArray($recipients), $message->getTo(), 'Check if Recipient is sent correctly.');
+                self::assertEquals([Address::create($sender)], $message->getFrom(), 'Check that the from header is set correctly.');
+                self::assertSame($subject, $message->getSubject(), 'Check that the subject has been set.');
+                self::assertSame('[Some Label] Something goes wrong', $message->getTextBody(), 'Check if the text body has been set.');
 
-            $this->assertSame('[Some Label] Something goes wrong', $message->getTextBody(), 'Check if the text body has been set.');
-
-            return true;
-        }))->shouldBeCalled();
+                return true;
+            }));
 
         $reporter->onFinish($checks);
     }

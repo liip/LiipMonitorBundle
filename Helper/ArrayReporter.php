@@ -15,8 +15,8 @@ use Laminas\Diagnostics\Runner\Reporter\ReporterInterface;
  */
 class ArrayReporter implements ReporterInterface
 {
-    const STATUS_OK = 'OK';
-    const STATUS_KO = 'KO';
+    public const STATUS_OK = 'OK';
+    public const STATUS_KO = 'KO';
 
     private $globalStatus = self::STATUS_OK;
     private $results = [];

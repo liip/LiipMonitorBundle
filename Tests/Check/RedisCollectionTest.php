@@ -10,7 +10,7 @@ use ReflectionException;
 
 final class RedisCollectionTest extends TestCase
 {
-    const AUTH = 'my-super-secret-password';
+    public const AUTH = 'my-super-secret-password';
 
     /**
      * @test

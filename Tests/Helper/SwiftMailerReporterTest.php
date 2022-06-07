@@ -11,7 +11,6 @@ use Laminas\Diagnostics\Result\Skip;
 use Laminas\Diagnostics\Result\Success;
 use Laminas\Diagnostics\Result\Warning;
 use Liip\MonitorBundle\Helper\SwiftMailerReporter;
-use Prophecy\Argument;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -23,13 +22,15 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendNoEmail(ResultInterface $result, $sendOnWarning): void
     {
-        $mailer = $this->prophesize('Swift_Mailer');
-        $mailer->send()->shouldNotBeCalled();
+        $mailer = $this->createMock('Swift_Mailer');
+        $mailer
+            ->expects(self::never())
+            ->method('send');
 
         $results = new Collection();
-        $results[$this->prophesize(CheckInterface::class)->reveal()] = $result;
+        $results[$this->createMock(CheckInterface::class)] = $result;
 
-        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
+        $reporter = new SwiftMailerReporter($mailer, 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);
     }
 
@@ -38,13 +39,16 @@ class SwiftMailerReporterTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendEmail(ResultInterface $result, $sendOnWarning): void
     {
-        $mailer = $this->prophesize('Swift_Mailer');
-        $mailer->send(Argument::type('Swift_Message'))->shouldBeCalled();
+        $mailer = $this->createMock('Swift_Mailer');
+        $mailer
+            ->expects(self::once())
+            ->method('send')
+            ->with(self::isInstanceOf('Swift_Message'));
 
         $results = new Collection();
-        $results[$this->prophesize(CheckInterface::class)->reveal()] = $result;
+        $results[$this->createMock(CheckInterface::class)] = $result;
 
-        $reporter = new SwiftMailerReporter($mailer->reveal(), 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
+        $reporter = new SwiftMailerReporter($mailer, 'foo@bar.com', 'bar@foo.com', 'foo bar', $sendOnWarning);
         $reporter->onFinish($results);
     }
 
