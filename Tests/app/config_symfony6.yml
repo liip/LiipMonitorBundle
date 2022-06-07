@@ -1,4 +1,4 @@
-# symfony 5 config (requires assets defined)
+# symfony 6 config (requires assets defined)
 framework:
     router:
         resource: "%kernel.project_dir%/routing.yml"
