@@ -18,8 +18,8 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class SymfonyVersion implements CheckInterface
 {
-    const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
-    const VERSION_CHECK_URL = 'https://symfony.com/releases/%s.json';
+    public const PACKAGIST_URL = 'https://packagist.org/packages/symfony/symfony.json';
+    public const VERSION_CHECK_URL = 'https://symfony.com/releases/%s.json';
 
     /**
      * @return ResultInterface
