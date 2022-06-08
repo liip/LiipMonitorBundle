@@ -3,6 +3,7 @@
 namespace Liip\MonitorBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
+use Liip\MonitorBundle\Runner;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -35,6 +36,11 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasService('liip_monitor.runner_foobar');
         $this->assertContainerBuilderHasService('liip_monitor.runner_bar');
         $this->assertContainerBuilderHasService('liip_monitor.runner_baz');
+        $this->assertContainerBuilderHasAlias(Runner::class.' $fooRunner', 'liip_monitor.runner_foo');
+        $this->assertContainerBuilderHasAlias(Runner::class.' $foobarRunner', 'liip_monitor.runner_foobar');
+        $this->assertContainerBuilderHasAlias(Runner::class.' $barRunner', 'liip_monitor.runner_bar');
+        $this->assertContainerBuilderHasAlias(Runner::class.' $bazRunner', 'liip_monitor.runner_baz');
+        $this->assertContainerBuilderHasAlias(Runner::class.' $groupeParDéfautRunner', 'liip_monitor.runner_'.$defaultGroup);
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void

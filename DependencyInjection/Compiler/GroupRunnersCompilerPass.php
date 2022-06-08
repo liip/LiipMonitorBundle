@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\DependencyInjection\Compiler;
 
+use Liip\MonitorBundle\Runner;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -35,6 +36,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $runners = [];
         foreach ($groups as $group) {
             $container->setDefinition('liip_monitor.runner_'.$group, clone $definition);
+            $container->registerAliasForArgument('liip_monitor.runner_' . $group, Runner::class, $group . 'Runner');
             $runners[] = 'liip_monitor.runner_'.$group;
         }
 
@@ -48,7 +50,7 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
     private function getGroups(array $services): array
     {
         $groups = [];
-        foreach ($services as $serviceId => $tags) {
+        foreach ($services as $tags) {
             foreach ($tags as $attributes) {
                 if (!empty($attributes['group'])) {
                     $groups[$attributes['group']] = true;
