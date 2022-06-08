@@ -21,10 +21,6 @@ class SymfonyMailerReporterTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!interface_exists(MailerInterface::class)) {
-            $this->markTestSkipped('Symfony Mailer not available.');
-        }
-
         $this->mailer = $this->createMock(MailerInterface::class);
     }
 
@@ -35,16 +31,16 @@ class SymfonyMailerReporterTest extends TestCase
     {
         $reporter = new SymfonyMailerReporter($this->mailer, $recipients, $sender, $subject);
 
-        $check = $this->prophesize(CheckInterface::class);
-        $check->getLabel()->willReturn('Some Label');
+        $check = $this->createStub(CheckInterface::class);
+        $check->method('getLabel')->willReturn('Some Label');
 
         $checks = new Collection();
-        $checks[$check->reveal()] = new Failure('Something goes wrong');
+        $checks[$check] = new Failure('Something goes wrong');
 
         $this->mailer
             ->expects(self::once())
             ->method('send')
-            ->with(self::callback(function (?Email $message) use ($recipients, $sender, $subject): bool {
+            ->with(self::callback(static function (Email $message) use ($recipients, $sender, $subject): bool {
                 self::assertEquals(Address::createArray($recipients), $message->getTo(), 'Check if Recipient is sent correctly.');
                 self::assertEquals([Address::create($sender)], $message->getFrom(), 'Check that the from header is set correctly.');
                 self::assertSame($subject, $message->getSubject(), 'Check that the subject has been set.');
