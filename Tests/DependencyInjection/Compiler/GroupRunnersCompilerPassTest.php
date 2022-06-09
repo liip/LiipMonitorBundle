@@ -41,6 +41,7 @@ class GroupRunnersCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasAlias(Runner::class.' $barRunner', 'liip_monitor.runner_bar');
         $this->assertContainerBuilderHasAlias(Runner::class.' $bazRunner', 'liip_monitor.runner_baz');
         $this->assertContainerBuilderHasAlias(Runner::class.' $groupeParDéfautRunner', 'liip_monitor.runner_'.$defaultGroup);
+        $this->assertContainerBuilderHasAlias(Runner::class, 'liip_monitor.runner');
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void

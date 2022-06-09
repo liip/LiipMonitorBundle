@@ -36,11 +36,12 @@ class GroupRunnersCompilerPass implements CompilerPassInterface
         $runners = [];
         foreach ($groups as $group) {
             $container->setDefinition('liip_monitor.runner_'.$group, clone $definition);
-            $container->registerAliasForArgument('liip_monitor.runner_' . $group, Runner::class, $group . 'Runner');
+            $container->registerAliasForArgument('liip_monitor.runner_'.$group, Runner::class, $group.'Runner');
             $runners[] = 'liip_monitor.runner_'.$group;
         }
 
         $container->setAlias('liip_monitor.runner', 'liip_monitor.runner_'.$defaultGroup);
+        $container->setAlias(Runner::class, 'liip_monitor.runner');
         $runner = $container->getAlias('liip_monitor.runner');
         $runner->setPublic(true);
 
