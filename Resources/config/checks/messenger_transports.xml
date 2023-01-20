@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="liip_monitor.check.messenger_transports" public="true" class="Liip\MonitorBundle\Check\SymfonyMessengerTransportCountCollection">
+            <argument type="service" id="messenger.receiver_locator" />
+            <argument>%%liip_monitor.check.messenger_transports%%</argument>
+            <tag name="liip_monitor.check_collection" />
+        </service>
+    </services>
+</container>
