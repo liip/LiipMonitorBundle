@@ -23,6 +23,10 @@ class SymfonyMessengerTransportCount extends AbstractCheck
 
         $this->warningThreshold = $config['warning_threshold'];
         $this->criticalThreshold = $config['critical_threshold'];
+
+        if ($this->warningThreshold && $this->warningThreshold >= $this->criticalThreshold) {
+            throw new \LogicException('Warning threshold must be lower than critical threshold');
+        }
     }
 
     public function check()
