@@ -1,3 +1,4 @@
+
 # Liip Monitor Bundle #
 
 [![CI Status](https://github.com/liip/LiipMonitorBundle/workflows/CI/badge.svg)](https://github.com/liip/LiipMonitorBundle/actions?query=workflow%3ACI)
@@ -468,6 +469,14 @@ liip_monitor:
                         critical_expression:  null # Example: ini('short_open_tag') == 1
                         warning_message:      null
                         critical_message:     null
+
+                # Validate that a messenger transport does not contain more than warning/critical messages
+                # Transport must implement MessageCountAwareInterface
+                messenger_transport:
+                    name: # name of transport
+                        critical_threshold:   10   # required
+                        warning_threshold:    null # optional: warning level
+                        service:              null # defaults to messenger.transport.name 
 ```
 
 ## REST API DOCS ##

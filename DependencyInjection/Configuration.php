@@ -391,6 +391,24 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
+                    ->arrayNode('messenger_transports')
+                        ->info('Symfony messenger transports to check count')
+                        ->example([
+                            'default' => [
+                                'critical_threshold' => 100,
+                                'warning_threshold' => 10,
+                                'service' => 'messenger.transport.foo',
+                            ],
+                        ])
+                        ->useAttributeAsKey('name')
+                        ->prototype('array')
+                            ->children()
+                                ->integerNode('critical_threshold')->isRequired()->end()
+                                ->integerNode('warning_threshold')->defaultNull()->end()
+                                ->scalarNode('service')->defaultNull()->end()
+                            ->end()
+                        ->end()
+                    ->end()
                     ->arrayNode('expressions')
                         ->useAttributeAsKey('alias')
                         ->info('Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)')

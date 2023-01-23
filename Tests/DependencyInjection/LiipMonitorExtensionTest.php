@@ -29,6 +29,7 @@ use Laminas\Diagnostics\Check\YamlFile;
 use Liip\MonitorBundle\Check\CustomErrorPages;
 use Liip\MonitorBundle\Check\DoctrineDbal;
 use Liip\MonitorBundle\Check\Expression;
+use Liip\MonitorBundle\Check\SymfonyMessengerTransportCount;
 use Liip\MonitorBundle\Check\SymfonyVersion;
 use Liip\MonitorBundle\DependencyInjection\Compiler\AddGroupsCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\Compiler\CheckCollectionTagCompilerPass;
@@ -37,6 +38,8 @@ use Liip\MonitorBundle\DependencyInjection\Compiler\GroupRunnersCompilerPass;
 use Liip\MonitorBundle\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -49,6 +52,21 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 
         $doctrineMock = $this->getMockBuilder('Doctrine\Persistence\ConnectionRegistry')->getMock();
         $this->container->set('doctrine', $doctrineMock);
+
+        $serviceLocator = $this->getMockBuilder(ServiceLocator::class)->disableOriginalConstructor()->getMock();
+        $serviceLocator->method('has')
+            ->will($this->returnValueMap([
+                ['messenger.transport.foo', true],
+                ['messenger.transport.bar', true],
+            ]));
+        $serviceLocator->method('get')
+            ->will($this->returnValueMap([
+                ['messenger.transport.foo', $this->getMockBuilder(MessageCountAwareInterface::class)->getMock()],
+                ['messenger.transport.bar', $this->getMockBuilder(MessageCountAwareInterface::class)->getMock()],
+            ]));
+
+        $this->container->set('messenger.receiver_locator', $serviceLocator);
+
         $this->container->addCompilerPass(new AddGroupsCompilerPass());
         $this->container->addCompilerPass(new GroupRunnersCompilerPass());
         $this->container->addCompilerPass(new CheckTagCompilerPass());
@@ -230,6 +248,27 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         ];
     }
 
+    /**
+     * @dataProvider invalidMessengerTransportConfig
+     */
+    public function testInvalidMessengerTransportConfig(array $config): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->load(['checks' => ['messenger_transports' => $config]]);
+        $this->compile();
+    }
+
+    public function invalidMessengerTransportConfig(): array
+    {
+        return [
+            [['foo']], // missing critical_threshold
+            [['foo' => ['critical_threshold' => '1']]], // critical_threshold not int
+            [['foo' => ['critical_threshold' => 2, 'warning_threshold' => '1']]], // warning_threshold not int
+            [['foo' => ['critical_threshold' => 2, 'warning_threshold' => 1, 'service' => []]]], // service not scalar
+        ];
+    }
+
     public function checkProvider(): array
     {
         return [
@@ -268,6 +307,10 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['file_yaml', ['foo.yaml'], YamlFile::class],
             ['expressions', ['foo' => ['label' => 'foo', 'critical_expression' => 'true']], Expression::class, 'expression_foo'],
             ['pdo_connections', ['foo' => ['dsn' => 'my-dsn']], PDOCheck::class, 'pdo_foo'],
+            ['messenger_transports', ['foo' => ['critical_threshold' => 100]], SymfonyMessengerTransportCount::class, 'messenger_transport_foo', 1],
+            ['messenger_transports', ['foo' => ['critical_threshold' => 100], 'bar' => ['critical_threshold' => 1]], SymfonyMessengerTransportCount::class, 'messenger_transport_foo', 2],
+            ['messenger_transports', ['foo' => ['critical_threshold' => 100], 'bar' => ['critical_threshold' => 1]], SymfonyMessengerTransportCount::class, 'messenger_transport_bar', 2],
+            ['messenger_transports', ['foo' => ['critical_threshold' => 100, 'service' => 'messenger.transport.foo'], 'bar' => ['critical_threshold' => 1, 'service' => 'messenger.transport.foo']], SymfonyMessengerTransportCount::class, 'messenger_transport_bar', 2],
         ];
     }
 
