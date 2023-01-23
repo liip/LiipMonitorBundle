@@ -265,6 +265,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             [['foo']], // missing critical_threshold
             [['foo' => ['critical_threshold' => '1']]], // critical_threshold not int
             [['foo' => ['critical_threshold' => 2, 'warning_threshold' => '1']]], // warning_threshold not int
+            [['foo' => ['critical_threshold' => 2, 'warning_threshold' => 1, 'service' => []]]], // service not scalar
         ];
     }
 
@@ -309,6 +310,7 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
             ['messenger_transports', ['foo' => ['critical_threshold' => 100]], SymfonyMessengerTransportCount::class, 'messenger_transport_foo', 1],
             ['messenger_transports', ['foo' => ['critical_threshold' => 100], 'bar' => ['critical_threshold' => 1]], SymfonyMessengerTransportCount::class, 'messenger_transport_foo', 2],
             ['messenger_transports', ['foo' => ['critical_threshold' => 100], 'bar' => ['critical_threshold' => 1]], SymfonyMessengerTransportCount::class, 'messenger_transport_bar', 2],
+            ['messenger_transports', ['foo' => ['critical_threshold' => 100, 'service' => 'messenger.transport.foo'], 'bar' => ['critical_threshold' => 1, 'service' => 'messenger.transport.foo']], SymfonyMessengerTransportCount::class, 'messenger_transport_bar', 2],
         ];
     }
 

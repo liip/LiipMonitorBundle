@@ -395,16 +395,17 @@ class Configuration implements ConfigurationInterface
                         ->info('Symfony messenger transports to check count')
                         ->example([
                             'default' => [
-                                'foo' => 'messenger.transport.foo',
-                                'warning_threshold' => 10,
                                 'critical_threshold' => 100,
+                                'warning_threshold' => 10,
+                                'service' => 'messenger.transport.foo',
                             ],
                         ])
                         ->useAttributeAsKey('name')
                         ->prototype('array')
                             ->children()
-                                ->integerNode('warning_threshold')->defaultNull()->end()
                                 ->integerNode('critical_threshold')->isRequired()->end()
+                                ->integerNode('warning_threshold')->defaultNull()->end()
+                                ->scalarNode('service')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()
