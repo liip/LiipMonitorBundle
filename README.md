@@ -472,7 +472,7 @@ liip_monitor:
 
                 # Validate that a messenger transport does not contain more than warning/critical messages
                 # Transport must implement MessageCountAwareInterface
-                messenger_transport:
+                messenger_transports:
                     name: # name of transport
                         critical_threshold:   10   # required
                         warning_threshold:    null # optional: warning level
