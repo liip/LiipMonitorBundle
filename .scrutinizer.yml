@@ -1,4 +1,0 @@
-filter:
-  dependency_paths: [vendor/]
-checks:
-  php: true

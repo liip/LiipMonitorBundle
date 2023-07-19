@@ -1,6 +1,7 @@
-/Tests/app/cache
-/Tests/app/logs
-/Tests/app/var
-/vendor
-composer.lock
-.phpunit.result.cache
+/composer.lock
+/phpunit.xml
+/vendor/
+/build/
+/var/
+/.php-cs-fixer.cache
+/.phpunit.result.cache

@@ -1,555 +1,739 @@
-
-# Liip Monitor Bundle #
-
-[![CI Status](https://github.com/liip/LiipMonitorBundle/workflows/CI/badge.svg)](https://github.com/liip/LiipMonitorBundle/actions?query=workflow%3ACI)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/badges/quality-score.png?s=ee7a1c39f11955b987b09aefb59b4b826157c754)](https://scrutinizer-ci.com/g/liip/LiipMonitorBundle/)
+# liip/monitor-bundle
 
 This bundle provides a way to run a series of application related health checks.
-Health checks in the scope of this bundle go beyond simple actions like performing
-a _ping_ to a server to see if it's alive. For example a Memcache server can be
-alive and not displaying any errors in your Nagios but you might not be able to
-access it from your PHP application. Each health check should then implement some
-application logic that you want to make sure always works. Another usage can be
-testing for specific requirements, like availability of PHP extensions.
 
-Another design goal of the bundle was to be able to perform the checks using the
-same configuration and environment that your application is using. In that way you
-can make sure that if the health check runs successfully then your app should work
-too.
+## Upgrading from 2.x to 3.x
 
-So each health check will be a class that will implement the `CheckInterface::check`
-method which must return a `CheckResult` object. What happens inside that method
-is up to the check developer.
+Version 3.x is a complete rewrite of the bundle using modern Symfony features. The following
+changes have been made:
 
-Health checks are defined as Symfony services and they have to be tagged as
-`liip_monitor.check` in order to be picked up by the _health check runner_. This gives
-a lot of flexibility to application and bundle developers when they want to add their
-own checks.
+1. We now provide our own `Check` and `Result` system.
+2. The web interface has been removed.
+3. `laminas/laminas-diagnostics` is now an optional dependency (a [_bridge_](#laminas-diagnostics-check-bridge) is available).
+4. _Check Groups_ have been renamed to [_Check Suites_](#check-suites).
+5. Option to run your checks with [`symfony/messenger`](#symfony-messenger) and/or [`symfony/scheduler`](#symfony-scheduler).
+6. [System and Info services](#system-and-info-services) have been added.
 
-Checks are run via the command line using a Symfony command or via a REST api that
-delivers the results in JSON format.
+## Installation
 
-Here's the web interface:
+```bash
+composer require liip/monitor-bundle
+```
 
-![Web Interface](https://raw.githubusercontent.com/liip/LiipMonitorBundle/master/Resources/doc/screenshot.png "Web Interface")
+## Enable/Create Checks
 
-## Installation ##
+### Packaged Checks
 
-Install with composer:
+The packaged checks are enabled via the bundle config. See [Full Default Configuration](#full-default-configuration)
+for descriptions for each check. Here is an example showing the default options when simply enabled:
 
-    $ composer require liip/monitor-bundle
+```yaml
+# config/packages/liip_monitor.yaml
 
-Then register the bundle in the `AppKernel.php` file:
+liip_monitor:
+    checks:
+        system_memory_usage: true # warn @ 70%, fail @ 90%
+
+        system_disk_usage: true # warn @ 70%, fail @ 90%
+
+        # requires configuration
+        system_free_disk_space:
+            warning: 20GB
+            critical: 10GB
+
+        system_reboot: true
+
+        system_load_average:
+            1_minute: true # warn @ 70%, fail @ 90%
+            5_minute: true # warn @ 70%, fail @ 90%
+            15_minute: true # warn @ 70%, fail @ 90%
+
+        apcu_memory_usage: true # warn @ 70%, fail @ 90%
+
+        apcu_fragmentation: true # warn @ 70%, fail @ 90%
+
+        opcache_memory_usage: true # warn @ 70%, fail @ 90%
+
+        php_version: true
+
+        composer_audit: true
+
+        symfony_version: true
+
+        dbal_connection: true # auto creates a check for each dbal connection
+        dbal_connection: default # use specific dbal connection
+        dbal_connection: [default, alternate] # use specific dbal connections
+
+        # requires configuration
+        ping_url:
+            Server1: https://www.example.com # ensures a 2xx response
+            Server2:
+                url: https://www.example.com
+                expected_status_code: 204 # ensures a 204 response
+            Server3:
+                url: https://www.example.com
+                warning_duration: 200 # triggers a warning if the response takes longer than 200ms
+                critical_duration: 1000 # triggers a failure if the response takes longer than 1s
+            Server4:
+                url: https://www.example.com
+                expected_content: "foo" # fails if "foo" is not found in the response body
+```
+
+### Custom Checks
+
+You can create your own checks by having an autoconfigured service implement
+`Liip\Monitor\Check`:
 
 ```php
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Liip\MonitorBundle\LiipMonitorBundle(),
-        // ...
-    );
+namespace App\Check;
 
-    return $bundles;
+use Liip\Monitor\Check;
+use Liip\Monitor\Result;
+
+class SomeServiceCheck implements Check
+{
+    public function run(): Result
+    {
+        if ($condition) {
+            return Result::failure('summary message');
+            return Result::failure('message summary', 'detailed message', ['some' => 'context']);
+        }
+
+        if ($anotherCondition) {
+            return Result::warning('summary message');
+            return Result::warning('message summary', 'detailed message', ['some' => 'context']);
+        }
+
+        return Result::success();
+        return Result::success('message summary', 'detailed message', ['some' => 'context']);
+
+        // other result statuses
+        return Result::skip('summary message')
+        return Result::unknown('summary message')
+    }
 }
 ```
 
-If you want to enable the REST API provided by the bundle then add the following to your `routing.yml`:
+> [!NOTE]
+> By default, the class name is used to determine the check label (above, the label would be _Some Service_).
+> This [can be customized](#check-labels) by making the check `\Stringable` _or_ with the `AsCheck` attribute.
 
-```yml
-_monitor:
-    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
-    prefix: /monitor/health
+> [!NOTE]
+> Use the `AsCheck` attribute to configure [caching](#caching-check-results),
+> [check id](#check-ids), and [suites](#check-suites).
+
+> [!NOTE]
+> If `run()` throws an exception, it will be caught and converted to an _error_ result when running.
+
+#### Laminas Diagnostics Check Bridge
+
+You can also have autoconfigured services implement `Laminas\Diagnostics\Check\CheckInterface` if
+you wish to use the [laminas/laminas-diagnostics](https://github.com/laminas/laminas-diagnostics) check
+system:
+
+```php
+namespace App\Check;
+
+use Laminas\Diagnostics\Check\CheckInterface;
+use Laminas\Diagnostics\Result\ResultInterface;
+use Laminas\Diagnostics\Result\Success;
+use Laminas\Diagnostics\Result\Warning;
+use Laminas\Diagnostics\Result\Failure;
+
+class MyCheck implements CheckInterface
+{
+    public function getLabel(): string
+    {
+        return 'My Check';
+    }
+
+    public function check(): ResultInterface
+    {
+        if ($condition) {
+            new Failure('summary message');
+        }
+
+        if ($anotherCondition) {
+            new Warning('summary message');
+        }
+
+        return new Success('summary message');
+    }
+}
 ```
 
-Then, enable the controller in your configuration:
+> [!NOTE]
+> Use the `AsCheck` attribute to configure [caching](#caching-check-results),
+> [check id](#check-ids), and [suites](#check-suites).
 
-```yml
+> [!NOTE]
+> `laminas/laminas-diagnostics` is an optional dependency. You must install it yourself.
+
+### Caching Check Results
+
+The check results can be cached. This can be useful if using a service that frequently
+hits and endpoint on your app that runs all your checks.
+
+The default cache TTL can be configured globally:
+
+```yaml
+# config/packages/liip_monitor.yaml
+
 liip_monitor:
-    enable_controller: true
+    default_ttl: 60 # 60 seconds
 ```
 
-And finally don't forget to install the bundle assets into your web root:
+For the [packaged checks](#packaged-checks), the ttl can be configured per check:
 
-    $ ./app/console assets:install web --symlink --relative
-
-## Enabling built-in health checks
-
-To enable built-in health checks, add them to your `config.yml`
-
-```yml
+```yaml
 liip_monitor:
     checks:
-        php_extensions: [apc, xdebug]
+        system_memory_usage:
+            ttl: 60 # 60 seconds
+
+        system_disk_usage:
+            ttl: -1 # disable caching for this check
 ```
 
-## Adding Health Checks ##
+For [custom checks](#custom-checks), use the `AsCheck` attribute:
 
-See [Writing Custom Checks](https://docs.laminas.dev/laminas-diagnostics/custom-checks/) for instructions
-on creating a custom check.
+```php
+use Liip\Monitor\AsCheck;
+use Liip\Monitor\Check;
 
-Once you implemented the class then it's time to register the check service with our service container:
+#[AsCheck(ttl: 60)]
+class SomeServiceCheck implements Check
+{
+}
 
-```yml
-services:
-    monitor.check.php_extensions:
-        class: Acme\HelloBundle\Check\PhpExtensionsCheck
-        arguments:
-            - [ xhprof, apc, memcache ]
-        tags:
-            - { name: liip_monitor.check, alias: php_extensions }
+#[AsCheck(ttl: AsCheck::DISABLE_CACHE)] // disable caching for this check
+class SomeServiceCheck implements Check
+{
+}
 ```
 
-The important bit there is to remember to tag your services with the `liip_monitor.check` tag.
-By doing that the check runner will be able to find your checks. Keep in mind that checks
-can reside either in your bundles or in your app specific code. The location doesn't matter
-as long as the service is properly tagged. The ``alias`` is optional and will then simply
-define the ``id`` used when running health checks individually, otherwise the full service
-id must be used in this case.
+### Check Suites
 
-If your app's service definition is using `autoconfigure` to discover services then classes 
-which implement `Laminas\Diagnostics\Check\CheckInterface` will be tagged automatically.
+You can _group_ your checks into _check suites_. Suites can be run individually.
 
-## Available Built-in Health Checks ##
+For the [packaged checks](#packaged-checks), suites can be configured in the config:
 
-See "Full Default Config" below for a list of all built-in checks and their configuration.
-
-## Running Checks ##
-
-There are two ways of running the health checks: by using the CLI or by using the REST API
-provided by the bundle. Let's see what commands we have available for the CLI:
-
-### List Checks ###
-
-    $ ./app/console monitor:list
-
-    monitor.check.jackrabbit
-    monitor.check.redis
-    monitor.check.memcache
-    monitor.check.php_extensions
-
-### Run All the Checks ###
-
-    $ ./app/console monitor:health
-
-    Jackrabbit Health Check: OK
-    Redis Health Check: OK
-    Memcache Health Check: KO - No configuration set for session.save_path
-    PHP Extensions Health Check: OK
-
-### Run Individual Checks ###
-
-To run an individual check you need to provide the check id to the `health` command:
-
-    $ ./app/console monitor:health monitor.check.php_extensions
-
-    PHP Extensions Health Check: OK
-
-### Run health checks as composer post-install/update scripts
-
-To run health checks as a composer post-install or post-update script, simply add the
-`Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth` ScriptHandler to the
-`post-install-cmd / post-update-cmd` command sections of your `composer.json`:
-
-```json
-"scripts": {
-    "post-install-cmd": [
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-        "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
-    ],
-    "post-update-cmd": [
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-        "Liip\\MonitorBundle\\Composer\\ScriptHandler::checkHealth"
-    ]
-},
-```
-
-## Adding Additional Reporters ##
-
-There are two default reporters: `ArrayReporter` for the REST API and `ConsoleReporter` for the CLI command. You can
-add additional reporters to be used by either of these.
-
-First, define an additional reporter service and tag it with `liip_monitor.additional_reporter`:
-
-```yml
-my_reporter:
-    class: My\Reporter
-    tags:
-        - { name: liip_monitor.additional_reporter, alias: my_reporter }
-```
-
-To run additional reporters with the CLI, add `--reporter=...` options for each one:
-
-    $ ./app/console monitor:health --reporter=my_reporter
-
-To run this reporter with the REST API, add a `reporters` query parameter:
-
-    /monitor/health?reporters[]=my_reporter
-
-You can list available reporters with:
-
-    $ ./app/console monitor:list --reporters
-
-## Grouping Checks
-
-It is possible to group the health checks for different environments (e.g. application server, cron runner, ...).
-If not specified differently, all health checks belong to the `default` group.
-
-### Define groups for build-in checks
-
-To define groups for built-in health checks, add the following grouping hint to your `config.yml`:
-
-```yml
+```yaml
 liip_monitor:
-    default_group: default
     checks:
-        groups:
-            default: # checks you may want to execute by default
-                php_extensions: [apc, xdebug]
-            cron: # checks you may want to execute only on cron servers
-                php_extensions: [redis]
+        system_memory_usage:
+            suite: system
+
+        system_disk_usage:
+            suite: [system, disk] # multiple suites
 ```
 
-This creates two groups, `default` and `cron`, each having different checks.
+For [custom checks](#custom-checks), use the `AsCheck` attribute:
 
-### Define groups for tagged Services
+```php
+use Liip\Monitor\AsCheck;
+use Liip\Monitor\Check;
 
-To define groups for tagged services, add a `group` attribute to the respective tags:
+#[AsCheck(suite: 'system')]
+class SomeServiceCheck implements Check
+{
+}
 
-```yml
-services:
-    monitor.check.php_extensions:
-        class: Acme\HelloBundle\Check\PhpExtensionsCheck
-        arguments:
-            - [ xhprof, apc, memcache ]
-        tags:
-            - { name: liip_monitor.check, alias: php_extensions, group: cron }
-            - { name: liip_monitor.check, alias: php_extensions, group: app_server }
+#[AsCheck(suite: ['system', 'database'])] // multiple suites
+class SomeServiceCheck implements Check
+{
+}
 ```
 
-`autoconfigure` will place checks into the default group. You must add `autoconfigure: false` to the service
-definition to change the group:
+### Check Labels
 
-```yml
-services:
-    Acme\HelloBundle\Check\PhpExtensionsCheck:
-        autoconfigure: false
-        tags:
-            - { name: liip_monitor.check, group: app_server }
-```
+For the [packaged checks](#packaged-checks), the label can be overridden in the config:
 
-### Specify group for CLI commands
+```yaml
+# config/packages/liip_monitor.yaml
 
-Both CLI commands have a `--group=...` option. If it is not given, the default group is used.
-
-    ./app/console monitor:list --group=app_server
-
-    ./app/console monitor:health --group=app_server
-
-Both commands, `monitor:list` and `monitor:health`, have an option `--all` to list or run the checks of all registered
-groups. Additionally, the `monitor:list` has an option `--groups` to list all registered groups.
-
-## Full Default Config
-
-```yml
 liip_monitor:
-    enable_controller:    false
-    view_template:        null
-    failure_status_code:  502
-    mailer:
-        enabled:              false
-        recipient:            ~ # Required
-        sender:               ~ # Required
-        subject:              ~ # Required
-        send_on_warning:      true
-    default_group:        default
+    checks:
+        system_memory_usage:
+            label: 'My Label'
+```
+
+For [custom checks](#custom-checks), there are two options to customize the label:
+
+1. Make your check class `\Stringable`:
+    ```php
+    use Liip\Monitor\Check;
+
+    class SomeServiceCheck implements Check, \Stringable
+    {
+        public function __toString(): string
+        {
+            return 'My Label';
+        }
+    }
+    ```
+2. Use the `AsCheck` attribute:
+    ```php
+    use Liip\Monitor\AsCheck;
+    use Liip\Monitor\Check;
+
+    #[AsCheck(label: 'My Label')]
+    class SomeServiceCheck implements Check
+    {
+    }
+    ```
+
+### Check IDs
+
+Each check must have a unique identifier. These are used for running individual checks.
+They are generated based on the [check label](#check-labels) but can be customized.
+
+For the [packaged checks](#packaged-checks), the custom id can be set in the config:
+
+```yaml
+# config/packages/liip_monitor.yaml
+
+liip_monitor:
+    checks:
+        system_memory_usage:
+            id: my_custom_id
+```
+
+For [custom checks](#custom-checks), use the `AsCheck` attribute:
+
+```php
+use Liip\Monitor\AsCheck;
+use Liip\Monitor\Check;
+
+#[AsCheck(id: 'my_custom_id')]
+class SomeServiceCheck implements Check
+{
+}
+```
+
+## List Checks
+
+### `monitor:list` Console Command
+
+Use the `monitor:list` command to list all configured checks. This will show their
+ID, label, any suites they are part of and the configured result cache TTL.
+
+```bash
+bin/console monitor:list
+```
+
+> [!NOTE]
+> Add this command to your CI pipeline to ensure all checks can be instantiated before deploying.
+
+### Manually Listing Checks
+
+Inject the `CheckRegistry` service into your own service/controller:
+
+```php
+use Liip\Monitor\Check\CheckRegistry;
+
+class ListChecksController
+{
+    public function __invoke(CheckRegistry $registry): Response
+    {
+        $checks = $registry->suite()->checks();
+        $checks = $registry->suite('database')->checks(); // just the "database" suite
+
+        foreach ($all as $check) {
+            /** @var Liip\Monitor\Check\CheckContext $check */
+            $check->id(); // string - unique id for check
+            $check->suites(); // string[] - suites this check is part of
+            $check->ttl(); // int|null - cache ttl for check results
+            $check->__toString(); // string - label for check
+            $check->wrapped(); // the "real" check implementation
+        }
+
+        // ...
+    }
+}
+```
+
+You can alternatively inject the `CheckSuite` directly:
+
+```php
+use Liip\Monitor\Check\CheckSuite;
+
+class ListChecksController
+{
+    public function __invoke(
+        CheckSuite $checks, // "all" checks
+        CheckSuite $databaseChecks, // just the "database" suite
+    ): Response {
+        // ...
+    }
+}
+```
+
+## Run Checks
+
+### `monitor:health` Console Command
+
+Use the `monitor:health` command to run checks:
+
+```bash
+bin/console monitor:health # runs all configured checks
+bin/console monitor:health --suite=database # runs all checks in the "database" suite
+bin/console monitor:health 3d6c988d # runs check with id "3d6c988d" (find ID's in monitor:list)
+bin/console monitor:health --no-cache # runs all checks with caching disabled
+```
+
+By default, the command only fails (exit code `1`) if any check results are _failures_ or _errors_.
+You can customize this behaviour:
+
+```bash
+bin/console monitor:health --fail-on-warning # fails if any results are warnings, failures or errors
+bin/console monitor:health --fail-on-skip # fails if any results are skipped, failures or errors
+bin/console monitor:health --fail-on-unknown # fails if any results are unknown, failures or errors
+```
+
+### Symfony Messenger
+
+Messages and handlers are provided to run checks asynchronously with `symfony/messenger`:
+
+```php
+use Liip\Monitor\Messenger\RunChecks;
+use Liip\Monitor\Messenger\RunCheck;
+use Liip\Monitor\Messenger\RunCheckSuite;
+
+/** @var \Symfony\Component\Messenger\MessageBusInterface $bus */
+
+$bus->dispatch(new RunCheckSuite()); // run all checks
+$bus->dispatch(new RunCheckSuite(cache: false)); // run all checks with caching disabled
+$bus->dispatch(new RunCheckSuite(suite: 'database')); // run all checks in the "database" suite
+
+$bus->dispatch(new RunChecks(['id-1', 'id-2'])); // run a set of specific checks
+$bus->dispatch(new RunChecks(['id-1', 'id-2'], cache: false)); // run a set of specific checks with caching disabled
+
+$bus->dispatch(new RunCheck('id')); // run a specific check
+$bus->dispatch(new RunCheck('id'), cache: false); // run a specific check with caching disabled
+```
+
+### Symfony Scheduler
+
+Use the messages above with `symfony/scheduler` to run checks/check suites on a schedule:
+
+```php
+use Liip\Monitor\Messenger\RunChecks;
+use Liip\Monitor\Messenger\RunCheck;
+use Liip\Monitor\Messenger\RunCheckSuite;
+
+#[AsSchedule('default')]
+class DefaultScheduleProvider implements ScheduleProviderInterface
+{
+    public function getSchedule(): Schedule
+    {
+        return (new Schedule())->add(
+            RecurringMessage::every('1 day', new RunCheckSuite()), // run all checks every day
+            RecurringMessage::every('1 day', new RunCheckSuite(cache: false)), // run all checks every day with caching disabled
+            RecurringMessage::every('1 day', new RunCheckSuite('database')), // run "database" check suite every day
+            RecurringMessage::every('1 day', new RunCheck('id')), // run check with id "id" every day
+            RecurringMessage::every('1 day', new RunChecks(['id-1', 'id-2'])), // run checks with ids "id-1" and "id-2" every day
+        );
+    }
+}
+```
+
+### Manually Run Check Suites
+
+Inject the `CheckRegistry` service into your own service/controller:
+
+```php
+use Liip\Monitor\Check\CheckRegistry;
+
+class ListChecksController
+{
+    public function __invoke(CheckRegistry $registry): Response
+    {
+        $suite = $registry->suite();
+        $suite = $registry->suite('database'); // just the "database" suite
+
+        $results = $suite->run(); // Liip\Monitor\Result\ResultSet
+        $results = $suite->run(cache: false); // disable caching for this run
+
+        $results->count();
+        $results->duration(); // float
+        $results->all(); // ResultContext[]
+
+        $results->successes(); // Liip\Monitor\Result\ResultSet
+        $results->failures(); // Liip\Monitor\Result\ResultSet
+        $results->errors(); // Liip\Monitor\Result\ResultSet
+        $results->warnings(); // Liip\Monitor\Result\ResultSet
+        $results->skipped(); // Liip\Monitor\Result\ResultSet
+        $results->unknowns(); // Liip\Monitor\Result\ResultSet
+        $results->defects(); // Liip\Monitor\Result\ResultSet (errors + failures)
+        $results->defects(Status::WARNING); // Liip\Monitor\Result\ResultSet (warnings + errors + failures)
+        $results->notOfStatus(Status::SUCCESS); // Liip\Monitor\Result\ResultSet (all but successes)
+
+        // ...
+    }
+}
+```
+
+You can alternatively inject the `CheckSuite` directly:
+
+```php
+use Liip\Monitor\Check\CheckSuite;
+
+class ListChecksController
+{
+    public function __invoke(
+        CheckSuite $checks, // "all" checks
+        CheckSuite $databaseChecks, // just the "database" suite
+    ): Response {
+        // ...
+    }
+}
+```
+
+### Manually Run Individual Checks
+
+Inject the `CheckRegistry` service into your own service/controller:
+
+```php
+use Liip\Monitor\Check\CheckRegistry;
+
+class RunCheckController
+{
+    public function __invoke(CheckRegistry $registry, string $checkId): Response
+    {
+        try {
+            $check = $registry->get($checkId);
+        } catch (\InvalidArgumentException) {
+            throw new NotFoundHttpException('Check not found.');
+        }
+
+        $result = $check->run(); // Liip\Monitor\Result\ResultContext
+        $result = $check->run(cache: false); // disable caching for this run
+
+        $result->status(); // Liip\Monitor\Result\Status
+        $result->duration(); // float
+        $result->summary(); // string
+        $result->detail(); // string
+        $result->check(); // Liip\Monitor\Check\CheckContext
+
+        // ...
+    }
+}
+```
+
+## System and Info Services
+
+These services can be useful for creating admin dashboard _widgets_ to show system status.
+
+### `System`
+
+A `System` (autowire-able) service is provided to get information about the system the app is running on:
+
+```php
+/** @var \Liip\Monitor\System $system */
+
+(string) $system; // OS info (ie Ubuntu 18.04.6 LTS)
+(string) $system->webserver(); // web server info (ie nginx/1.18.0)
+$system->isRebootRequired(); // bool
+[$oneMinute, $fiveMinute, $fifteenMinute] = $system->loadAverages(); // Percent[]
+
+$disk = $system->disk(); // StorageInfo
+$disk->free(); // Zenstruck/Bytes
+$disk->used(); // Zenstruck/Bytes
+$disk->total(); // Zenstruck/Bytes
+$disk->percentUsed(); // Percent
+
+$memory = $system->memory(); // StorageInfo
+$memory->free(); // Zenstruck/Bytes
+$memory->used(); // Zenstruck/Bytes
+$memory->total(); // Zenstruck/Bytes
+$memory->percentUsed(); // Percent
+
+$php = $system->php(); // PhpInfo
+(string) $php; // output of phpinfo()
+$php->version(); // PhpVersionInfo
+$php->symfonyVersion(); // SymfonyVersionInfo
+
+$opcache = $php->opcache(); // OpCacheInfo
+$opcache->memory(); // StorageInfo
+$opcache->hits(); // int
+$opcache->misses(); // int
+$opcache->hitRate(); // Percent
+
+$apcu = $php->apcu(); // ApcuInfo
+$apcu->memory(); // StorageInfo
+$apcu->hits(); // int
+$apcu->misses(); // int
+$apcu->hitRate(); // Percent
+$apcu->percentFragmented(); // Percent
+```
+
+## Full Default Configuration
+
+```yaml
+liip_monitor:
+
+    # Default TTL for checks
+    default_ttl:          null
     checks:
 
-        # Grouping checks
-        groups:
+        # fails/warns if system memory usage % is above thresholds
+        system_memory_usage:
+            enabled:              false
+            warning:              70%
+            critical:             90%
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails/warns if disk usage % is above thresholds
+        system_disk_usage:
+
+            # Prototype
+            -
+                path:                 ~ # Required
+                warning:              70%
+                critical:             90%
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+
+        # fails/warns if disk free space is below thresholds
+        system_free_disk_space:
+
+            # Prototype
+            -
+                path:                 ~ # Required
+                warning:              ~ # Required, Example: 20GB
+                critical:             ~ # Required, Example: 5GB
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+
+        # warns if system reboot is required
+        system_reboot:
+            enabled:              false
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails/warns if 15-minute load average is above thresholds
+        system_load_average:
+            1_minute:
+                enabled:              false
+                warning:              70%
+                critical:             90%
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+            5_minute:
+                enabled:              false
+                warning:              70%
+                critical:             90%
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+            15_minute:
+                enabled:              false
+                warning:              70%
+                critical:             90%
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+
+        # fails/warns if apcu memory usage % is above thresholds
+        apcu_memory_usage:
+            enabled:              false
+            warning:              70%
+            critical:             90%
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails/warns if apcu fragmentation % is above thresholds
+        apcu_fragmentation:
+            enabled:              false
+            warning:              70%
+            critical:             90%
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails/warns if opcache memory usage % is above thresholds
+        opcache_memory_usage:
+            enabled:              false
+            warning:              70%
+            critical:             90%
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails if EOL, warns if patch update required
+        php_version:
+            enabled:              false
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails if vulnerabilities found
+        composer_audit:
+            enabled:              false
+            path:                 '%kernel.project_dir%'
+            binary:               null
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+
+        # fails if EOL, warns if patch update required
+        symfony_version:
+            enabled:              false
+            suite:                []
+            ttl:                  null
+            label:                null
+            id:                   null
+        ping_url:
+
+            # Prototype
+            -
+                url:                  ~ # Required
+                method:               GET
+
+                # See HttpClientInterface::DEFAULT_OPTIONS
+                options:              []
+
+                # Leave null to ensure "successful" (2xx) status code
+                expected_status_code: null
+                expected_content:     null
+
+                # Milliseconds
+                warning_duration:     null
+
+                # Milliseconds
+                critical_duration:    null
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
+
+        # fails if dbal connection fails
+        dbal_connection:
 
             # Prototype
             name:
-
-                # Validate that a named extension or a collection of extensions is available
-                php_extensions:       [] # Example: apc, xdebug
-
-                # Pairs of a PHP setting and an expected value
-                php_flags:            # Example: session.use_only_cookies: false
-
-                    # Prototype
-                    setting:              ~
-
-                # Pairs of a version and a comparison operator
-                php_version:          # Example: 5.4.15: >=
-
-                    # Prototype
-                    version:              ~
-
-                # Process name/pid or an array of process names/pids
-                process_running:      ~ # Example: [apache, foo]
-
-                # Validate that a given path (or a collection of paths) is a dir and is readable
-                readable_directory:   [] # Example: ["%kernel.cache_dir%"]
-
-                # Validate that a given path (or a collection of paths) is a dir and is writable
-                writable_directory:   [] # Example: ["%kernel.cache_dir%"]
-
-                # Validate that a class or a collection of classes is available
-                class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
-
-                # Benchmark CPU performance and return failure if it is below the given ratio
-                cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
-
-                # Checks to see if the disk usage is below warning/critical percent thresholds
-                disk_usage:
-                    warning:              70
-                    critical:             90
-                    path:                 '%kernel.cache_dir%'
-
-                # Checks Symfony2 requirements file
-                symfony_requirements:
-                    file:                 '%kernel.root_dir%/SymfonyRequirements.php'
-
-                # Checks to see if the OpCache memory usage is below warning/critical thresholds
-                opcache_memory:
-                    warning:              70
-                    critical:             90
-
-                # Checks to see if the APC memory usage is below warning/critical thresholds
-                apc_memory:
-                    warning:              70
-                    critical:             90
-
-                # Checks to see if the APC fragmentation is below warning/critical thresholds
-                apc_fragmentation:
-                    warning:              70
-                    critical:             90
-
-                # Connection name or an array of connection names
-                doctrine_dbal:        null # Example: [default, crm]
-                
-                # Checks to see if migrations from specified configuration file are applied
-                doctrine_migrations:
-                    # Examples:
-                    application_migrations: 
-                        configuration_file:  %kernel.root_dir%/Resources/config/migrations.yml
-                        connection:          default
-                    migrations_with_doctrine_bundle: 
-                        connection:          default
-                    migrations_with_doctrine_bundle_v2: default
-                    
-                    # Prototype
-                    name:
-                        # Absolute path to doctrine migrations configuration
-                        configuration_file:   ~
-                        # Connection name from doctrine DBAL configuration
-                        connection:           ~ # Required
-                
-                # Connection name or an array of connection names
-                doctrine_mongodb:        null # Example: [default, crm]
-
-                # Check if MemCache extension is loaded and given server is reachable
-                memcache:
-
-                    # Prototype
-                    name:
-                        host:                 localhost
-                        port:                 11211
-
-                # Validate that a Redis service is running
-                redis:
-
-                    # Prototype
-                    name:
-                        host:                 localhost
-                        port:                 6379
-                        password:             null
-                        # or
-                        dsn: redis://localhost:6379
-
-                # Attempt connection to given HTTP host and (optionally) check status code and page content
-                http_service:
-
-                    # Prototype
-                    name:
-                        host:                 localhost
-                        port:                 80
-                        path:                 /
-                        status_code:          200
-                        content:              null
-
-                # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
-                guzzle_http_service:
-
-                    # Prototype
-                    name:
-                        url:                  localhost
-                        headers:              []
-                        options:              []
-                        status_code:          200
-                        content:              null
-                        method:               GET
-                        body:                 null
-
-                # Validate that a RabbitMQ service is running
-                rabbit_mq:
-
-                    # Prototype
-                    name:
-                        host:                 localhost
-                        port:                 5672
-                        user:                 guest
-                        password:             guest
-                        vhost:                /
-                        # or
-                        dsn: amqp://guest:guest@localhost:5672/%2F
-
-                # Checks the version of this app against the latest stable release
-                symfony_version:      ~
-
-                # Checks if error pages have been customized for given error codes
-                custom_error_pages:
-                    # The status codes that should be customized
-                    error_codes:          [] # Required
-
-                    # The directory where your custom error page twig templates are located. Keep as "%kernel.project_dir%" to use default location.
-                    path:                 '%kernel.project_dir%'
-
-                # Checks installed composer dependencies against the SensioLabs Security Advisory database
-                security_advisory:
-                    lock_file:            '%kernel.root_dir%/../composer.lock'
-
-                # Validate that a stream wrapper or collection of stream wrappers exists
-                stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
-
-                # Find and validate INI files
-                file_ini:             [] # Example: ['path/to/my.ini']
-
-                # Find and validate JSON files
-                file_json:            [] # Example: ['path/to/my.json']
-
-                # Find and validate XML files
-                file_xml:             [] # Example: ['path/to/my.xml']
-
-                # Find and validate YAML files
-                file_yaml:            [] # Example: ['path/to/my.yml']
-                
-                # PDO connections to check for connection
-                pdo_connections:
-
-                    # Prototype
-                    name:
-                        dsn:                  null
-                        username:             null
-                        password:             null
-                        timeout:              1
-
-                # Checks that fail/warn when given expression is false (expressions are evaluated with symfony/expression-language)
-                expressions:
-
-                    # Example:
-                    opcache:             
-                        label:               OPcache
-                        warning_expression:  ini('opcache.revalidate_freq') > 0
-                        critical_expression: ini('opcache.enable')
-                        warning_message:     OPcache not optimized for production
-                        critical_message:    OPcache not enabled
-
-                    # Prototype
-                    alias:
-                        label:                ~ # Required
-                        warning_expression:   null # Example: ini('apc.stat') == 0
-                        critical_expression:  null # Example: ini('short_open_tag') == 1
-                        warning_message:      null
-                        critical_message:     null
-
-                # Validate that a messenger transport does not contain more than warning/critical messages
-                # Transport must implement MessageCountAwareInterface
-                messenger_transports:
-                    name: # name of transport
-                        critical_threshold:   10   # required
-                        warning_threshold:    null # optional: warning level
-                        service:              null # defaults to messenger.transport.name 
+                suite:                []
+                ttl:                  null
+                label:                null
+                id:                   null
 ```
-
-## REST API DOCS ##
-
-For documentation on the REST API see: [http://myproject.org/monitor/health/](http://myproject.org/monitor/health/).
-Don't forget to add the bundle routes in your `routing.xml` file.
-
-
-## Nagios integration ##
-
-You can find a simple Nagios check written in Perl and Python in the Resources/scripts directory.
-
-### Perl Version ###
-
-This is dependent on perl modules available on CPAN Getopt::Std, WWW::Mechanize, and JSON
-
-
-Copy the script into your scripts directory in Nagios and create a command like this:
-
-    define command{
-            command_name    check_symfony_health
-            command_line    $USER1$/check_symfony2.pl -H $HOSTNAME$
-    }
-
-Running the command with the Hostname flag (-H) will check "http://$HOSTNAME$/monitor/health/run".
-You can also use the Address flag (-A) to check a specified URL:
-
-    command_line    $USER1$/check_symfony2.pl -A https://mysite.org/monitor/health/run
-
-The plugin can be used with Authentication, Using the Username (-u) and Password (-p) flags:
-
-    command_line    $USER1$/check_symfony2.p1 -H $HOSTNAME$ -u username -p password
-
-You can also specify the Warning (-w) and Critical (-c) levels for the check using the standard flags
-
-    command_line    $USER1$/check_symfony2.pl -H $HOSTNAME$ -w 1 -c 2
-
-Any flags can be combined except -A and -H. THe -u and -p flags should always be used together.
-
-### Python Version ###
-
-The Python version depends on the nagiosplugin library < 1.0.0.
-
-Copy the script into your scripts directory in Nagios and create a command like this:
-
-    define command{
-            command_name    check_symfony_health
-            command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$
-    }
-
-To use the plugin with HTTP basic authentication, change the command to:
-
-    command_line    $USER1$/check_symfony2.py -w 0  -c 0 -u https://$HOSTNAME$ -a username:password
-
-### Connecting Check to Host in Nagios ###
-
-Add a service:
-
-    define service{
-     hostgroup_name         Symfony2
-     service_description    Symfony2 health check
-     check_command          check_symfony_health
-     use                    generic-service
-    }
-
-And create a host attached to the Symfony2 hostgroup:
-
-    define host{
-        use              web-host
-        host_name        www.myhost.com
-        address          8.8.8.4
-        hostgroups       Symfony2
-    }
-
-And place your host within the Symfony2 hostgroup.
-
