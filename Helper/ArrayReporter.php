@@ -20,6 +20,7 @@ class ArrayReporter implements ReporterInterface
 
     private $globalStatus = self::STATUS_OK;
     private $results = [];
+    private $checkRunTime = 0;
 
     public function getResults(): array
     {
@@ -65,6 +66,7 @@ class ArrayReporter implements ReporterInterface
             'status' => $status,
             'status_name' => $statusName,
             'service_id' => $checkAlias,
+            'duration' => microtime(true) - $this->checkRunTime,
         ];
     }
 
@@ -81,7 +83,7 @@ class ArrayReporter implements ReporterInterface
      */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
-        return;
+        $this->checkRunTime = microtime(true);
     }
 
     /**
