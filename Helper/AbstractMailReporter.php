@@ -2,7 +2,6 @@
 
 namespace Liip\MonitorBundle\Helper;
 
-use ArrayObject;
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Collection as ResultsCollection;
 use Laminas\Diagnostics\Result\ResultInterface;
@@ -44,7 +43,7 @@ abstract class AbstractMailReporter implements ReporterInterface
     /**
      * @return void
      */
-    public function onStart(ArrayObject $checks, $runnerConfig)
+    public function onStart(\ArrayObject $checks, $runnerConfig)
     {
     }
 

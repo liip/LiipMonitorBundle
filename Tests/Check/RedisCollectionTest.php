@@ -5,8 +5,6 @@ namespace Liip\MonitorBundle\Tests\Check;
 use Laminas\Diagnostics\Check\Redis;
 use Liip\MonitorBundle\Check\RedisCollection;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 
 final class RedisCollectionTest extends TestCase
 {
@@ -14,6 +12,7 @@ final class RedisCollectionTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider provideDsnWithAut
      */
     public function handleDsnWithAuth(string $dsn): void
@@ -37,11 +36,11 @@ final class RedisCollectionTest extends TestCase
     private function assertAuthPropertyValue(Redis $check, string $auth): void
     {
         try {
-            $refClass = new ReflectionClass($check);
+            $refClass = new \ReflectionClass($check);
             $authProp = $refClass->getProperty('auth');
             $authProp->setAccessible(true);
             self::assertSame($auth, $authProp->getValue($check));
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
             self::fail($e->getMessage());
         }
     }

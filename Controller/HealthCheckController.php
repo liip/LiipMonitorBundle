@@ -17,10 +17,6 @@ class HealthCheckController
     protected $template;
     protected $failureStatusCode;
 
-    /**
-     * @param $template
-     * @param $failureStatusCode
-     */
     public function __construct(RunnerManager $runnerManager, PathHelper $pathHelper, $template, $failureStatusCode)
     {
         $this->runnerManager = $runnerManager;
@@ -107,7 +103,7 @@ class HealthCheckController
 
         return new Response(
             '',
-            (ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode)
+            ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode
         );
     }
 
@@ -120,7 +116,7 @@ class HealthCheckController
 
         return new Response(
             '',
-            (ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode)
+            ArrayReporter::STATUS_OK === $report->getGlobalStatus() ? 200 : $this->failureStatusCode
         );
     }
 
