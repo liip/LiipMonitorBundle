@@ -22,9 +22,6 @@ class RawConsoleReporter implements ReporterInterface
      */
     protected $output;
 
-    /**
-     * @param OutputInterface $output
-     */
     public function __construct(OutputInterface $output = null)
     {
         if (null === $output) {

@@ -5,8 +5,6 @@ namespace Liip\MonitorBundle\Helper;
 use Laminas\Diagnostics\Check\CheckInterface;
 use Laminas\Diagnostics\Result\Collection as ResultsCollection;
 use Laminas\Diagnostics\Result\ResultInterface;
-use Swift_Mailer;
-use Swift_Message;
 
 /**
  * @author louis <louis@systemli.org>
@@ -21,7 +19,7 @@ class SwiftMailerReporter extends AbstractMailReporter
      * @param string       $subject
      * @param bool         $sendOnWarning
      */
-    public function __construct(Swift_Mailer $mailer, $recipients, $sender, $subject, $sendOnWarning = true)
+    public function __construct(\Swift_Mailer $mailer, $recipients, $sender, $subject, $sendOnWarning = true)
     {
         $this->mailer = $mailer;
 
@@ -43,7 +41,7 @@ class SwiftMailerReporter extends AbstractMailReporter
             }
         }
 
-        $message = (new Swift_Message())
+        $message = (new \Swift_Message())
             ->setSubject($this->subject)
             ->setFrom($this->sender)
             ->setTo($this->recipients)
