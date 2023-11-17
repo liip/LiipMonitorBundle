@@ -28,7 +28,7 @@
         "laminas/laminas-diagnostics": "^1.9"
     },
     "require-dev": {
-        "matthiasnoback/symfony-dependency-injection-test": "^4.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.3 || ^5.0",
         "enlightn/security-checker": "^1.11",
         "guzzlehttp/guzzle": "^5.3.2 || ^6.3.3 || ^7.0.1",
         "symfony/expression-language": "^4.4 || ^5.0 || ^6.0 || ^7.0",
