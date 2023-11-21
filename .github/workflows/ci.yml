@@ -7,129 +7,38 @@ on:
     - cron: '0 0 1,16 * *'
 
 jobs:
-  symfony-version-tests:
-    name: "Test: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}"
-
+  tests:
+    name: PHP ${{ matrix.php }}, SF ${{ matrix.symfony }} - ${{ matrix.deps }}
     runs-on: ubuntu-latest
-
     strategy:
-      fail-fast: true
       matrix:
-        php: [7.4, 8.0, 8.1]
-        symfony: [4.4.*, 5.3.*, 5.4.*]
+        php: [ 8.1, 8.2, 8.3 ]
+        deps: [ highest ]
+        symfony: [ 6.3.*, 6.4.*, 7.0.* ]
         include:
-          - php: 8.0
-            symfony: 6.0.*
           - php: 8.1
-            symfony: 6.0.*
+            deps: lowest
+            symfony: '*'
+        exclude:
           - php: 8.1
-            symfony: 6.1.*
-
+            symfony: 7.0.*
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: zenstruck/.github@php-test-symfony
         with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-          tools: flex
-
-      - name: Install symfony/mailer
-        run: composer require --dev "symfony/mailer" --no-update
-
-      - name: Install dependencies
-        uses: ramsey/composer-install@v1
-        with:
-          composer-options: --prefer-dist
-        env:
-          SYMFONY_REQUIRE: ${{ matrix.symfony }}
-
-      - name: Run tests
-        run: vendor/bin/phpunit -v
-
-  prefer-lowest-tests:
-    name: "Test: prefer-lowest"
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.3
-          coverage: none
-
-      - name: Install dependencies
-        uses: ramsey/composer-install@v1
-        with:
-          dependency-versions: lowest
-          composer-options: --prefer-dist
-
-      - name: Run tests
-        run: vendor/bin/phpunit -v
+          php: ${{ matrix.php }}
+          symfony: ${{ matrix.symfony }}
+          deps: ${{ matrix.deps }}
 
   code-coverage:
-    name: Code Coverage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          coverage: xdebug
-
-      - name: Install symfony/mailer
-        run: composer require --dev "symfony/mailer" --no-update
-
-      - name: Install dependencies
-        uses: ramsey/composer-install@v1
-        with:
-          composer-options: --prefer-dist
-
-      - name: Run code coverage
-        run: vendor/bin/phpunit -v --coverage-text
+    uses: zenstruck/.github/.github/workflows/php-coverage-codecov.yml@main
 
   composer-validate:
-    name: Validate composer.json
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    uses: zenstruck/.github/.github/workflows/php-composer-validate.yml@main
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          coverage: none
+  sca:
+    uses: zenstruck/.github/.github/workflows/php-stan.yml@main
 
-      - name: Validate composer.json
-        run: composer validate --strict --no-check-lock
-
-  cs-check:
-    name: PHP Coding Standards
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          coverage: none
-
-      - name: Install dependencies
-        uses: ramsey/composer-install@v1
-        with:
-          composer-options: --prefer-dist
-
-      - name: Check CS
-        run: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose
+  cs:
+    uses: zenstruck/.github/.github/workflows/php-cs-fixer.yml@main
+    with:
+      php: 8.1
