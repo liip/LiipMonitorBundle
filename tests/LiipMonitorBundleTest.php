@@ -41,10 +41,10 @@ final class LiipMonitorBundleTest extends KernelTestCase
         /** @var TestService $service */
         $service = self::getContainer()->get(TestService::class);
 
-        $this->assertCount(19, $service->checks);
+        $this->assertCount(21, $service->checks);
         $this->assertCount(3, $service->fooChecks);
         $this->assertCount(1, $service->barChecks);
-        $this->assertCount(1, $service->bazChecks);
+        $this->assertCount(2, $service->bazChecks);
 
         $this->assertSame($service->system, $service->linuxSystem);
     }
@@ -70,7 +70,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
     public function execute_health_command(): void
     {
         $this->executeConsoleCommand('monitor:health')
-            ->assertOutputContains('19 check executed')
+            ->assertOutputContains('21 check executed')
             ->assertOutputContains('OK DBAL Connection "default"')
             ->assertOutputContains('OK Check Service 1: Success')
         ;
@@ -88,7 +88,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
         ;
 
         $this->executeConsoleCommand('monitor:health -v') // verbose
-            ->assertOutputContains('19 check executed')
+            ->assertOutputContains('21 check executed')
         ;
 
         /** @var TestLogger $logger */
@@ -109,7 +109,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $results = $this->handle(new RunCheckSuite());
 
         $this->assertInstanceOf(ResultSet::class, $results);
-        $this->assertCount(19, $results);
+        $this->assertCount(21, $results);
     }
 
     /**

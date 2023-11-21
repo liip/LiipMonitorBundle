@@ -11,7 +11,6 @@
 
 namespace Liip\Monitor\Tests\Check;
 
-use Composer\InstalledVersions;
 use Laminas\Diagnostics\Check\Callback;
 use Laminas\Diagnostics\Result\AbstractResult;
 use Laminas\Diagnostics\Result\Failure;
@@ -29,13 +28,6 @@ use PHPUnit\Framework\TestCase;
 final class LaminasDiagnosticsBridgeCheckTest extends TestCase
 {
     use CheckTests;
-
-    public static function setUpBeforeClass(): void
-    {
-        if (!InstalledVersions::isInstalled('laminas/laminas-diagnostics')) {
-            self::markTestSkipped('laminas/laminas-diagnostics is not installed');
-        }
-    }
 
     public static function checkResultProvider(): iterable
     {
