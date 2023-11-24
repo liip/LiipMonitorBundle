@@ -11,9 +11,9 @@
 
 namespace Liip\Monitor\Tests\Fixture;
 
+use ColinODell\PsrTestLogger\TestLogger;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Liip\Monitor\LiipMonitorBundle;
-use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -55,6 +55,7 @@ final class TestKernel extends Kernel
         ]);
 
         $c->loadFromExtension('liip_monitor', [
+            'logging' => true,
             'checks' => [
                 'system_memory_usage' => true,
                 'system_disk_usage' => true,
@@ -85,7 +86,10 @@ final class TestKernel extends Kernel
             ],
         ]);
 
-        $c->register('logger', NullLogger::class); // disable logging
+        $c->register('logger', TestLogger::class)
+            ->addTag('kernel.reset', ['method' => 'reset'])
+        ;
+
         $c->register(CheckService1::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(CheckService2::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(CheckService3::class)->setAutowired(true)->setAutoconfigured(true);

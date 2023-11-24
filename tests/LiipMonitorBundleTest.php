@@ -11,6 +11,7 @@
 
 namespace Liip\Monitor\Tests;
 
+use ColinODell\PsrTestLogger\TestLogger;
 use Liip\Monitor\Messenger\RunCheck;
 use Liip\Monitor\Messenger\RunChecks;
 use Liip\Monitor\Messenger\RunCheckSuite;
@@ -75,6 +76,12 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $this->executeConsoleCommand('monitor:health -v') // verbose
             ->assertOutputContains('19 check executed')
         ;
+
+        /** @var TestLogger $logger */
+        $logger = self::getContainer()->get('logger');
+
+        $logger->hasInfoThatContains('Running health check "Check Service 1"');
+        $logger->hasInfoThatContains('Health check "Check Service 1": Success');
     }
 
     /**

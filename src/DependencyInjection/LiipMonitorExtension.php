@@ -83,6 +83,10 @@ final class LiipMonitorExtension extends ConfigurableExtension implements Compil
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.php');
 
+        if ($mergedConfig['logging']['enabled']) {
+            $loader->load('logging.php');
+        }
+
         $container->getDefinition('liip_monitor.check_registry')
             ->setArgument('$defaultTtl', $mergedConfig['default_ttl'])
         ;

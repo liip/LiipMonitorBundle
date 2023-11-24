@@ -26,6 +26,7 @@
         "zenstruck/bytes": "^1.0"
     },
     "require-dev": {
+        "colinodell/psr-testlogger": "^1.2",
         "doctrine/doctrine-bundle": "^2.10",
         "matthiasnoback/symfony-dependency-injection-test": "^4.3|^5.0",
         "phpstan/phpstan": "^1.4",

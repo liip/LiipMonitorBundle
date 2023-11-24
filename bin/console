@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Liip\Monitor\Tests\Fixture\TestKernel;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$application = new Application(new TestKernel('test', true));
+$application->run();

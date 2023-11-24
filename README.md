@@ -575,6 +575,8 @@ liip_monitor:
 
     # Default TTL for checks
     default_ttl:          null
+    logging:
+        enabled:              false
     checks:
 
         # fails/warns if system memory usage % is above thresholds

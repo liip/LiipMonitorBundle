@@ -63,6 +63,9 @@ final class Configuration implements ConfigurationInterface
                     ->defaultNull()
                     ->min(0)
                 ->end()
+                ->arrayNode('logging')
+                    ->canBeEnabled()
+                ->end()
                 ->arrayNode('checks')
                     ->children()
         ;
