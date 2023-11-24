@@ -32,11 +32,13 @@
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.5.0",
         "symfony/http-client": "^6.3",
+        "symfony/mailer": "^6.3|^7.0",
         "symfony/messenger": "^6.3|^7.0",
         "symfony/phpunit-bridge": "^6.3|^7.0",
         "symfony/process": "^6.3|^7.0",
         "symfony/var-dumper": "^6.0|^7.0",
-        "zenstruck/console-test": "^1.4"
+        "zenstruck/console-test": "^1.4",
+        "zenstruck/mailer-test": "^1.4"
     },
     "config": {
         "preferred-install": "dist",

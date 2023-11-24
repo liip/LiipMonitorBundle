@@ -20,6 +20,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Zenstruck\Mailer\Test\ZenstruckMailerTestBundle;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -32,6 +33,7 @@ final class TestKernel extends Kernel
     {
         yield new FrameworkBundle();
         yield new DoctrineBundle();
+        yield new ZenstruckMailerTestBundle();
         yield new LiipMonitorBundle();
     }
 
@@ -43,6 +45,9 @@ final class TestKernel extends Kernel
             'router' => ['utf8' => true],
             'test' => true,
             'messenger' => true,
+            'mailer' => [
+                'dsn' => 'null://null',
+            ],
         ]);
 
         $c->loadFromExtension('doctrine', [
@@ -56,6 +61,10 @@ final class TestKernel extends Kernel
 
         $c->loadFromExtension('liip_monitor', [
             'logging' => true,
+            'mailer' => [
+                'sender' => 'admin@example.com',
+                'recipient' => 'alerts@example.com',
+            ],
             'checks' => [
                 'system_memory_usage' => true,
                 'system_disk_usage' => true,

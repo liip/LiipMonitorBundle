@@ -577,6 +577,14 @@ liip_monitor:
     default_ttl:          null
     logging:
         enabled:              false
+    mailer:
+        enabled:              false
+        recipient:            [] # Required
+        sender:               null
+        subject:              'Health Check Failed'
+        send_on_warning:      false
+        send_on_skip:         false
+        send_on_unknown:      false
     checks:
 
         # fails/warns if system memory usage % is above thresholds

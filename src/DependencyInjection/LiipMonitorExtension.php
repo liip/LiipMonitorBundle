@@ -87,6 +87,13 @@ final class LiipMonitorExtension extends ConfigurableExtension implements Compil
             $loader->load('logging.php');
         }
 
+        if ($mergedConfig['mailer']['enabled']) {
+            $loader->load('mailer.php');
+            $container->getDefinition('.liip_monitor.mailer_subscriber')
+                ->setArgument('$config', $mergedConfig['mailer'])
+            ;
+        }
+
         $container->getDefinition('liip_monitor.check_registry')
             ->setArgument('$defaultTtl', $mergedConfig['default_ttl'])
         ;

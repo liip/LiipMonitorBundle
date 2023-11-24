@@ -28,6 +28,6 @@ final class CheckService2 implements Check
 
     public function run(): Result
     {
-        return Result::success();
+        return Result::failure('failed');
     }
 }

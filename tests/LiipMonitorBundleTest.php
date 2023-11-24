@@ -23,13 +23,15 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Zenstruck\Console\Test\InteractsWithConsole;
+use Zenstruck\Mailer\Test\InteractsWithMailer;
+use Zenstruck\Mailer\Test\TestEmail;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 final class LiipMonitorBundleTest extends KernelTestCase
 {
-    use HandleTrait, InteractsWithConsole;
+    use HandleTrait, InteractsWithConsole, InteractsWithMailer;
 
     /**
      * @test
@@ -71,6 +73,18 @@ final class LiipMonitorBundleTest extends KernelTestCase
             ->assertOutputContains('19 check executed')
             ->assertOutputContains('OK DBAL Connection "default"')
             ->assertOutputContains('OK Check Service 1: Success')
+        ;
+
+        $this->mailer()
+            ->assertEmailSentTo('alerts@example.com', function(TestEmail $email) {
+                $email
+                    ->assertFrom('admin@example.com')
+                    ->assertSubjectContains('Health Check Failed')
+                    ->assertTextContains('[Custom Check Service 2] failed')
+                ;
+            })
+            ->sentEmails()
+            ->assertCount(1)
         ;
 
         $this->executeConsoleCommand('monitor:health -v') // verbose
