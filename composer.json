@@ -37,7 +37,9 @@
         "symfony/messenger": "^6.3|^7.0",
         "symfony/phpunit-bridge": "^6.3|^7.0",
         "symfony/process": "^6.3|^7.0",
+        "symfony/routing": "^6.3|^7.0",
         "symfony/var-dumper": "^6.0|^7.0",
+        "zenstruck/browser": "^1.6",
         "zenstruck/console-test": "^1.4",
         "zenstruck/mailer-test": "^1.4"
     },
