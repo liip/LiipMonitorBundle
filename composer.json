@@ -28,6 +28,7 @@
     "require-dev": {
         "colinodell/psr-testlogger": "^1.2",
         "doctrine/doctrine-bundle": "^2.10",
+        "laminas/laminas-diagnostics": "^1.24",
         "matthiasnoback/symfony-dependency-injection-test": "^4.3|^5.0",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.5.0",
