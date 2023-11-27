@@ -11,7 +11,8 @@
 
 namespace Liip\Monitor\Check\Php;
 
-use Liip\Monitor\Check\ConfigurableCheck;
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -25,7 +26,7 @@ use Symfony\Component\Process\Process;
  *
  * @internal
  */
-final class ComposerAuditCheck implements ConfigurableCheck, \Stringable
+final class ComposerAuditCheck implements Check, ConfigurableCheck, \Stringable
 {
     public function __construct(private string $path, private ?string $composerBinary = null)
     {

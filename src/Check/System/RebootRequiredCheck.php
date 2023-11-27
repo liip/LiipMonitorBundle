@@ -11,7 +11,8 @@
 
 namespace Liip\Monitor\Check\System;
 
-use Liip\Monitor\Check\ConfigurableCheck;
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Liip\Monitor\System;
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @internal
  */
-final class RebootRequiredCheck implements ConfigurableCheck, \Stringable
+final class RebootRequiredCheck implements Check, ConfigurableCheck, \Stringable
 {
     public function __construct(private System $system)
     {

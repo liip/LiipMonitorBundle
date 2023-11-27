@@ -11,7 +11,8 @@
 
 namespace Liip\Monitor\Check\Symfony;
 
-use Liip\Monitor\Check\ConfigurableCheck;
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Info\Symfony\SymfonyVersionInfo;
 use Liip\Monitor\Result;
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @internal
  */
-final class SymfonyVersionCheck implements ConfigurableCheck, \Stringable
+final class SymfonyVersionCheck implements Check, ConfigurableCheck, \Stringable
 {
     public function __construct(private SymfonyVersionInfo $version)
     {

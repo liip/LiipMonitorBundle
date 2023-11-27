@@ -11,6 +11,8 @@
 
 namespace Liip\Monitor\Check;
 
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -25,7 +27,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @internal
  */
-final class PingUrlCheck implements ConfigurableCheck, \Stringable
+final class PingUrlCheck implements Check, ConfigurableCheck, \Stringable
 {
     private HttpClientInterface $httpClient;
 

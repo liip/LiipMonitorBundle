@@ -11,7 +11,8 @@
 
 namespace Liip\Monitor\Check\System;
 
-use Liip\Monitor\Check\ConfigurableCheck;
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Liip\Monitor\System;
@@ -26,7 +27,7 @@ use Zenstruck\Bytes;
  *
  * @internal
  */
-final class FreeDiskSpaceCheck implements ConfigurableCheck, \Stringable
+final class FreeDiskSpaceCheck implements Check, ConfigurableCheck, \Stringable
 {
     private Bytes $warningThreshold;
     private Bytes $criticalThreshold;

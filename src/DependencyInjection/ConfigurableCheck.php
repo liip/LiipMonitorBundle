@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\Monitor\Check;
+namespace Liip\Monitor\DependencyInjection;
 
-use Liip\Monitor\Check;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @internal
  */
-interface ConfigurableCheck extends Check
+interface ConfigurableCheck
 {
     public static function configKey(): string;
 

@@ -13,7 +13,8 @@ namespace Liip\Monitor\Check\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
-use Liip\Monitor\Check\ConfigurableCheck;
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -27,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @internal
  */
-final class DbalConnectionCheck implements ConfigurableCheck, \Stringable
+final class DbalConnectionCheck implements Check, ConfigurableCheck, \Stringable
 {
     private const ALL_CONNECTIONS = '__ALL__';
 

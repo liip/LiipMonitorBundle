@@ -11,7 +11,6 @@
 
 namespace Liip\Monitor\DependencyInjection;
 
-use Liip\Monitor\Check\ConfigurableCheck;
 use Liip\Monitor\Check\Doctrine\DbalConnectionCheck;
 use Liip\Monitor\Check\Php\ApcuFragmentationCheck;
 use Liip\Monitor\Check\Php\ApcuMemoryUsageCheck;

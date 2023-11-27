@@ -12,7 +12,6 @@
 namespace Liip\Monitor\Tests\DependencyInjection;
 
 use Liip\Monitor\Check\CheckRegistry;
-use Liip\Monitor\Check\ConfigurableCheck;
 use Liip\Monitor\Check\Doctrine\DbalConnectionCheck;
 use Liip\Monitor\Check\Php\ApcuFragmentationCheck;
 use Liip\Monitor\Check\Php\ApcuMemoryUsageCheck;
@@ -26,6 +25,7 @@ use Liip\Monitor\Check\System\FreeDiskSpaceCheck;
 use Liip\Monitor\Check\System\LoadAverageCheck;
 use Liip\Monitor\Check\System\MemoryUsageCheck;
 use Liip\Monitor\Check\System\RebootRequiredCheck;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 

@@ -11,6 +11,8 @@
 
 namespace Liip\Monitor\Check;
 
+use Liip\Monitor\Check;
+use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\Configuration;
 use Liip\Monitor\Result;
 use Liip\Monitor\Utility\Percent;
@@ -23,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @internal
  */
-abstract class PercentThresholdCheck implements ConfigurableCheck
+abstract class PercentThresholdCheck implements Check, ConfigurableCheck
 {
     protected readonly Percent $warningThreshold;
     protected readonly Percent $criticalThreshold;
