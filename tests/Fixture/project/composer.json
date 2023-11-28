@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/security-http": "5.4.30",
+        "symfony/twig-bridge": "5.4.29"
+    }
+}

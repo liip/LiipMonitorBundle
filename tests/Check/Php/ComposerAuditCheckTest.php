@@ -26,7 +26,7 @@ final class ComposerAuditCheckTest extends TestCase
     /**
      * @test
      */
-    public function can_run(): void
+    public function successful_check(): void
     {
         $check = new ComposerAuditCheck(\dirname(__DIR__, 3));
 
@@ -34,12 +34,21 @@ final class ComposerAuditCheckTest extends TestCase
 
         $result = $check->run();
 
-        if (Status::FAILURE === $result->status()) {
-            $this->assertSame(\sprintf('%s advisories', \count($result->context()['advisories'])), $result->summary());
-
-            return;
-        }
-
         $this->assertEquals(Result::success('No advisories'), $result);
+    }
+
+    /**
+     * @test
+     */
+    public function failed_check(): void
+    {
+        $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project');
+
+        $result = $check->run();
+
+        $this->assertSame(Status::FAILURE, $result->status());
+        $this->assertSame('2 advisories', $result->summary());
+        $this->assertSame('symfony/security-http, symfony/twig-bridge', $result->detail());
+        $this->assertCount(2, $result->context()['advisories']);
     }
 }

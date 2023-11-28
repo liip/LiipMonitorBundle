@@ -44,19 +44,28 @@ final class ComposerAuditCheck implements Check, ConfigurableCheck, \Stringable
         }
 
         $binary = $this->composerBinary ?? (new ExecutableFinder())->find('composer', 'composer');
-        $process = Process::fromShellCommandline("{$binary} audit --format=json", $this->path);
+        $process = new Process(
+            [
+                $binary,
+                'audit',
+                '--format=json',
+                '--locked',
+            ],
+            $this->path,
+        );
         $process->run();
 
         $advisories = \json_decode($process->getOutput(), true, flags: \JSON_THROW_ON_ERROR)['advisories'] ?? throw new \RuntimeException('Unable to parse Composer audit output.');
 
-        if (\count($advisories)) {
-            return Result::failure(
-                \sprintf('%d advisories', \count($advisories)),
-                context: ['advisories' => $advisories],
-            );
+        if (!\count($advisories)) {
+            return Result::success('No advisories');
         }
 
-        return Result::success('No advisories');
+        return Result::failure(
+            \sprintf('%d advisories', \count($advisories)),
+            detail: \implode(', ', \array_keys($advisories)),
+            context: ['advisories' => $advisories],
+        );
     }
 
     public static function configKey(): string
