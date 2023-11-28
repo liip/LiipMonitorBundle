@@ -28,7 +28,7 @@ final class ComposerAuditCheckTest extends TestCase
      */
     public function successful_check(): void
     {
-        $check = new ComposerAuditCheck(\dirname(__DIR__, 3));
+        $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project1');
 
         $this->assertSame('Composer Security Audit', (string) $check);
 
@@ -42,7 +42,7 @@ final class ComposerAuditCheckTest extends TestCase
      */
     public function failed_check(): void
     {
-        $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project');
+        $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project2');
 
         $result = $check->run();
 
