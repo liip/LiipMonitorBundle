@@ -19,7 +19,7 @@ jobs:
           - php: 7.4
             symfony: 5.4.*
           - php: 8.0
-            symfony: 6.4.*
+            symfony: 5.4.*
           - php: 8.1
             symfony: 6.4.*
           - php: 8.2
