@@ -16,7 +16,7 @@ jobs:
       fail-fast: true
       matrix:
         php: [7.4, 8.0, 8.1, 8.2, 8.3]
-        symfony: [4.4.*, 5.4.*]
+        symfony: [5.4.*]
         include:
           - php: 8.0
             symfony: 6.4.*
