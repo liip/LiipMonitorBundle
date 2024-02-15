@@ -14,6 +14,7 @@ namespace Liip\Monitor\Tests\Fixture;
 use ColinODell\PsrTestLogger\TestLogger;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Liip\Monitor\LiipMonitorBundle;
+use Liip\Monitor\Tests\Fixture\Controller\OhDearController;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -107,9 +108,11 @@ final class TestKernel extends Kernel
         $c->register(CheckService6::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(CheckService7::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(TestService::class)->setPublic(true)->setAutowired(true)->setAutoconfigured(true);
+        $c->register(OhDearController::class)->setAutowired(true)->setAutoconfigured(true);
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
+        $routes->import(__DIR__.'/Controller', 'attribute');
     }
 }

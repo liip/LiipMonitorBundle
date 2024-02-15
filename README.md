@@ -568,6 +568,43 @@ $apcu->hitRate(); // Percent
 $apcu->percentFragmented(); // Percent
 ```
 
+## Integrations
+
+### [OhDear Application Monitoring](https://ohdear.app)
+
+A base controller is provided to integrate with OhDear's
+[application monitoring](https://ohdear.app/docs/features/application-health-monitoring) feature.
+
+First, create a controller that extends `Liip\Monitor\Controller\OhDearController` with
+the desired route:
+
+```php
+namespace App\Controller;
+
+use Liip\Monitor\Controller\OhDearController as BaseOhDearController;
+use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[AsController]
+#[Route('/health-check')]
+class OhDearController extends BaseOhDearController
+{
+}
+```
+
+Now, enable application monitoring in OhDear and add the expected Full URL
+(ie `https://myapp.com/health-check`) to the _Health Report URL_.
+
+On the settings page, note the _Health Report Secret_ (or generate one). Add this value to
+a `OH_DEAR_MONITOR_SECRET` environment variable in your application.
+
+That's it! Once you deploy to production, OhDear will start receiving health reports for all
+your checks.
+
+> [!NOTE]
+> If you wish to restrict the check suites that are reported to OhDear, override the
+> `OhDearController::checks()` in your controller.
+
 ## Full Default Configuration
 
 ```yaml
