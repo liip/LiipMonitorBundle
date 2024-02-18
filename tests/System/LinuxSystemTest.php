@@ -14,6 +14,7 @@ namespace Liip\Monitor\Tests\System;
 use Liip\Monitor\System\LinuxSystem;
 use Liip\Monitor\Tests\RequiresLinux;
 use Liip\Monitor\Tests\SystemTest;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -22,25 +23,19 @@ final class LinuxSystemTest extends SystemTest
 {
     use RequiresLinux;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function stringable(): void
     {
         $this->assertStringContainsString('Ubuntu', (string) $this->create());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function is_reboot_required(): void
     {
         $this->assertSame(\file_exists('/var/run/reboot-required'), $this->create()->isRebootRequired());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function memory(): void
     {
         $memory = $this->create()->memory();
@@ -50,9 +45,7 @@ final class LinuxSystemTest extends SystemTest
         $this->assertLessThanOrEqual(1.0, $memory->percentUsed()->decimal());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function cached_memory(): void
     {
         $memory = $this->create()->cachedMemory();
@@ -62,9 +55,7 @@ final class LinuxSystemTest extends SystemTest
         $this->assertLessThanOrEqual(1.0, $memory->percentUsed()->decimal());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function buffered_memory(): void
     {
         $memory = $this->create()->bufferedMemory();
@@ -74,9 +65,7 @@ final class LinuxSystemTest extends SystemTest
         $this->assertLessThanOrEqual(1.0, $memory->percentUsed()->decimal());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function swap_memory(): void
     {
         $memory = $this->create()->swapMemory();

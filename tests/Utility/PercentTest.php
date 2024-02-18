@@ -12,6 +12,8 @@
 namespace Liip\Monitor\Tests\Utility;
 
 use Liip\Monitor\Utility\Percent;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,10 +40,8 @@ final class PercentTest extends TestCase
         yield [fn() => Percent::from('   5  %   '), 0.05, 5.0, '5%', '5.00%'];
     }
 
-    /**
-     * @test
-     * @dataProvider formatsProvider
-     */
+    #[Test]
+    #[DataProvider('formatsProvider')]
     public function formats(callable $p, $expectedDecimal, $expectedPercentage, $expectedString, $expectedFormat): void
     {
         $p = $p();
@@ -52,9 +52,7 @@ final class PercentTest extends TestCase
         $this->assertSame($expectedFormat, $p->format(2));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_constrain(): void
     {
         $this->assertSame(5.0, Percent::from(5)->constrain()->percentage());
@@ -66,9 +64,7 @@ final class PercentTest extends TestCase
         $this->assertSame(120.0, Percent::from(120)->constrainLower()->percentage());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function comparisons(): void
     {
         $this->assertTrue(Percent::from(5)->isEqualTo(Percent::from(5)));
@@ -83,9 +79,7 @@ final class PercentTest extends TestCase
         $this->assertFalse(Percent::from(5)->isLessThanOrEqualTo(Percent::from(4)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function calculate(): void
     {
         $this->assertSame(0.5, Percent::calculate(5, 10)->decimal());
@@ -97,10 +91,8 @@ final class PercentTest extends TestCase
         Percent::calculate(5, 0);
     }
 
-    /**
-     * @test
-     * @dataProvider invalidStringProvider
-     */
+    #[Test]
+    #[DataProvider('invalidStringProvider')]
     public function from_percentage_invalid_string(string $value): void
     {
         $this->expectException(\InvalidArgumentException::class);

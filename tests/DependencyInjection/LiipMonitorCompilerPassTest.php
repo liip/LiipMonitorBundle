@@ -15,6 +15,7 @@ use Liip\Monitor\Check\CheckContext;
 use Liip\Monitor\Check\Doctrine\DbalConnectionCheck;
 use Liip\Monitor\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -22,9 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class LiipMonitorCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function adds_default_doctrine_connection_checks(): void
     {
         $this->setParameter('liip_monitor.check.doctrine_dbal_connection.all', []);

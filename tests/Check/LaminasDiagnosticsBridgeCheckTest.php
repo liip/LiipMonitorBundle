@@ -20,6 +20,7 @@ use Laminas\Diagnostics\Result\Warning;
 use Liip\Monitor\Check\LaminasDiagnosticsBridgeCheck;
 use Liip\Monitor\Result;
 use Liip\Monitor\Tests\CheckTests;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -64,9 +65,7 @@ final class LaminasDiagnosticsBridgeCheckTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalid(): void
     {
         $check = self::create(fn() => 'invalid');

@@ -15,14 +15,14 @@ use Liip\Monitor\Check\Symfony\SymfonyVersionCheck;
 use Liip\Monitor\Info\Symfony\SymfonyVersionInfo;
 use Liip\Monitor\Result;
 use Liip\Monitor\Tests\CheckTests;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @group slow
  */
+#[Group('slow')]
 final class SymfonyVersionCheckTest extends TestCase
 {
     use CheckTests;

@@ -12,6 +12,7 @@
 namespace Liip\Monitor\Tests;
 
 use Liip\Monitor\System;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SystemTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function is_reboot_required(): void
     {
         $system = $this->create();
@@ -31,9 +30,7 @@ class SystemTest extends TestCase
         $system->isRebootRequired();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_averages(): void
     {
         $averages = $this->create()->loadAverages();
@@ -48,9 +45,7 @@ class SystemTest extends TestCase
         $this->assertGreaterThanOrEqual(0, $averages[2]->decimal());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function disk(): void
     {
         $disk = $this->create()->disk();
@@ -60,9 +55,7 @@ class SystemTest extends TestCase
         $this->assertLessThanOrEqual(1.0, $disk->percentUsed()->decimal());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function memory(): void
     {
         $system = $this->create();
@@ -72,17 +65,13 @@ class SystemTest extends TestCase
         $system->memory();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function stringable(): void
     {
         $this->assertSame('Linux', (string) $this->create());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function webserver(): void
     {
         $this->assertSame('n/a', (string) $this->create()->webserver());

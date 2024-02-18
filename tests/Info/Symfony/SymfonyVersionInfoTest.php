@@ -12,19 +12,18 @@
 namespace Liip\Monitor\Tests\Info\Symfony;
 
 use Liip\Monitor\Info\Symfony\SymfonyVersionInfo;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @group slow
  */
+#[Group('slow')]
 final class SymfonyVersionInfoTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function installed_version(): void
     {
         $info = new SymfonyVersionInfo();
@@ -54,9 +53,7 @@ final class SymfonyVersionInfoTest extends TestCase
         $info->isLatest();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function specific_version(): void
     {
         $info = new SymfonyVersionInfo('4.3.2');

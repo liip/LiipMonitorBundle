@@ -15,14 +15,14 @@ use Liip\Monitor\Check\Php\PhpVersionCheck;
 use Liip\Monitor\Info\Php\PhpVersionInfo;
 use Liip\Monitor\Result;
 use Liip\Monitor\Tests\CheckTests;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @group slow
  */
+#[Group('slow')]
 final class PhpVersionCheckTest extends TestCase
 {
     use CheckTests;

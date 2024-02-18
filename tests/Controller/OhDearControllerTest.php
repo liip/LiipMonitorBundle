@@ -11,6 +11,8 @@
 
 namespace Liip\Monitor\Tests\Controller;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\Test\HasBrowser;
 
@@ -21,10 +23,8 @@ final class OhDearControllerTest extends KernelTestCase
 {
     use HasBrowser;
 
-    /**
-     * @test
-     * @group slow
-     */
+    #[Test]
+    #[Group('slow')]
     public function run_checks(): void
     {
         $content = $this->browser()
@@ -43,9 +43,7 @@ final class OhDearControllerTest extends KernelTestCase
         $this->assertSame('ok', $content['checkResults'][0]['status']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function not_found_if_secret_missing(): void
     {
         $this->browser()
@@ -54,9 +52,7 @@ final class OhDearControllerTest extends KernelTestCase
         ;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function not_found_if_secret_mismatch(): void
     {
         $this->browser()
