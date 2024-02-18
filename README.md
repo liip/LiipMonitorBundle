@@ -592,6 +592,13 @@ class OhDearController extends BaseOhDearController
 }
 ```
 
+You maybe need to add this route to your firewall-configuration in `config/packages/security.yaml`.
+
+```yaml
+    access_control:
+        - { path: ^/health-check$, role: PUBLIC_ACCESS }
+```
+
 Now, enable application monitoring in OhDear and add the expected Full URL
 (ie `https://myapp.com/health-check`) to the _Health Report URL_.
 
@@ -604,6 +611,10 @@ your checks.
 > [!NOTE]
 > If you wish to restrict the check suites that are reported to OhDear, override the
 > `OhDearController::checks()` in your controller.
+
+> [!NOTE]
+> Please mind that [OhDear does limit the checkResults to 50 items](https://ohdear.app/docs/features/application-health-monitoring#health-check-results-format).
+> If there are more, no checks will be monitored !
 
 ## Full Default Configuration
 
