@@ -612,6 +612,10 @@ your checks.
 > If you wish to restrict the check suites that are reported to OhDear, override the
 > `OhDearController::checks()` in your controller.
 
+> [!NOTE]
+> Please mind that [OhDear does limit the checkResults to 50 items](https://ohdear.app/docs/features/application-health-monitoring#health-check-results-format).
+> If there are more, no checks will be monitored !
+
 ## Full Default Configuration
 
 ```yaml
