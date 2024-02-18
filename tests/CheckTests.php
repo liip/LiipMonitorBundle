@@ -15,16 +15,16 @@ use Liip\Monitor\Check;
 use Liip\Monitor\Check\CheckContext;
 use Liip\Monitor\Result;
 use Liip\Monitor\Result\Status;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 trait CheckTests
 {
-    /**
-     * @test
-     * @dataProvider checkResultProvider
-     */
+    #[Test]
+    #[DataProvider('checkResultProvider')]
     public function run_check(Check|callable $check, Result|Status|callable $expectedResult, ?string $expectedLabel = null): void
     {
         if ($check instanceof \Closure) {

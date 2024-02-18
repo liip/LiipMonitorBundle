@@ -16,6 +16,7 @@ use Liip\Monitor\Check\CheckContext;
 use Liip\Monitor\Result;
 use Liip\Monitor\Result\ResultContext;
 use Liip\Monitor\Result\ResultSet;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,9 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ResultSetTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function json_serialize(): void
     {
         $results = new ResultSet([

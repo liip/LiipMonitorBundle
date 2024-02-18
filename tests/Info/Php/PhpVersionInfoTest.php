@@ -12,19 +12,18 @@
 namespace Liip\Monitor\Tests\Info\Php;
 
 use Liip\Monitor\Info\Php\PhpVersionInfo;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @group slow
  */
+#[Group('slow')]
 final class PhpVersionInfoTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function system_version(): void
     {
         $activeVersions = HttpClient::create()->request('GET', 'https://www.php.net/releases/active')->toArray();
@@ -57,9 +56,7 @@ final class PhpVersionInfoTest extends TestCase
         $info->nextMinorVersion();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function specific_version(): void
     {
         $info = new PhpVersionInfo('7.3.2');

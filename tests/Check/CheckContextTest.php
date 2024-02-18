@@ -15,6 +15,7 @@ use Liip\Monitor\Check\CallbackCheck;
 use Liip\Monitor\Check\CheckContext;
 use Liip\Monitor\Result;
 use Liip\Monitor\Tests\CheckTests;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,36 +33,28 @@ final class CheckContextTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function id_can_be_overridden(): void
     {
         $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', fn() => null)))->id());
         $this->assertSame('override', (new CheckContext(new CallbackCheck('name', fn() => null), id: 'override'))->id());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function wrapped_label_is_used_to_calculate_id(): void
     {
         $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', fn() => null)))->id());
         $this->assertSame('b22f5367', (new CheckContext(new CallbackCheck('name', fn() => null), label: 'override'))->id());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function label_can_be_overridden(): void
     {
         $this->assertSame('name', (new CheckContext(new CallbackCheck('name', fn() => null)))->label());
         $this->assertSame('override', (new CheckContext(new CallbackCheck('name', fn() => null), label: 'override'))->label());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_set_suites_and_ttl(): void
     {
         $context = new CheckContext(new CallbackCheck('name', fn() => null));
@@ -77,9 +70,7 @@ final class CheckContextTest extends TestCase
         $this->assertSame(['foo', 'bar'], (new CheckContext(new CallbackCheck('name', fn() => null), suite: ['foo', 'bar']))->suites());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function cannot_create_for_self(): void
     {
         $this->expectException(\InvalidArgumentException::class);

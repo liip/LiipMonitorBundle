@@ -14,6 +14,7 @@ namespace Liip\Monitor\Tests\Check;
 use Liip\Monitor\Check\CallbackCheck;
 use Liip\Monitor\Check\CheckRunner;
 use Liip\Monitor\Result\Status;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -23,9 +24,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 final class CheckRunnerTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function exception_thrown(): void
     {
         $runner = new CheckRunner(
@@ -45,9 +44,7 @@ final class CheckRunnerTest extends TestCase
         $this->assertStringContainsString('Liip\Monitor\Tests\Check\CheckRunnerTest->Liip\Monitor\Tests\Check\{closure}()', $result->context()['stack_trace']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function exception_thrown_with_previous(): void
     {
         $runner = new CheckRunner(

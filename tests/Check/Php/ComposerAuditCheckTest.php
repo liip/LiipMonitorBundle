@@ -14,18 +14,17 @@ namespace Liip\Monitor\Tests\Check\Php;
 use Liip\Monitor\Check\Php\ComposerAuditCheck;
 use Liip\Monitor\Result;
 use Liip\Monitor\Result\Status;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @group slow
  */
+#[Group('slow')]
 final class ComposerAuditCheckTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function successful_check(): void
     {
         $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project1');
@@ -37,9 +36,7 @@ final class ComposerAuditCheckTest extends TestCase
         $this->assertEquals(Result::success('No advisories'), $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function failed_check(): void
     {
         $check = new ComposerAuditCheck(__DIR__.'/../../Fixture/project2');

@@ -19,6 +19,8 @@ use Liip\Monitor\Result\ResultContext;
 use Liip\Monitor\Result\ResultSet;
 use Liip\Monitor\Result\Status;
 use Liip\Monitor\Tests\Fixture\TestService;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -33,9 +35,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
 {
     use HandleTrait, InteractsWithConsole, InteractsWithMailer;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function services_are_autowired(): void
     {
         /** @var TestService $service */
@@ -49,9 +49,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $this->assertSame($service->system, $service->linuxSystem);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function execute_list_command(): void
     {
         $this->executeConsoleCommand('monitor:list')
@@ -63,10 +61,8 @@ final class LiipMonitorBundleTest extends KernelTestCase
         ;
     }
 
-    /**
-     * @test
-     * @group slow
-     */
+    #[Test]
+    #[Group('slow')]
     public function execute_health_command(): void
     {
         $this->executeConsoleCommand('monitor:health')
@@ -98,10 +94,8 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $logger->hasInfoThatContains('Health check "Check Service 1": Success');
     }
 
-    /**
-     * @test
-     * @group slow
-     */
+    #[Test]
+    #[Group('slow')]
     public function messenger_run_check_suite(): void
     {
         $this->messageBus = self::getContainer()->get(MessageBusInterface::class);
@@ -112,9 +106,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $this->assertCount(21, $results);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function messenger_run_check(): void
     {
         $this->messageBus = self::getContainer()->get(MessageBusInterface::class);
@@ -125,9 +117,7 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $this->assertSame(Status::SUCCESS, $result->status());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function messenger_run_checks(): void
     {
         $this->messageBus = self::getContainer()->get(MessageBusInterface::class);

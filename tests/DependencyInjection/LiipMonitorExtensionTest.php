@@ -28,15 +28,15 @@ use Liip\Monitor\Check\System\RebootRequiredCheck;
 use Liip\Monitor\DependencyInjection\ConfigurableCheck;
 use Liip\Monitor\DependencyInjection\LiipMonitorExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function loads_with_no_config(): void
     {
         $this->load();
@@ -45,11 +45,10 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
     }
 
     /**
-     * @test
-     * @dataProvider checksThatCanBeEnabled
-     *
      * @param class-string<ConfigurableCheck> $check
      */
+    #[Test]
+    #[DataProvider('checksThatCanBeEnabled')]
     public function simple_enable_checks(string $check): void
     {
         $this->loadCheck([$check::configKey() => true]);
@@ -69,9 +68,7 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         yield [SymfonyVersionCheck::class];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function enable_disk_usage(): void
     {
         $this->loadCheck(['system_disk_usage' => true]);
@@ -79,9 +76,7 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('.liip_monitor.check.system_disk_usage.2cd3e1ab', DiskUsageCheck::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function enable_free_disk_space(): void
     {
         $this->loadCheck(['system_free_disk_space' => [
@@ -92,9 +87,7 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('.liip_monitor.check.system_free_disk_space.2cd3e1ab', FreeDiskSpaceCheck::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function enable_dbal_collection(): void
     {
         $this->loadCheck(['dbal_connection' => true]);
@@ -121,9 +114,7 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('.liip_monitor.check.doctrine_dbal_connection.second', DbalConnectionCheck::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function enable_ping_url_check(): void
     {
         $this->loadCheck(['ping_url' => [
@@ -139,9 +130,7 @@ final class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('.liip_monitor.check.ping_url.foo', PingUrlCheck::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_average(): void
     {
         $this->loadCheck(['system_load_average' => [

@@ -15,6 +15,7 @@ use Doctrine\Persistence\ConnectionRegistry;
 use Liip\Monitor\Check\Doctrine\DbalConnectionCheck;
 use Liip\Monitor\Result;
 use Liip\Monitor\Result\Status;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -22,9 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 final class DbalConnectionCheckTest extends KernelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function can_run(): void
     {
         $check = new DbalConnectionCheck(self::getContainer()->get('doctrine'), 'default');
@@ -34,9 +33,7 @@ final class DbalConnectionCheckTest extends KernelTestCase
         $this->assertSame(Status::SUCCESS, $check->run()->status());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalid_connection(): void
     {
         $connectionRegistry = $this->createMock(ConnectionRegistry::class);

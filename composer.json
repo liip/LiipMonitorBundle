@@ -31,7 +31,7 @@
         "laminas/laminas-diagnostics": "^1.25",
         "matthiasnoback/symfony-dependency-injection-test": "^5.1",
         "phpstan/phpstan": "^1.4",
-        "phpunit/phpunit": "^9.6.16",
+        "phpunit/phpunit": "^10.5.10",
         "symfony/http-client": "^6.4|^7.0",
         "symfony/mailer": "^6.4|^7.0",
         "symfony/messenger": "^6.4|^7.0",
