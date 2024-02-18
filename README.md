@@ -592,6 +592,13 @@ class OhDearController extends BaseOhDearController
 }
 ```
 
+You maybe need to add this route to your firewall-configuration in `config/packages/security.yaml`.
+
+```yaml
+    access_control:
+        - { path: ^/health-check$, role: PUBLIC_ACCESS }
+```
+
 Now, enable application monitoring in OhDear and add the expected Full URL
 (ie `https://myapp.com/health-check`) to the _Health Report URL_.
 
