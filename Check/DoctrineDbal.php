@@ -24,7 +24,7 @@ class DoctrineDbal extends AbstractCheck
     public function check()
     {
         $connection = $this->manager->getConnection($this->connectionName);
-        $query = $connection->getDriver()->getDatabasePlatform()->getDummySelectSQL();
+        $query = $connection->getDriver()->getDatabasePlatform($connection)->getDummySelectSQL();
 
         // after dbal 2.11 fetchOne replace fetchColumn
         if (method_exists($connection, 'fetchOne')) {
