@@ -36,8 +36,9 @@ Here's the web interface:
 ## Installation ##
 
 Install with composer:
-
-    $ composer require liip/monitor-bundle
+```bash
+composer require liip/monitor-bundle
+```
 
 Then register the bundle in the `AppKernel.php` file:
 
@@ -71,7 +72,9 @@ liip_monitor:
 
 And finally don't forget to install the bundle assets into your web root:
 
-    $ ./app/console assets:install web --symlink --relative
+```bash
+./app/console assets:install web --symlink --relative
+```
 
 ## Enabling built-in health checks
 
@@ -185,16 +188,18 @@ my_reporter:
 ```
 
 To run additional reporters with the CLI, add `--reporter=...` options for each one:
-
-    $ ./app/console monitor:health --reporter=my_reporter
-
+```bash
+    ./app/console monitor:health --reporter=my_reporter
+```
 To run this reporter with the REST API, add a `reporters` query parameter:
 
     /monitor/health?reporters[]=my_reporter
 
 You can list available reporters with:
 
-    $ ./app/console monitor:list --reporters
+```bash
+bin/console monitor:list --reporters
+```
 
 ## Grouping Checks
 
@@ -248,9 +253,10 @@ services:
 
 Both CLI commands have a `--group=...` option. If it is not given, the default group is used.
 
-    ./app/console monitor:list --group=app_server
-
-    ./app/console monitor:health --group=app_server
+```bash
+bin/console monitor:list --group=app_server
+bin/console monitor:health --group=app_server
+```
 
 Both commands, `monitor:list` and `monitor:health`, have an option `--all` to list or run the checks of all registered
 groups. Additionally, the `monitor:list` has an option `--groups` to list all registered groups.
