@@ -7,8 +7,8 @@ use Liip\MonitorBundle\DependencyInjection\DoctrineMigrations\DoctrineMigrations
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class LiipMonitorExtension extends Extension implements CompilerPassInterface
 {
