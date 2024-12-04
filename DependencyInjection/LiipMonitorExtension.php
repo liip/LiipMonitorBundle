@@ -125,6 +125,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
             case 'memcache':
             case 'memcached':
             case 'redis':
+            case 'elastic_search':
             case 'rabbit_mq':
             case 'stream_wrapper_exists':
             case 'file_ini':

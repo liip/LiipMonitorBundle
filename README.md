@@ -380,6 +380,17 @@ liip_monitor:
                         # or
                         dsn: redis://localhost:6379
 
+                # Validate that an Elasticsearch service is running
+                elastic_search:
+
+                    # Prototype
+                    name:
+                        scheme:               http
+                        host:                 localhost
+                        port:                 9200
+                        # or
+                        dsn: http://localhost:9200
+
                 # Attempt connection to given HTTP host and (optionally) check status code and page content
                 http_service:
 
