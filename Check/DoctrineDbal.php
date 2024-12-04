@@ -2,6 +2,7 @@
 
 namespace Liip\MonitorBundle\Check;
 
+use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 use Doctrine\Persistence\ConnectionRegistry;
 use Laminas\Diagnostics\Check\AbstractCheck;
 use Laminas\Diagnostics\Result\ResultInterface;
@@ -24,6 +25,21 @@ class DoctrineDbal extends AbstractCheck
     public function check()
     {
         $connection = $this->manager->getConnection($this->connectionName);
+
+        if ($connection instanceof PrimaryReadReplicaConnection) {
+            $connection->ensureConnectedToReplica();
+            $this->runCheck($connection);
+            $connection->ensureConnectedToPrimary();
+            $this->runCheck($connection);
+        } else {
+            $this->runCheck($connection);
+        }
+
+        return new Success();
+    }
+
+    private function runCheck($connection)
+    {
         $query = $connection->getDriver()->getDatabasePlatform($connection)->getDummySelectSQL();
 
         // after dbal 2.11 fetchOne replace fetchColumn
@@ -32,7 +48,5 @@ class DoctrineDbal extends AbstractCheck
         } else {
             $connection->fetchColumn($query);
         }
-
-        return new Success();
     }
 }
