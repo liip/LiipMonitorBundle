@@ -23,7 +23,7 @@ final class V3MigrationsLoader extends AbstractDoctrineMigrationsLoader
         ContainerBuilder $container,
         string $connectionName,
         string $serviceId,
-        string $filename = null
+        ?string $filename = null
     ): void {
         if (null !== $filename) {
             $configurationClass = $this->getConfigurationLoaderClass($container, $filename);

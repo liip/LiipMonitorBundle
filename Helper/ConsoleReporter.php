@@ -22,7 +22,7 @@ class ConsoleReporter implements ReporterInterface
      */
     protected $output;
 
-    public function __construct(OutputInterface $output = null)
+    public function __construct(?OutputInterface $output = null)
     {
         if (null === $output) {
             $output = new ConsoleOutput();
