@@ -28,6 +28,8 @@ jobs:
             symfony: 7.0.*
           - php: 8.3
             symfony: 7.0.*
+          - php: 8.4
+            symfony: 7.0.*
 
     steps:
       - name: Checkout code
@@ -44,7 +46,7 @@ jobs:
         run: composer require --dev "symfony/mailer" --no-update
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           composer-options: --prefer-dist
         env:
@@ -69,7 +71,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           dependency-versions: lowest
           composer-options: --prefer-dist
@@ -94,7 +96,7 @@ jobs:
         run: composer require --dev "symfony/mailer" --no-update
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           composer-options: --prefer-dist
 
@@ -131,7 +133,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           composer-options: --prefer-dist
 
