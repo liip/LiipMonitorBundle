@@ -52,7 +52,7 @@ final class V2MigrationsLoader extends AbstractDoctrineMigrationsLoader implemen
         ContainerBuilder $container,
         string $connectionName,
         string $serviceId,
-        string $filename = null
+        ?string $filename = null
     ): void {
         if (!$container->has(Configuration::class)) {
             $container->register(Configuration::class)

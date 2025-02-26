@@ -22,6 +22,6 @@ abstract class AbstractDoctrineMigrationsLoader
         ContainerBuilder $container,
         string $connectionName,
         string $serviceId,
-        string $filename = null
+        ?string $filename = null
     ): void;
 }
