@@ -45,15 +45,21 @@ final class HealthCheckCommand extends Command
             ->addOption('fail-on-warning', description: 'Fail command if any checks have a warning result')
             ->addOption('fail-on-skip', description: 'Fail command if any checks are skipped')
             ->addOption('fail-on-unknown', description: 'Fail command if any checks have an unknown result')
+            ->addOption('json', description: 'Output in JSON format')
         ;
     }
 
+    /**
+     * @throws \JsonException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $subscriber = $io->isVerbose() ? new ConsoleCheckVerboseSubscriber($io) : new ConsoleCheckListSubscriber($input, $output);
+        if (!$input->getOption('json')) {
+            $io = new SymfonyStyle($input, $output);
+            $subscriber = $io->isVerbose() ? new ConsoleCheckVerboseSubscriber($io) : new ConsoleCheckListSubscriber($input, $output);
 
-        $this->eventDispatcher->addSubscriber($subscriber);
+            $this->eventDispatcher->addSubscriber($subscriber);
+        }
 
         $suite = $this->checkRegistry->suite($input->getOption('suite'));
 
@@ -61,24 +67,7 @@ final class HealthCheckCommand extends Command
             throw new \RuntimeException(\sprintf('No checks found for suite "%s"', $suite));
         }
 
-        $io->section($input->getOption('suite') ? \sprintf('Running Check Suite "%s"', $suite) : 'Running All Checks');
-
-        if ($input->getOption('no-cache')) {
-            $io->note('Running with cache disabled');
-        }
-
         $results = $suite->run(!$input->getOption('no-cache'));
-        $warnings = $results->warnings();
-        $unknowns = $results->unknowns();
-        $summary = \array_filter([
-            $results->successes()->count() ? \sprintf('%d successful', $results->successes()->count()) : null,
-            $warnings->count() ? \sprintf('%d warning%s', $warnings->count(), $warnings->count() > 2 ? 's' : '') : null,
-            $results->failures()->count() ? \sprintf('%d failed', $results->failures()->count()) : null,
-            $results->errors()->count() ? \sprintf('%d errored', $results->errors()->count()) : null,
-            $results->skipped()->count() ? \sprintf('%d skipped', $results->skipped()->count()) : null,
-            $unknowns->count() ? \sprintf('%d unknown%s', $unknowns->count(), $unknowns->count() > 2 ? 's' : '') : null,
-        ]);
-        $message = \sprintf('%d check executed (%s)', $results->count(), \implode(', ', $summary));
         $failureStatuses = [];
 
         if ($input->getOption('fail-on-warning')) {
@@ -94,6 +83,31 @@ final class HealthCheckCommand extends Command
         }
 
         $isFail = $results->defects(...$failureStatuses)->count() > 0;
+
+        if ($input->getOption('json')) {
+            echo json_encode($results, JSON_THROW_ON_ERROR, 512);
+            return $isFail ? self::FAILURE : self::SUCCESS;
+        }
+
+        $this->eventDispatcher->addSubscriber($subscriber);
+
+        $io->section($input->getOption('suite') ? \sprintf('Running Check Suite "%s"', $suite) : 'Running All Checks');
+
+        if ($input->getOption('no-cache')) {
+            $io->note('Running with cache disabled');
+        }
+
+        $warnings = $results->warnings();
+        $unknowns = $results->unknowns();
+        $summary = \array_filter([
+            $results->successes()->count() ? \sprintf('%d successful', $results->successes()->count()) : null,
+            $warnings->count() ? \sprintf('%d warning%s', $warnings->count(), $warnings->count() > 2 ? 's' : '') : null,
+            $results->failures()->count() ? \sprintf('%d failed', $results->failures()->count()) : null,
+            $results->errors()->count() ? \sprintf('%d errored', $results->errors()->count()) : null,
+            $results->skipped()->count() ? \sprintf('%d skipped', $results->skipped()->count()) : null,
+            $unknowns->count() ? \sprintf('%d unknown%s', $unknowns->count(), $unknowns->count() > 2 ? 's' : '') : null,
+        ]);
+        $message = \sprintf('%d check executed (%s)', $results->count(), \implode(', ', $summary));
 
         $io->newLine();
         $io->{$isFail ? 'error' : 'success'}($message);
