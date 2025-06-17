@@ -138,7 +138,7 @@ final class PingUrlCheck implements Check, ConfigurableCheck, \Stringable
     public static function load(array $config, ContainerBuilder $container): void
     {
         foreach ($config as $key => $check) {
-            $check['label'] = $check['label'] ?? \is_string($key) ? $key : null;
+            $check['label'] = $check['label'] ?? (\is_string($key) ? $key : null);
 
             $container->register(\sprintf('.liip_monitor.check.ping_url.%s', $key), self::class)
                 ->setArguments([
