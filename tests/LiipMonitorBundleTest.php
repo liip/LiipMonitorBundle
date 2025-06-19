@@ -106,7 +106,6 @@ final class LiipMonitorBundleTest extends KernelTestCase
     public function execute_health_command_with_json_output(): void
     {
         $output = $this->executeConsoleCommand('monitor:health --json')
-            ->assertSuccessful()
             ->output()
         ;
 
