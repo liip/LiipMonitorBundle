@@ -86,7 +86,8 @@ final class HealthCheckCommand extends Command
         $isFail = $results->defects(...$failureStatuses)->count() > 0;
 
         if ($isJsonOutput) {
-            $output->write(json_encode($results, JSON_THROW_ON_ERROR, 512));
+            $output->write(\json_encode($results, \JSON_THROW_ON_ERROR, 512));
+
             return $isFail ? self::FAILURE : self::SUCCESS;
         }
 

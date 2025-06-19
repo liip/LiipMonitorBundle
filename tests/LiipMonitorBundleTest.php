@@ -110,9 +110,8 @@ final class LiipMonitorBundleTest extends KernelTestCase
         ;
 
         // Verify that the output is valid JSON
-        $jsonData = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
+        $jsonData = \json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
         $this->assertIsArray($jsonData);
-
     }
 
     /**
