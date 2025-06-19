@@ -54,10 +54,11 @@ final class HealthCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$input->getOption('json')) {
-            $io = new SymfonyStyle($input, $output);
-            $subscriber = $io->isVerbose() ? new ConsoleCheckVerboseSubscriber($io) : new ConsoleCheckListSubscriber($input, $output);
+        $isJsonOutput = $input->getOption('json');
+        $io = $isJsonOutput ? null : new SymfonyStyle($input, $output);
 
+        if (!$isJsonOutput) {
+            $subscriber = $io->isVerbose() ? new ConsoleCheckVerboseSubscriber($io) : new ConsoleCheckListSubscriber($input, $output);
             $this->eventDispatcher->addSubscriber($subscriber);
         }
 
@@ -84,12 +85,10 @@ final class HealthCheckCommand extends Command
 
         $isFail = $results->defects(...$failureStatuses)->count() > 0;
 
-        if ($input->getOption('json')) {
-            echo json_encode($results, JSON_THROW_ON_ERROR, 512);
+        if ($isJsonOutput) {
+            $output->write(json_encode($results, JSON_THROW_ON_ERROR, 512));
             return $isFail ? self::FAILURE : self::SUCCESS;
         }
-
-        $this->eventDispatcher->addSubscriber($subscriber);
 
         $io->section($input->getOption('suite') ? \sprintf('Running Check Suite "%s"', $suite) : 'Running All Checks');
 

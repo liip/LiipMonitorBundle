@@ -102,6 +102,40 @@ final class LiipMonitorBundleTest extends KernelTestCase
      * @test
      * @group slow
      */
+    public function execute_health_command_with_json_output(): void
+    {
+        $output = $this->executeConsoleCommand('monitor:health --json')
+            ->assertSuccessful()
+            ->output()
+        ;
+
+        // Verify that the output is valid JSON
+        $jsonData = json_decode($output, true);
+        $this->assertIsArray($jsonData);
+
+        // Verify the structure of the JSON output
+        $this->assertArrayHasKey('results', $jsonData);
+        $this->assertArrayHasKey('duration', $jsonData);
+        $this->assertIsArray($jsonData['results']);
+        $this->assertIsNumeric($jsonData['duration']);
+
+        // Verify that we have the expected number of results
+        $this->assertCount(21, $jsonData['results']);
+
+        // Verify the structure of a result
+        $firstResult = reset($jsonData['results']);
+        $this->assertArrayHasKey('check', $firstResult);
+        $this->assertArrayHasKey('status', $firstResult);
+        $this->assertArrayHasKey('summary', $firstResult);
+        $this->assertArrayHasKey('detail', $firstResult);
+        $this->assertArrayHasKey('context', $firstResult);
+        $this->assertArrayHasKey('duration', $firstResult);
+    }
+
+    /**
+     * @test
+     * @group slow
+     */
     public function messenger_run_check_suite(): void
     {
         $this->messageBus = self::getContainer()->get(MessageBusInterface::class);
