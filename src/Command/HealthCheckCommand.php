@@ -55,7 +55,7 @@ final class HealthCheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isJsonOutput = $input->getOption('json');
-        $io = $isJsonOutput ? null : new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
         if (!$isJsonOutput) {
             $subscriber = $io->isVerbose() ? new ConsoleCheckVerboseSubscriber($io) : new ConsoleCheckListSubscriber($input, $output);
