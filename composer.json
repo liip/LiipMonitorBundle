@@ -25,7 +25,7 @@
     "require": {
         "php": "^8.1",
         "symfony/framework-bundle": "^6.4|^7.0",
-        "laminas/laminas-diagnostics": "^1.9"
+        "laminas/laminas-diagnostics": "^1.27"
     },
     "require-dev": {
         "doctrine/doctrine-migrations-bundle": "^2.0 || ^3.0 || ^7.0",
