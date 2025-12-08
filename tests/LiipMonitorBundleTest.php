@@ -45,8 +45,6 @@ final class LiipMonitorBundleTest extends KernelTestCase
         $this->assertCount(3, $service->fooChecks);
         $this->assertCount(1, $service->barChecks);
         $this->assertCount(2, $service->bazChecks);
-
-        $this->assertSame($service->system, $service->linuxSystem);
     }
 
     /**

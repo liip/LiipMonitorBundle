@@ -21,8 +21,8 @@
     ],
     "require": {
         "php": ">=8.1",
-        "symfony/framework-bundle": "^6.4|^7.0",
-        "symfony/string": "^6.4|^7.0",
+        "symfony/framework-bundle": "^6.4|^7.0|^8.0",
+        "symfony/string": "^6.4|^7.0|^8.0",
         "zenstruck/bytes": "^1.0"
     },
     "require-dev": {
@@ -32,13 +32,13 @@
         "matthiasnoback/symfony-dependency-injection-test": "^5.1",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.6.16",
-        "symfony/http-client": "^6.4|^7.0",
-        "symfony/mailer": "^6.4|^7.0",
-        "symfony/messenger": "^6.4|^7.0",
-        "symfony/phpunit-bridge": "^6.4|^7.0",
-        "symfony/process": "^6.4|^7.0",
-        "symfony/routing": "^6.4|^7.0",
-        "symfony/var-dumper": "^6.4|^7.0",
+        "symfony/http-client": "^6.4|^7.0|^8.0",
+        "symfony/mailer": "^6.4|^7.0|^8.0",
+        "symfony/messenger": "^6.4|^7.0|^8.0",
+        "symfony/phpunit-bridge": "^6.4|^7.0|^8.0",
+        "symfony/process": "^6.4|^7.0|^8.0",
+        "symfony/routing": "^6.4|^7.0|^8.0",
+        "symfony/var-dumper": "^6.4|^7.0|^8.0",
         "zenstruck/browser": "^1.8",
         "zenstruck/console-test": "^1.5",
         "zenstruck/mailer-test": "^1.4"
