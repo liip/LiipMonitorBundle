@@ -82,18 +82,16 @@ final class FreeDiskSpaceCheck implements Check, ConfigurableCheck, \Stringable
 
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
-        return $node // @phpstan-ignore-line
+        return $node
             ->beforeNormalization()
-                ->ifTrue(fn($v) => \is_array($v) && isset($v['warning']))
-                ->then(function($v) {
-                    return [
-                        [
-                            'path' => $v['path'] ?? '/',
-                            'warning' => $v['warning'],
-                            'critical' => $v['critical'] ?? $v['warning'],
-                        ],
-                    ];
-                })
+                ->ifTrue(static fn($v) => \is_array($v) && isset($v['warning']))
+                ->then(static fn($v) => [
+                    [
+                        'path' => $v['path'] ?? '/',
+                        'warning' => $v['warning'],
+                        'critical' => $v['critical'] ?? $v['warning'],
+                    ],
+                ])
             ->end()
             ->arrayPrototype()
                 ->children()

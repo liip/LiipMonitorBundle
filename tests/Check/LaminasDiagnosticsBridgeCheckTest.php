@@ -32,34 +32,34 @@ final class LaminasDiagnosticsBridgeCheckTest extends TestCase
     public static function checkResultProvider(): iterable
     {
         yield [
-            self::create(fn() => new Success()),
+            self::create(static fn() => new Success()),
             Result::success(context: ['data' => null]),
             'Callback',
         ];
 
         yield [
-            self::create(fn() => new Success('reason', 'foo'), 'Custom'),
+            self::create(static fn() => new Success('reason', 'foo'), 'Custom'),
             Result::success('reason', context: ['data' => 'foo']),
             'Custom',
         ];
 
         yield [
-            self::create(fn() => new Warning('reason', 'foo')),
+            self::create(static fn() => new Warning('reason', 'foo')),
             Result::warning('reason', context: ['data' => 'foo']),
         ];
 
         yield [
-            self::create(fn() => new Failure('reason', 'foo')),
+            self::create(static fn() => new Failure('reason', 'foo')),
             Result::failure('reason', context: ['data' => 'foo']),
         ];
 
         yield [
-            self::create(fn() => new Skip('reason', 'foo')),
+            self::create(static fn() => new Skip('reason', 'foo')),
             Result::skip('reason', context: ['data' => 'foo']),
         ];
 
         yield [
-            self::create(fn() => new class() extends AbstractResult {}),
+            self::create(static fn() => new class extends AbstractResult {}),
             Result::unknown('', context: ['data' => null]),
         ];
     }
@@ -69,7 +69,7 @@ final class LaminasDiagnosticsBridgeCheckTest extends TestCase
      */
     public function invalid(): void
     {
-        $check = self::create(fn() => 'invalid');
+        $check = self::create(static fn() => 'invalid');
 
         $this->expectException(\RuntimeException::class);
 

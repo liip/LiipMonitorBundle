@@ -3,6 +3,7 @@
 /vendor/
 /build/
 /var/
+/config/reference.php
 /.php-cs-fixer.cache
 /.phpunit.result.cache
 /Tests/app/var/cache/

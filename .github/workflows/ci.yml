@@ -12,18 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ 8.1, 8.2, 8.3 ]
+        php: [ 8.2, 8.3, 8.4, 8.5 ]
         deps: [ highest ]
-        symfony: [ 6.4.*, 7.0.* ]
+        symfony: [ 6.4.*, 7.4.*, 8.0.* ]
         include:
-          - php: 8.1
+          - php: 8.2
             deps: lowest
             symfony: '*'
         exclude:
-          - php: 8.1
-            symfony: 7.0.*
+          - php: 8.2
+            symfony: 8.0.*
+          - php: 8.3
+            symfony: 8.0.*
+          - php: 8.5
+            symfony: 6.4.* # laminas-diagnostics doesn't support PHP 8.5 with Symfony 6.4
     steps:
-      - uses: zenstruck/.github@php-test-symfony
+      - uses: zenstruck/.github/actions/php-test-symfony@main
         with:
           php: ${{ matrix.php }}
           symfony: ${{ matrix.symfony }}

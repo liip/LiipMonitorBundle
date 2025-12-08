@@ -36,8 +36,8 @@ final class SymfonyVersionCheckTest extends TestCase
         $latest54 = self::latest54(...);
 
         yield [
-            fn() => new SymfonyVersionCheck(new SymfonyVersionInfo($stable())),
-            fn() => Result::success($stable()),
+            static fn() => new SymfonyVersionCheck(new SymfonyVersionInfo($stable())),
+            static fn() => Result::success($stable()),
             'Symfony Version',
         ];
 

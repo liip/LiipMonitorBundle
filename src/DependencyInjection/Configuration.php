@@ -55,7 +55,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('liip_monitor');
 
-        $node = $builder->getRootNode() // @phpstan-ignore-line
+        $node = $builder->getRootNode()
             ->children()
                 ->integerNode('default_ttl')
                     ->info('Default TTL for checks')
@@ -74,7 +74,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarPrototype()->end()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(fn($v) => [$v])
+                                ->then(static fn($v) => [$v])
                             ->end()
                         ->end()
                         ->scalarNode('sender')
@@ -102,10 +102,10 @@ final class Configuration implements ConfigurationInterface
 
     public static function addSuiteConfig(): NodeDefinition
     {
-        return (new TreeBuilder('suite'))->getRootNode() // @phpstan-ignore-line
+        return (new TreeBuilder('suite'))->getRootNode()
             ->beforeNormalization()
                 ->ifString()
-                ->then(fn($v) => [$v])
+                ->then(static fn($v) => [$v])
             ->end()
             ->prototype('scalar')->cannotBeEmpty()->end()
         ;
@@ -143,6 +143,6 @@ final class Configuration implements ConfigurationInterface
             $node->info($info);
         }
 
-        return $class::addConfig($node); // @phpstan-ignore-line
+        return $class::addConfig($node);
     }
 }

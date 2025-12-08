@@ -68,20 +68,20 @@ final class DbalConnectionCheck implements Check, ConfigurableCheck, \Stringable
 
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
-        return $node // @phpstan-ignore-line
+        return $node
             ->beforeNormalization()
-                ->ifTrue(fn($v) => \is_array($v) && \array_is_list($v))
-                ->then(fn($v) => \array_map(fn() => [], \array_combine($v, $v)))
+                ->ifTrue(static fn($v) => \is_array($v) && \array_is_list($v))
+                ->then(static fn($v) => \array_map(static fn() => [], \array_combine($v, $v)))
             ->end()
             ->beforeNormalization()
-                ->ifString()->then(fn(string $v) => [['name' => $v]])
+                ->ifString()->then(static fn(string $v) => [['name' => $v]])
             ->end()
             ->beforeNormalization()
-                ->ifTrue()->then(fn() => [['name' => self::ALL_CONNECTIONS]])
+                ->ifTrue()->then(static fn() => [['name' => self::ALL_CONNECTIONS]])
             ->end()
             ->beforeNormalization()
-                ->ifTrue(fn($v) => \is_array($v) && isset($v['suite']))
-                ->then(fn($v) => [['name' => self::ALL_CONNECTIONS, ...$v]])
+                ->ifTrue(static fn($v) => \is_array($v) && isset($v['suite']))
+                ->then(static fn($v) => [['name' => self::ALL_CONNECTIONS, ...$v]])
             ->end()
             ->useAttributeAsKey('name')
             ->arrayPrototype()
@@ -129,7 +129,7 @@ final class DbalConnectionCheck implements Check, ConfigurableCheck, \Stringable
             throw new LogicException('Could not determine Doctrine DBAL connections. Is doctrine/doctrine-bundle installed/enabled?');
         }
 
-        $config = \array_map(fn() => $config, $container->getParameter('doctrine.connections')); // @phpstan-ignore-line
+        $config = \array_map(static fn() => $config, $container->getParameter('doctrine.connections')); // @phpstan-ignore-line
 
         self::load($config, $container);
     }

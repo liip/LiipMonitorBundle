@@ -45,7 +45,7 @@ abstract class PercentThresholdCheck implements Check, ConfigurableCheck
      */
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
-        return $node // @phpstan-ignore-line
+        return $node
             ->canBeEnabled()
             ->children()
                 ->scalarNode('warning')

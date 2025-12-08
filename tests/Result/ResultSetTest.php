@@ -30,12 +30,12 @@ final class ResultSetTest extends TestCase
     {
         $results = new ResultSet([
             new ResultContext(
-                new CheckContext(new CallbackCheck('first', fn() => null)),
+                new CheckContext(new CallbackCheck('first', static fn() => null)),
                 Result::success('summary 1', 'detail 1', ['context' => 1]),
                 0.1
             ),
             new ResultContext(
-                new CheckContext(new CallbackCheck('second', fn() => null)),
+                new CheckContext(new CallbackCheck('second', static fn() => null)),
                 Result::success('summary 2', 'detail 2', ['context' => 2]),
                 0.1
             ),

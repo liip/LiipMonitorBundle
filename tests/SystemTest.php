@@ -77,7 +77,7 @@ class SystemTest extends TestCase
      */
     public function stringable(): void
     {
-        $this->assertSame('Linux', (string) $this->create());
+        $this->assertSame(\PHP_OS, (string) $this->create());
     }
 
     /**

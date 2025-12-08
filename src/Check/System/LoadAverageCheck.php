@@ -70,7 +70,7 @@ final class LoadAverageCheck extends PercentThresholdCheck implements \Stringabl
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
         foreach (\array_keys(self::KEYS) as $type) {
-            $node // @phpstan-ignore-line
+            $node
                 ->info(\sprintf('fails/warns if %s load average is above thresholds', \str_replace('_', '-', $type)))
                 ->children()
                     ->arrayNode($type)

@@ -11,18 +11,20 @@
 
 namespace Liip\Monitor\Tests;
 
+use Liip\Monitor\Info\Php\ApcuCacheInfo;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-trait RequiresLinux
+trait RequiresApcu
 {
     /**
      * @beforeClass
      */
-    public static function ensureLinux(): void
+    public static function ensureApcuInstalled(): void
     {
-        if ('Linux' !== \PHP_OS) {
-            self::markTestSkipped('Linux only test');
+        if (!ApcuCacheInfo::isInstalled()) {
+            self::markTestSkipped('APCu is not installed');
         }
     }
 }

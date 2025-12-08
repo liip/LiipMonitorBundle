@@ -53,16 +53,16 @@ final class DiskUsageCheck extends StorageUsageCheck implements \Stringable
 
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
-        return $node // @phpstan-ignore-line
+        return $node
             ->beforeNormalization()
-                ->ifTrue()->then(fn() => [['path' => '/']])
+                ->ifTrue()->then(static fn() => [['path' => '/']])
             ->end()
             ->beforeNormalization()
-                ->ifString()->then(fn(string $v) => [['path' => $v]])
+                ->ifString()->then(static fn(string $v) => [['path' => $v]])
             ->end()
             ->beforeNormalization()
-                ->ifTrue(fn($v) => \is_array($v) && !\array_is_list($v))
-                ->then(function($v) {
+                ->ifTrue(static fn($v) => \is_array($v) && !\array_is_list($v))
+                ->then(static function($v) {
                     $v['path'] ??= '/';
 
                     return [$v];
@@ -70,7 +70,7 @@ final class DiskUsageCheck extends StorageUsageCheck implements \Stringable
             ->end()
             ->arrayPrototype()
                 ->beforeNormalization()
-                    ->ifString()->then(fn(string $v) => ['path' => $v])
+                    ->ifString()->then(static fn(string $v) => ['path' => $v])
                 ->end()
                 ->children()
                     ->scalarNode('path')->isRequired()->cannotBeEmpty()->end()
