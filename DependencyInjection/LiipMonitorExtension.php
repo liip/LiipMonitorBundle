@@ -32,10 +32,10 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('runner.xml');
-        $loader->load('helper.xml');
-        $loader->load('commands.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('runner.php');
+        $loader->load('helper.php');
+        $loader->load('commands.php');
 
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
@@ -47,7 +47,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
         if ($config['enable_controller']) {
             $container->setParameter(sprintf('%s.view_template', $this->getAlias()), $config['view_template']);
             $container->setParameter(sprintf('%s.failure_status_code', $this->getAlias()), $config['failure_status_code']);
-            $loader->load('controller.xml');
+            $loader->load('controller.php');
         }
 
         $this->configureMailer($container, $config);
@@ -74,7 +74,7 @@ class LiipMonitorExtension extends Extension implements CompilerPassInterface
                 $this->setParameters($container, $check, $group, $values);
 
                 if (!in_array($check, $checksLoaded)) {
-                    $loader->load('checks/'.$check.'.xml');
+                    $loader->load('checks/'.$check.'.php');
                     $checksLoaded[] = $check;
                 }
             }

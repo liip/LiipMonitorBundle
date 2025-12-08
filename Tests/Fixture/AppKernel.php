@@ -24,7 +24,7 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/config_'.$this->environment.'.yml');
+        $loader->load(__DIR__.'/config.yml');
     }
 
     public function getProjectDir(): string
