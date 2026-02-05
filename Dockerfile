@@ -10,4 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Allow git operations when /app is mounted from host (different ownership)
+RUN git config --global --add safe.directory /app
+
 WORKDIR /app

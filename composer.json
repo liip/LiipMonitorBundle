@@ -45,6 +45,11 @@
         "symfony/phpunit-bridge": "^7.3",
         "symfony/twig-bundle": "^6.4|^7.0"
     },
+    "scripts": {
+        "test": [
+            "phpunit"
+        ]
+    },
     "suggest": {
         "symfony/expression-language": "To use the Expression check"
     },
