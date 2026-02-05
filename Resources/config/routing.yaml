@@ -1,0 +1,44 @@
+liip_monitor_health_interface:
+    path: /
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::indexAction
+
+liip_monitor_list_checks:
+    path: /checks
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::listAction
+
+liip_monitor_list_all_checks:
+    path: /all_checks
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::listAllAction
+
+liip_monitor_list_groups:
+    path: /groups
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::listGroupsAction
+
+liip_monitor_run_all_checks_http_status:
+    path: /http_status_checks
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksHttpStatusAction
+
+liip_monitor_run_single_check_http_status:
+    path: /http_status_check/{checkId}
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckHttpStatusAction
+
+liip_monitor_run_all_checks:
+    path: /run
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::runAllChecksAction
+
+liip_monitor_run_single_check:
+    path: /run/{checkId}
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::runSingleCheckAction
+
+liip_monitor_list_reporters:
+    path: /list/reporters
+    defaults:
+        _controller: Liip\MonitorBundle\Controller\HealthCheckController::listReportersAction

@@ -29,7 +29,7 @@ class MailerCompilerPass implements CompilerPassInterface
             throw new \InvalidArgumentException('To enable mail reporting you have to install "symfony/mailer".');
         }
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
-        $loader->load('symfony_mailer.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
+        $loader->load('symfony_mailer.php');
     }
 }
