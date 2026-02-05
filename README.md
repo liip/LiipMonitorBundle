@@ -59,7 +59,7 @@ If you want to enable the REST API provided by the bundle then add the following
 
 ```yml
 _monitor:
-    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
+    resource: "@LiipMonitorBundle/Resources/config/routing.yaml"
     prefix: /monitor/health
 ```
 
@@ -488,7 +488,7 @@ liip_monitor:
 ## REST API DOCS ##
 
 For documentation on the REST API see: [http://myproject.org/monitor/health/](http://myproject.org/monitor/health/).
-Don't forget to add the bundle routes in your `routing.xml` file.
+Don't forget to add the bundle routes in your `routing.yaml` file.
 
 
 ## Nagios integration ##
