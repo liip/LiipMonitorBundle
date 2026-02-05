@@ -72,7 +72,6 @@ class RawConsoleReporter implements ReporterInterface
      */
     public function onStart(\ArrayObject $checks, $runnerConfig)
     {
-        return;
     }
 
     /**
@@ -80,7 +79,6 @@ class RawConsoleReporter implements ReporterInterface
      */
     public function onBeforeRun(CheckInterface $check, $checkAlias = null)
     {
-        return;
     }
 
     /**
@@ -88,7 +86,6 @@ class RawConsoleReporter implements ReporterInterface
      */
     public function onStop(ResultsCollection $results)
     {
-        return;
     }
 
     /**
@@ -96,6 +93,5 @@ class RawConsoleReporter implements ReporterInterface
      */
     public function onFinish(ResultsCollection $results)
     {
-        return;
     }
 }

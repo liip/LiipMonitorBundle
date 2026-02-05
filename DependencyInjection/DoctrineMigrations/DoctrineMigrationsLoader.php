@@ -30,7 +30,7 @@ final class DoctrineMigrationsLoader implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if (!($this->loader instanceof CompilerPassInterface)) {
+        if (!$this->loader instanceof CompilerPassInterface) {
             return;
         }
 
