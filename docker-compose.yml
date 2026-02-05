@@ -1,0 +1,12 @@
+services:
+  php:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - KERNEL_CLASS=Liip\MonitorBundle\Tests\Fixture\AppKernel
+      - SYMFONY_DEPRECATIONS_HELPER=max[self]=0&max[direct]=0&quiet[]=indirect&quiet[]=other
+    stdin_open: true
+    tty: true
+    command: sh
