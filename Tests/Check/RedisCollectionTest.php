@@ -38,7 +38,9 @@ final class RedisCollectionTest extends TestCase
         try {
             $refClass = new \ReflectionClass($check);
             $authProp = $refClass->getProperty('auth');
-            $authProp->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $authProp->setAccessible(true);
+            }
             self::assertSame($auth, $authProp->getValue($check));
         } catch (\ReflectionException $e) {
             self::fail($e->getMessage());
