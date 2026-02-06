@@ -41,6 +41,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Validate composer.json constraints (CI requirement)
+        run: |
+          RAW=$(cat composer.json | tr -d '\n')
+          if echo "$RAW" | grep -qE 'laminas-diagnostics[^"]*"\^1\.28"'; then
+            echo "::error::composer.json must use laminas/laminas-diagnostics ^1.27 (not ^1.28) for PHP 8.1 and Symfony 6.4 compatibility."
+            exit 1
+          fi
+          if echo "$RAW" | grep -q '"require-dev"[^}]*"enlightn/security-checker"'; then
+            echo "::error::enlightn/security-checker must be in suggest only, not in require-dev. Remove it from require-dev."
+            exit 1
+          fi
+          echo "composer.json constraints OK"
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
