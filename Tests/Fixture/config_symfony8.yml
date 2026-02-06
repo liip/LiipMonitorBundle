@@ -1,0 +1,12 @@
+# Symfony 8 config (same structure as 7.x)
+framework:
+    router:
+        resource: "%kernel.project_dir%/routing.yml"
+    secret:        test
+    test: ~
+    assets: ~
+    profiler:
+        collect: false
+
+liip_monitor:
+    enable_controller: true
