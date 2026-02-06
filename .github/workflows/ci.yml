@@ -15,9 +15,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [ 8.1, 8.2, 8.3, 8.4 ]
+        php: [ 8.1, 8.2, 8.3, 8.4, 8.5 ]
         deps: [ highest ]
-        symfony: [ 6.4.*, 7.2.*, 7.3.* ]
+        symfony: [ 6.4.*, 7.2.*, 7.3.*, 8.0.* ]
         include:
           - php: 8.1
             deps: lowest
@@ -27,6 +27,12 @@ jobs:
             symfony: 7.2.*
           - php: 8.1
             symfony: 7.3.*
+          - php: 8.1
+            symfony: 8.0.*
+          - php: 8.2
+            symfony: 8.0.*
+          - php: 8.3
+            symfony: 8.0.*
 
     steps:
       - name: Checkout code
@@ -42,7 +48,7 @@ jobs:
       - name: Install dependencies
         uses: ramsey/composer-install@v2
         with:
-          dependency-versions: ${{ inputs.deps }}
+          dependency-versions: ${{ matrix.deps }}
           composer-options: --prefer-dist
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
