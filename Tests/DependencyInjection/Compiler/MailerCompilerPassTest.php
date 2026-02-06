@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Mailer\MailerInterface;
 
+/**
+ * @group symfony8-incompatible
+ */
 class MailerCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testDisabledMailer(): void

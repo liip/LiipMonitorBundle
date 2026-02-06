@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
+ *
+ * @group symfony8-incompatible
  */
 class AdditionalReporterCompilerPassTest extends AbstractCompilerPassTestCase
 {

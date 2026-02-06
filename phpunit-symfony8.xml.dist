@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Use this config when matthiasnoback/symfony-dependency-injection-test is not installed (e.g. Symfony 8 CI job). -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_CLASS" value="Liip\MonitorBundle\Tests\Fixture\AppKernel"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0&amp;quiet[]=indirect&amp;quiet[]=other"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="LiipMonitorBundle Test Suite (without DependencyInjection)">
+            <directory>Tests/Check</directory>
+            <directory>Tests/Helper</directory>
+            <file>Tests/LiipMonitorBundleTest.php</file>
+            <file>Tests/RunnerTest.php</file>
+        </testsuite>
+    </testsuites>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
+</phpunit>

@@ -7,6 +7,9 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
+/**
+ * @group symfony8-incompatible
+ */
 class AddGroupsCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess(): void
