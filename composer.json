@@ -30,7 +30,8 @@
         "symfony/mailer": "^6.4|^7.0|^8.0",
         "symfony/messenger": "^6.4|^7.0|^8.0",
         "symfony/phpunit-bridge": "^7.3|^8.0",
-        "symfony/twig-bundle": "^6.4|^7.0|^8.0"
+        "symfony/twig-bundle": "^6.4|^7.0|^8.0",
+        "symfony/yaml": "^6.4|^7.0|^8.0"
     },
     "scripts": {
         "test": ["phpunit"]
