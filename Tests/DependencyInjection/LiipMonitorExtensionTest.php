@@ -43,6 +43,8 @@ use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
+ *
+ * @group symfony8-incompatible
  */
 class LiipMonitorExtensionTest extends AbstractExtensionTestCase
 {
@@ -81,6 +83,10 @@ class LiipMonitorExtensionTest extends AbstractExtensionTestCase
         // skip checks for missing classes
         if (!class_exists($checkClass)) {
             $this->setExpectedException('InvalidArgumentException');
+        }
+
+        if ('security_advisory' === $name && !class_exists('Enlightn\SecurityChecker\AdvisoryAnalyzer')) {
+            $this->markTestSkipped('enlightn/security-checker is not installed (optional dependency).');
         }
 
         if (!$checkAlias) {
