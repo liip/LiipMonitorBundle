@@ -26,28 +26,28 @@ final class CallbackCheckTest extends TestCase
     public static function checkResultProvider(): iterable
     {
         yield [
-            new CallbackCheck('Test', fn() => null),
+            new CallbackCheck('Test', static fn() => null),
             Result::success(),
             'Test',
         ];
 
         yield [
-            new CallbackCheck('Test', fn() => true),
+            new CallbackCheck('Test', static fn() => true),
             Result::success(),
         ];
 
         yield [
-            new CallbackCheck('Test', fn() => 'foo'),
+            new CallbackCheck('Test', static fn() => 'foo'),
             Result::failure('Unrecognized result returned from callback.'),
         ];
 
         yield [
-            new CallbackCheck('Test', fn() => false),
+            new CallbackCheck('Test', static fn() => false),
             Result::failure('Fail'),
         ];
 
         yield [
-            new CallbackCheck('Test', fn() => Result::unknown('foo')),
+            new CallbackCheck('Test', static fn() => Result::unknown('foo')),
             Result::unknown('foo'),
         ];
     }

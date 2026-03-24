@@ -105,8 +105,6 @@ final class TestKernel extends Kernel
         $c->register(CheckService3::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(CheckService4::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(CheckService5::class)->setAutowired(true)->setAutoconfigured(true);
-        $c->register(CheckService6::class)->setAutowired(true)->setAutoconfigured(true);
-        $c->register(CheckService7::class)->setAutowired(true)->setAutoconfigured(true);
         $c->register(TestService::class)->setPublic(true)->setAutowired(true)->setAutoconfigured(true);
         $c->register(OhDearController::class)->setAutowired(true)->setAutoconfigured(true);
     }

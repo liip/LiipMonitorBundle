@@ -64,7 +64,7 @@ final class ApcuCacheInfo extends CacheInfo
 
         self::ensureEnabled();
 
-        if (!$info = \apcu_sma_info()) {
+        if (!$info = apcu_sma_info()) {
             throw new \RuntimeException('Unable to retrieve APCu shared memory information.');
         }
 
@@ -97,11 +97,11 @@ final class ApcuCacheInfo extends CacheInfo
     {
         self::ensureEnabled();
 
-        if (!$apcuInfo = \apcu_cache_info()) {
+        if (!$apcuInfo = apcu_cache_info()) {
             throw new \RuntimeException('Unable to retrieve APCu cache information.');
         }
 
-        if (!$apcuMem = \apcu_sma_info()) {
+        if (!$apcuMem = apcu_sma_info()) {
             throw new \RuntimeException('Unable to retrieve APCu shared memory information.');
         }
 

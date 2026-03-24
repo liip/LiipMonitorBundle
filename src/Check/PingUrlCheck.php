@@ -98,11 +98,11 @@ final class PingUrlCheck implements Check, ConfigurableCheck, \Stringable
 
     public static function addConfig(ArrayNodeDefinition $node): NodeDefinition
     {
-        return $node // @phpstan-ignore-line
+        return $node
             ->arrayPrototype()
                 ->beforeNormalization()
                     ->ifString()
-                    ->then(fn(string $url) => ['url' => $url])
+                    ->then(static fn(string $url) => ['url' => $url])
                 ->end()
                 ->children()
                     ->scalarNode('url')->isRequired()->cannotBeEmpty()->end()

@@ -21,21 +21,21 @@ final class PercentTest extends TestCase
 {
     public static function formatsProvider(): iterable
     {
-        yield [fn() => Percent::from(5), 0.05, 5.0, '5%', '5.00%'];
-        yield [fn() => Percent::from(5.2), 0.052, 5.2, '5%', '5.20%'];
-        yield [fn() => Percent::from(5.6), 0.056, 5.6, '6%', '5.60%'];
-        yield [fn() => Percent::fromDecimal(0.05), 0.05, 5.0, '5%', '5.00%'];
-        yield [fn() => Percent::from(-5), -0.05, -5.0, '-5%', '-5.00%'];
-        yield [fn() => Percent::fromDecimal(-0.05), -0.05, -5.0, '-5%', '-5.00%'];
-        yield [fn() => Percent::fromDecimal(0.53678), 0.53678, 53.678, '54%', '53.68%'];
-        yield [fn() => Percent::calculate(6, 4), 1.5, 150.0, '150%', '150.00%'];
-        yield [fn() => Percent::calculate(3, 62), 0.04839, 4.83871, '5%', '4.84%'];
-        yield [fn() => Percent::from('5'), 0.05, 5.0, '5%', '5.00%'];
-        yield [fn() => Percent::from('5.2'), 0.052, 5.2, '5%', '5.20%'];
-        yield [fn() => Percent::from('5.6'), 0.056, 5.6, '6%', '5.60%'];
-        yield [fn() => Percent::from('5.2%'), 0.052, 5.2, '5%', '5.20%'];
-        yield [fn() => Percent::from('5  %'), 0.05, 5.0, '5%', '5.00%'];
-        yield [fn() => Percent::from('   5  %   '), 0.05, 5.0, '5%', '5.00%'];
+        yield [static fn() => Percent::from(5), 0.05, 5.0, '5%', '5.00%'];
+        yield [static fn() => Percent::from(5.2), 0.052, 5.2, '5%', '5.20%'];
+        yield [static fn() => Percent::from(5.6), 0.056, 5.6, '6%', '5.60%'];
+        yield [static fn() => Percent::fromDecimal(0.05), 0.05, 5.0, '5%', '5.00%'];
+        yield [static fn() => Percent::from(-5), -0.05, -5.0, '-5%', '-5.00%'];
+        yield [static fn() => Percent::fromDecimal(-0.05), -0.05, -5.0, '-5%', '-5.00%'];
+        yield [static fn() => Percent::fromDecimal(0.53678), 0.53678, 53.678, '54%', '53.68%'];
+        yield [static fn() => Percent::calculate(6, 4), 1.5, 150.0, '150%', '150.00%'];
+        yield [static fn() => Percent::calculate(3, 62), 0.04839, 4.83871, '5%', '4.84%'];
+        yield [static fn() => Percent::from('5'), 0.05, 5.0, '5%', '5.00%'];
+        yield [static fn() => Percent::from('5.2'), 0.052, 5.2, '5%', '5.20%'];
+        yield [static fn() => Percent::from('5.6'), 0.056, 5.6, '6%', '5.60%'];
+        yield [static fn() => Percent::from('5.2%'), 0.052, 5.2, '5%', '5.20%'];
+        yield [static fn() => Percent::from('5  %'), 0.05, 5.0, '5%', '5.00%'];
+        yield [static fn() => Percent::from('   5  %   '), 0.05, 5.0, '5%', '5.00%'];
     }
 
     /**

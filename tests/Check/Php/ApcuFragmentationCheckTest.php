@@ -16,6 +16,7 @@ use Liip\Monitor\Info\Php\ApcuCacheInfo;
 use Liip\Monitor\Result;
 use Liip\Monitor\Result\Status;
 use Liip\Monitor\Tests\CheckTests;
+use Liip\Monitor\Tests\RequiresApcu;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +24,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class ApcuFragmentationCheckTest extends TestCase
 {
-    use CheckTests;
+    use CheckTests, RequiresApcu;
 
     public static function checkResultProvider(): iterable
     {
-        if (!ApcuCacheInfo::isInstalled()) {
-            return;
-        }
-
         if (!ApcuCacheInfo::isEnabled()) {
             yield [
                 new ApcuFragmentationCheck(70, 90),

@@ -34,14 +34,14 @@ final class PhpVersionCheckTest extends TestCase
         $stable = self::stable(...);
 
         yield [
-            fn() => new PhpVersionCheck(new PhpVersionInfo($stable()['version'])),
-            fn() => Result::success($stable()['version']),
+            static fn() => new PhpVersionCheck(new PhpVersionInfo($stable()['version'])),
+            static fn() => Result::success($stable()['version']),
             'PHP Version',
         ];
 
         yield [
             new PhpVersionCheck(new PhpVersionInfo('8.2.6')),
-            fn() => Result::warning('PHP 8.2.6 requires a patch update to '.$stable()['version'], context: [
+            static fn() => Result::warning('PHP 8.2.6 requires a patch update to '.$stable()['version'], context: [
                 'latest_patch_version' => $stable()['version'],
                 'latest_patch_date' => new \DateTimeImmutable($stable()['date']),
             ]),

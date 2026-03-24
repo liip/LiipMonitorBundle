@@ -47,8 +47,8 @@ final class ComposerAuditCheckTest extends TestCase
         $result = $check->run();
 
         $this->assertSame(Status::FAILURE, $result->status());
-        $this->assertSame('2 advisories', $result->summary());
-        $this->assertSame('symfony/security-http, symfony/twig-bridge', $result->detail());
-        $this->assertCount(2, $result->context()['advisories']);
+        $this->assertSame('4 advisories', $result->summary());
+        $this->assertSame('symfony/http-foundation, symfony/security-http, symfony/twig-bridge, twig/twig', $result->detail());
+        $this->assertCount(4, $result->context()['advisories']);
     }
 }

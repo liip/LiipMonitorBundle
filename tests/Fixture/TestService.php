@@ -33,12 +33,12 @@ final class TestService
         public readonly CheckSuite $barChecks,
         public readonly CheckSuite $bazChecks,
         public readonly System $system,
-        public readonly LinuxSystem $linuxSystem,
         public readonly PhpInfo $phpInfo,
         public readonly ApcuCacheInfo $apcuCacheInfo,
         public readonly OpCacheInfo $opCacheInfo,
         public readonly PhpVersionInfo $phpVersionInfo,
         public readonly SymfonyVersionInfo $symfonyVersionInfo,
+        public readonly ?LinuxSystem $linuxSystem = null,
     ) {
     }
 }

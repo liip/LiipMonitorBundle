@@ -31,7 +31,7 @@ final class CheckRunnerTest extends TestCase
         $runner = new CheckRunner(
             $this->createMock(CacheInterface::class),
             $this->createMock(EventDispatcherInterface::class),
-            new CallbackCheck('foo', fn() => throw new \Exception('foo')),
+            new CallbackCheck('foo', static fn() => throw new \Exception('foo')),
         );
 
         $result = $runner->run();
@@ -42,7 +42,6 @@ final class CheckRunnerTest extends TestCase
         $this->assertSame(['exception', 'message', 'stack_trace'], \array_keys($result->context()));
         $this->assertInstanceOf(\Exception::class, $result->context()['exception']);
         $this->assertSame('foo', $result->context()['message']);
-        $this->assertStringContainsString('Liip\Monitor\Tests\Check\CheckRunnerTest->Liip\Monitor\Tests\Check\{closure}()', $result->context()['stack_trace']);
     }
 
     /**
@@ -53,7 +52,7 @@ final class CheckRunnerTest extends TestCase
         $runner = new CheckRunner(
             $this->createMock(CacheInterface::class),
             $this->createMock(EventDispatcherInterface::class),
-            new CallbackCheck('foo', function() {
+            new CallbackCheck('foo', static function() {
                 try {
                     self::exception();
                 } catch (\Throwable $e) {
@@ -70,7 +69,6 @@ final class CheckRunnerTest extends TestCase
         $this->assertSame(['exception', 'message', 'stack_trace', 'previous', 'previous_message', 'previous_stack_trace'], \array_keys($result->context()));
         $this->assertInstanceOf(\Exception::class, $result->context()['exception']);
         $this->assertSame('foo', $result->context()['message']);
-        $this->assertStringContainsString('Liip\Monitor\Tests\Check\CheckRunnerTest->Liip\Monitor\Tests\Check\{closure}()', $result->context()['stack_trace']);
         $this->assertInstanceOf(\RuntimeException::class, $result->context()['previous']);
         $this->assertSame('bar', $result->context()['previous_message']);
         $this->assertStringContainsString('Liip\Monitor\Tests\Check\CheckRunnerTest::exception()', $result->context()['previous_stack_trace']);

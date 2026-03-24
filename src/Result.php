@@ -121,7 +121,7 @@ class Result implements \Stringable
     final public function normalizedContext(): array
     {
         return \array_map(
-            function(mixed $v) {
+            static function(mixed $v) {
                 if (\is_scalar($v)) {
                     return $v;
                 }

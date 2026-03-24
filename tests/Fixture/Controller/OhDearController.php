@@ -13,7 +13,7 @@ namespace Liip\Monitor\Tests\Fixture\Controller;
 
 use Liip\Monitor\Controller\OhDearController as BaseOhDearController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

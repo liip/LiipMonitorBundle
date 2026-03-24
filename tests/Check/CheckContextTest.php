@@ -27,7 +27,7 @@ final class CheckContextTest extends TestCase
     public static function checkResultProvider(): iterable
     {
         yield [
-            new CheckContext(new CallbackCheck('name', fn() => null)),
+            new CheckContext(new CallbackCheck('name', static fn() => null)),
             Result::success(),
         ];
     }
@@ -37,8 +37,8 @@ final class CheckContextTest extends TestCase
      */
     public function id_can_be_overridden(): void
     {
-        $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', fn() => null)))->id());
-        $this->assertSame('override', (new CheckContext(new CallbackCheck('name', fn() => null), id: 'override'))->id());
+        $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', static fn() => null)))->id());
+        $this->assertSame('override', (new CheckContext(new CallbackCheck('name', static fn() => null), id: 'override'))->id());
     }
 
     /**
@@ -46,8 +46,8 @@ final class CheckContextTest extends TestCase
      */
     public function wrapped_label_is_used_to_calculate_id(): void
     {
-        $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', fn() => null)))->id());
-        $this->assertSame('b22f5367', (new CheckContext(new CallbackCheck('name', fn() => null), label: 'override'))->id());
+        $this->assertSame('7e4c0e91', (new CheckContext(new CallbackCheck('name', static fn() => null)))->id());
+        $this->assertSame('b22f5367', (new CheckContext(new CallbackCheck('name', static fn() => null), label: 'override'))->id());
     }
 
     /**
@@ -55,8 +55,8 @@ final class CheckContextTest extends TestCase
      */
     public function label_can_be_overridden(): void
     {
-        $this->assertSame('name', (new CheckContext(new CallbackCheck('name', fn() => null)))->label());
-        $this->assertSame('override', (new CheckContext(new CallbackCheck('name', fn() => null), label: 'override'))->label());
+        $this->assertSame('name', (new CheckContext(new CallbackCheck('name', static fn() => null)))->label());
+        $this->assertSame('override', (new CheckContext(new CallbackCheck('name', static fn() => null), label: 'override'))->label());
     }
 
     /**
@@ -64,17 +64,17 @@ final class CheckContextTest extends TestCase
      */
     public function can_set_suites_and_ttl(): void
     {
-        $context = new CheckContext(new CallbackCheck('name', fn() => null));
+        $context = new CheckContext(new CallbackCheck('name', static fn() => null));
 
         $this->assertSame([], $context->suites());
         $this->assertNull($context->ttl());
 
-        $context = new CheckContext(new CallbackCheck('name', fn() => null), ttl: 5, suite: 'foo');
+        $context = new CheckContext(new CallbackCheck('name', static fn() => null), ttl: 5, suite: 'foo');
 
         $this->assertSame(['foo'], $context->suites());
         $this->assertSame(5, $context->ttl());
 
-        $this->assertSame(['foo', 'bar'], (new CheckContext(new CallbackCheck('name', fn() => null), suite: ['foo', 'bar']))->suites());
+        $this->assertSame(['foo', 'bar'], (new CheckContext(new CallbackCheck('name', static fn() => null), suite: ['foo', 'bar']))->suites());
     }
 
     /**
@@ -84,6 +84,6 @@ final class CheckContextTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new CheckContext(new CheckContext(new CallbackCheck('name', fn() => null)));
+        new CheckContext(new CheckContext(new CallbackCheck('name', static fn() => null)));
     }
 }
