@@ -16,18 +16,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [ 8.1, 8.2, 8.3, 8.4, 8.5 ]
+        php: [ 8.1, 8.2, 8.3, 8.4, 8.5, 8.6 ]
         deps: [ highest ]
-        symfony: [ 6.4.*, 7.2.*, 7.3.*, 8.0.* ]
+        symfony: [ 6.4.*, 7.4.*, 8.1.* ]
         include:
           - php: 8.1
             deps: lowest
             symfony: '*'
         exclude:
           - php: 8.1
-            symfony: 7.2.*
-          - php: 8.1
-            symfony: 7.3.*
+            symfony: 7.4.*
           - php: 8.1
             symfony: 8.0.*
           - php: 8.2
@@ -40,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -66,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -87,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -103,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
